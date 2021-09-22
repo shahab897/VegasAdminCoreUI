@@ -28,7 +28,12 @@ const ProductOptionValuesProdvider = ({ children }) => {
   const setChecked = (options, clicked) => {
     setOptionList(options);
     if (clicked.state === true) {
-      setOptionList();
+      setOptionList([
+        ...options,
+        (options[
+          options.findIndex((option) => option.value === clicked.id)
+        ].isChecked = true),
+      ]);
     }
   };
 

@@ -68,9 +68,7 @@ function ProductsCreate() {
   const [isLoading, setIsLoading] = useState(true);
   const [redirect, setRedirect] = useState(undefined);
 
-  const { productOptionValues, optionList, setChecked } = useContext(
-    ProductOptionValuesContext
-  );
+  const { productOptionValues } = useContext(ProductOptionValuesContext);
   const [fixedData, setFixedData] = useState(undefined);
 
   const token_vegas =
@@ -108,7 +106,6 @@ function ProductsCreate() {
           return { value: item.id, label: item.name, isChecked: false };
         });
         setProductOptionList(cat);
-        setChecked(cat);
         setProductOptionValuesList(
           response.data.data
             .map((item) =>
@@ -138,6 +135,10 @@ function ProductsCreate() {
     console.log("configurable");
     // console.log(productsList);
   }, [productType]);
+
+  useEffect(() => {
+    console.log(productOptionValuesList);
+  }, [productOptionValuesList]);
 
   // useEffect(() => {
   //   console.log(productOptionList, "ah yes teh power");
@@ -466,7 +467,7 @@ function ProductsCreate() {
           <>
             <div className="mb-3">
               <CLabel htmlFor="ProductOption">Product Options</CLabel>
-              {optionList.map((option, index) => (
+              {productOptionList.map((option, index) => (
                 <div className="mb-3 ml-4" key={index + Math.random()}>
                   <div className="d-sm-flex">
                     <CLabel htmlFor="ProductOption">{option.label}</CLabel>
@@ -550,12 +551,20 @@ function ProductsCreate() {
                                     <CCol sm="8">
                                       <CInput
                                         type="text"
-                                        defaultValue={`${productsSlug}-${title}`}
+                                        value={`${productsSlug}-${title}`}
                                         name="sku"
                                         onChange={(e) =>
                                           handleVariationchange(index, e)
                                         }
                                       />
+                                      {/* <input
+                                        type="text"
+                                        value={sku}
+                                        name="sku"
+                                        onChange={(e) =>
+                                          handleVariationchange(index, e)
+                                        }
+                                      /> */}
                                     </CCol>
                                   </td>
                                   <td>
