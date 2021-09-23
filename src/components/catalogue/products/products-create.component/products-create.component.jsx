@@ -68,7 +68,14 @@ function ProductsCreate() {
   const [isLoading, setIsLoading] = useState(true);
   const [redirect, setRedirect] = useState(undefined);
 
-  const { productOptionValues } = useContext(ProductOptionValuesContext);
+  const {
+    productOptionValues,
+    setChecked,
+    optionList,
+    setUnchecked,
+    setOptionValues,
+    optionsValues,
+  } = useContext(ProductOptionValuesContext);
   const [fixedData, setFixedData] = useState(undefined);
 
   const token_vegas =
@@ -106,7 +113,23 @@ function ProductsCreate() {
           return { value: item.id, label: item.name, isChecked: false };
         });
         setProductOptionList(cat);
+        setChecked(cat, { state: false });
         setProductOptionValuesList(
+          response.data.data
+            .map((item) =>
+              item.option_values.map((option) => {
+                return {
+                  id: option.id,
+                  option_id: option.option_id,
+                  sort_order: option.sort_order,
+                  value: option.value,
+                  isChecked: false,
+                };
+              })
+            )
+            .flat()
+        );
+        setOptionValues(
           response.data.data
             .map((item) =>
               item.option_values.map((option) => {
@@ -135,6 +158,10 @@ function ProductsCreate() {
     console.log("configurable");
     // console.log(productsList);
   }, [productType]);
+
+  useEffect(() => {
+    console.log(optionList, " ye hogya");
+  }, [optionList]);
 
   useEffect(() => {
     console.log(productOptionValuesList);
@@ -214,27 +241,29 @@ function ProductsCreate() {
     console.log("ye wala function");
   };
 
-  const handleOptionChange = (e, index) => {
+  const handleOptionChange = (e, index, option) => {
     // this function adds checked values and removes unchecked values and also manages the state for showing checked and unchecked inside the check box
     if (e.target.checked === true) {
-      setProductOptionList(
-        productOptionList.map((productOption, i) => {
-          if (index === i) return { ...productOption, isChecked: true };
-          else return productOption;
-        })
-      );
+      // setProductOptionList(
+      //   productOptionList.map((productOption, i) => {
+      //     if (index === i) return { ...productOption, isChecked: true };
+      //     else return productOption;
+      //   })
+      // );
+      setChecked(optionList, { state: true, index: index });
       setProductOption([
         ...productOption,
         { name: e.target.name, value: e.target.value },
       ]);
       console.log(productOption, "ye thek hai");
     } else {
-      setProductOptionList(
-        productOptionList.map((productOption, i) => {
-          if (index === i) return { ...productOption, isChecked: false };
-          else return productOption;
-        })
-      );
+      // setProductOptionList(
+      //   productOptionList.map((productOption, i) => {
+      //     if (index === i) return { ...productOption, isChecked: false };
+      //     else return productOption;
+      //   })
+      // );
+      setUnchecked(optionList, { state: true, index: index });
       setProductOption(
         productOption.filter((option) => e.target.value !== option.value)
       );
@@ -467,7 +496,7 @@ function ProductsCreate() {
           <>
             <div className="mb-3">
               <CLabel htmlFor="ProductOption">Product Options</CLabel>
-              {productOptionList.map((option, index) => (
+              {optionList.map((option, index) => (
                 <div className="mb-3 ml-4" key={index + Math.random()}>
                   <div className="d-sm-flex">
                     <CLabel htmlFor="ProductOption">{option.label}</CLabel>
@@ -475,7 +504,7 @@ function ProductsCreate() {
                       key={index + Math.random()}
                       name={option.label}
                       value={option.value}
-                      onChange={(e) => handleOptionChange(e, index)}
+                      onChange={(e) => handleOptionChange(e, index, option)}
                       checked={option.isChecked}
                     />
                   </div>

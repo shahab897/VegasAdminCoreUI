@@ -141,6 +141,21 @@ const ProductsEdit = React.lazy(() =>
   )
 );
 
+const SuppliersListing = React.lazy(() =>
+  import(
+    "./components/suppliers/suppliers-listing.component/suppliers-listing.component"
+  )
+);
+const SuppliersCreate = React.lazy(() =>
+  import(
+    "./components/suppliers/suppliers-create.component/suppliers-create.component"
+  )
+);
+const SuppliersEdit = React.lazy(() =>
+  import(
+    "./components/suppliers/suppliers-edit.component/suppliers-edit.component"
+  )
+);
 const routes = [
   { path: "/", exact: true, name: "Home" },
   { path: "/dashboard", name: "Dashboard", component: Dashboard },
@@ -240,6 +255,22 @@ const routes = [
     path: "/catalogue/products/edit/:editID",
     name: "Products Edit",
     component: ProductsEdit,
+  },
+  {
+    path: "/purchase-order/suppliers/",
+    name: "Suppliers",
+    component: SuppliersListing,
+    exact: true,
+  },
+  {
+    path: "/purchase-order/suppliers/create",
+    name: "Suppliers Create",
+    component: SuppliersCreate,
+  },
+  {
+    path: "/purchase-order/suppliers/edit/:editID",
+    name: "Suppliers Edit",
+    component: SuppliersEdit,
   },
   { path: "/theme", name: "Theme", component: Colors, exact: true },
   { path: "/theme/colors", name: "Colors", component: Colors },

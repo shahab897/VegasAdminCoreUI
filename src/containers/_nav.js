@@ -82,6 +82,19 @@ const _nav = [
     to: "/orders",
     icon: <CIcon name="cil-building" customClasses="c-sidebar-nav-icon" />,
   },
+  {
+    _tag: "CSidebarNavDropdown",
+    name: "Purchase Order",
+    route: "/purchase-order",
+    icon: "cil-cursor",
+    _children: [
+      {
+        _tag: "CSidebarNavItem",
+        name: "Suppliers",
+        to: "/purchase-order/suppliers",
+      },
+    ],
+  },
   //     {
   //       _tag: 'CSidebarNavItem',
   //       name: 'Navs',
@@ -137,6 +150,11 @@ const _nav = [
     _children: [
       {
         _tag: "CSidebarNavItem",
+        name: "Products",
+        to: "/catalogue/products",
+      },
+      {
+        _tag: "CSidebarNavItem",
         name: "Categories",
         to: "/catalogue/categories",
       },
@@ -149,11 +167,6 @@ const _nav = [
         _tag: "CSidebarNavItem",
         name: "Options",
         to: "/catalogue/options",
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Products",
-        to: "/catalogue/products",
       },
     ],
   },

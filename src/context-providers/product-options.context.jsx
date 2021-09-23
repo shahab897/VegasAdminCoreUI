@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 
 export const ProductOptionValuesContext = createContext({
   productOptionValues: [],
-  optionsShow: [],
+  optionsValues: [],
   optionList: [],
   changeOptionValueList: () => {},
   setChecked: () => {},
@@ -13,11 +13,12 @@ export const ProductOptionValuesContext = createContext({
   setCheckBoxSubCategories: () => {},
   addProductOptionValues: () => {},
   removeProductOptionValues: () => {},
+  setOptionValues: () => {},
 });
 
 const ProductOptionValuesProdvider = ({ children }) => {
   const [productOptionValues, setProductOptionValues] = useState([]);
-  const [optionShow, setOptionShow] = useState([]);
+  const [optionsValues, setOptionsValues] = useState([]);
   const [optionList, setOptionList] = useState([]);
   // const [allOptionValueList, setAllOptionValueList] = useState([]);
 
@@ -26,15 +27,28 @@ const ProductOptionValuesProdvider = ({ children }) => {
   // }
 
   const setChecked = (options, clicked) => {
-    setOptionList(options);
-    if (clicked.state === true) {
-      setOptionList([
-        ...options,
-        (options[
-          options.findIndex((option) => option.value === clicked.id)
-        ].isChecked = true),
-      ]);
-    }
+    if (clicked.state === true)
+      setOptionList(
+        optionList.map((productOption, i) => {
+          if (clicked.index === i) return { ...productOption, isChecked: true };
+          else return productOption;
+        })
+      );
+    else setOptionList(options);
+  };
+  const setUnchecked = (options, clicked) => {
+    if (clicked.state === true)
+      setOptionList(
+        optionList.map((productOption, i) => {
+          if (clicked.index === i)
+            return { ...productOption, isChecked: false };
+          else return productOption;
+        })
+      );
+    else setOptionList(options);
+  };
+  const setOptionValues = (options) => {
+    setOptionsValues(options);
   };
 
   useEffect(() => {
@@ -74,7 +88,10 @@ const ProductOptionValuesProdvider = ({ children }) => {
         addProductOptionValues,
         removeProductOptionValues,
         setChecked,
+        setUnchecked,
+        optionsValues,
         optionList,
+        setOptionValues,
       }}
     >
       {children}

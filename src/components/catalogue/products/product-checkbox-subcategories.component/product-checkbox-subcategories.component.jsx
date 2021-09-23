@@ -8,9 +8,12 @@ function ProductOptionValues(props) {
   const [optionsShow, setOptionsShow] = useState(
     options.filter((item) => item.option_id === value)
   );
-  const { addProductOptionValues, removeProductOptionValues } = useContext(
-    ProductOptionValuesContext
-  );
+  const {
+    addProductOptionValues,
+    removeProductOptionValues,
+    setOptionValues,
+    optionsValues,
+  } = useContext(ProductOptionValuesContext);
   const [selectedOptionValues, setSelectedOptionValues] = useState([]);
 
   useEffect(() => {
