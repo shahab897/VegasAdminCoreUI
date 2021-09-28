@@ -17,8 +17,11 @@ function ProductOptionValues(props) {
   const [selectedOptionValues, setSelectedOptionValues] = useState([]);
 
   useEffect(() => {
-    console.log(selectedOptionValues, "props");
-  }, [selectedOptionValues]);
+    console.log(
+      optionsShow,
+      "chalo eee brooooooooooooooooooooooooooooooooooooo"
+    );
+  }, [optionsShow]);
 
   const handleOptionChange = (e, index, item) => {
     // this function adds checked values and removes unchecked values and also manages the state for showing checked and unchecked inside the check box

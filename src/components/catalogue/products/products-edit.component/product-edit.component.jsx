@@ -103,7 +103,6 @@ function ProductsCreate() {
         setVisibility(cat.Product.visibility);
         setYoutube(cat.Product.youtube);
         setProductType(cat.Product.product_type);
-        setIsLoading(false);
       })
       .catch(console.log);
     axios
@@ -113,7 +112,6 @@ function ProductsCreate() {
           return { value: item.id, label: item.title };
         });
         setCategoryList(cat);
-        setIsLoading(false);
       })
       .catch(console.log);
     axios
@@ -123,7 +121,6 @@ function ProductsCreate() {
           return { value: item.id, label: item.title };
         });
         setBrandList(cat);
-        setIsLoading(false);
       })
       .catch(console.log);
 

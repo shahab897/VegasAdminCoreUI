@@ -17,6 +17,7 @@ import {
 import { Redirect } from "react-router-dom";
 import Loading from "../../../Loading-component/loading-component";
 import CategoryDropDown from "../category-dropdown-component/category-dropdown.component";
+import SubcategoryDropDown from "../category-dropdown-component/subcategory-dropdown.compoent";
 import BrandDropDown from "../brand-dropdown.component/brand-dropdown.component";
 import ProductTypeDropDown from "../product-type-dropdown.component/product-type-dropdown.component";
 import ProductOptionValues from "../product-checkbox-subcategories.component/product-checkbox-subcategories.component";
@@ -58,6 +59,8 @@ function ProductsCreate() {
   const [visibility, setVisibility] = useState(undefined);
   const [productOption, setProductOption] = useState([]);
   const [productOptionList, setProductOptionList] = useState(undefined);
+  const [subcategories, setSubcategories] = useState([]);
+  const [subcategoryId, setSubcategoryId] = useState(undefined);
   const [productOptionValuesList, setProductOptionValuesList] =
     useState(undefined);
 
@@ -86,69 +89,51 @@ function ProductsCreate() {
       headers: { Authorization: `Bearer ${token_vegas}` },
     };
     axios
-      .get("https://vegasapi.phebsoft-team.com/api/categories", config)
+      .get("https://vegasapi.phebsoft-team.com/api/products/create", config)
       .then((response) => {
-        const cat = response.data.data.map((item) => {
+        const categoriesData = response.data.data.categories.map((item) => {
           return { value: item.id, label: item.title };
         });
-        setCategoryList(cat);
-        setIsLoading(false);
-      })
-      .catch(console.log);
-    axios
-      .get("https://vegasapi.phebsoft-team.com/api/brands", config)
-      .then((response) => {
-        const cat = response.data.data.map((item) => {
-          return { value: item.id, label: item.title };
-        });
-        setBrandList(cat);
-        setIsLoading(false);
-      })
-      .catch(console.log);
+        setCategoryList(categoriesData);
 
-    axios
-      .get("https://vegasapi.phebsoft-team.com/api/options", config)
-      .then((response) => {
-        const cat = response.data.data.map((item) => {
+        const brandsData = response.data.data.brands.map((item) => {
+          return { value: item.id, label: item.title };
+        });
+
+        setBrandList(brandsData);
+
+        const optionData = response.data.data.options.map((item) => {
+          // ispar error nai deta
           return { value: item.id, label: item.name, isChecked: false };
         });
-        setProductOptionList(cat);
-        setChecked(cat, { state: false });
-        setProductOptionValuesList(
-          response.data.data
-            .map((item) =>
-              item.option_values.map((option) => {
-                return {
-                  id: option.id,
-                  option_id: option.option_id,
-                  sort_order: option.sort_order,
-                  value: option.value,
-                  isChecked: false,
-                };
-              })
-            )
-            .flat()
-        );
-        setOptionValues(
-          response.data.data
-            .map((item) =>
-              item.option_values.map((option) => {
-                return {
-                  id: option.id,
-                  option_id: option.option_id,
-                  sort_order: option.sort_order,
-                  value: option.value,
-                  isChecked: false,
-                };
-              })
-            )
-            .flat()
-        );
+        console.log(optionData, "ye dekhien");
+        setProductOptionList(optionData);
+        setChecked(optionData, { state: false });
+        const optionValsData = response.data.data.options
+          .map((item) =>
+            item.option_value.map((option) => {
+              return {
+                id: option.id,
+                option_id: option.option_id,
+                sort_order: option.sort_order,
+                value: option.value,
+                isChecked: false,
+              };
+            })
+          )
+          .flat();
+
+        setProductOptionValuesList(optionValsData);
+        setOptionValues(optionValsData);
+
         setIsLoading(false);
       })
       .catch(console.log);
   };
 
+  useEffect(() => {
+    console.log(optionsValues);
+  }, [optionsValues]);
   useEffect(() => {
     fetch_c();
     // console.log(productsList);
@@ -303,7 +288,7 @@ function ProductsCreate() {
       variations: variantions,
       product_slug: productsSlug,
       youtube: youtube,
-      sub_category_id: 3,
+      sub_category_id: subcategoryId,
     };
 
     console.log(catergoryData);
@@ -400,10 +385,18 @@ function ProductsCreate() {
           />
         </div>
         <div className="mb-3">
-          <CLabel htmlFor="CategoryId">Category Id</CLabel>
+          <CLabel htmlFor="CategoryId">Category</CLabel>
           <CategoryDropDown
             options={categoryList}
             setCategoryId={setCategoryId}
+            setSubcategories={setSubcategories}
+          />
+        </div>
+        <div className="mb-3">
+          <CLabel htmlFor="CategoryId">Subcategory</CLabel>
+          <SubcategoryDropDown
+            options={subcategories}
+            setSubcategoryId={setSubcategoryId}
           />
         </div>
         <div className="mb-3">
@@ -586,14 +579,6 @@ function ProductsCreate() {
                                           handleVariationchange(index, e)
                                         }
                                       />
-                                      {/* <input
-                                        type="text"
-                                        value={sku}
-                                        name="sku"
-                                        onChange={(e) =>
-                                          handleVariationchange(index, e)
-                                        }
-                                      /> */}
                                     </CCol>
                                   </td>
                                   <td>
@@ -661,22 +646,6 @@ function ProductsCreate() {
             onChange={(e) => setVisibility(e.target.value)}
           />
         </div>
-        <div className="mb-3">
-          <CLabel htmlFor="ProductOption">ProductOption</CLabel>
-          <CInput
-            type="text"
-            id="ProductOption"
-            onChange={(e) => setProductOption(e.target.value)}
-          />
-        </div>
-        {/* <div className="mb-3">
-          <CLabel htmlFor="Variations">Variations</CLabel>
-          <CInput
-            type="text"
-            id="Variations"
-            onChange={(e) => setVariations(e.target.value)}
-          />
-        </div> */}
         <div className="mb-3">
           <CLabel htmlFor="Youtube">Youtube</CLabel>
           <CInput
