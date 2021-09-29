@@ -169,6 +169,12 @@ const CouriersEdit = React.lazy(() =>
   import("./components/courier/courier-edit.component/courier-edit.component")
 );
 
+const CouponList = React.lazy(() =>
+  import(
+    "./components/coupon/coupon-listing.component/coupon-listing.component"
+  )
+);
+
 const routes = [
   { path: "/", exact: true, name: "Home" },
   { path: "/dashboard", name: "Dashboard", component: Dashboard },
@@ -300,6 +306,12 @@ const routes = [
     path: "/couriers/edit/:editId",
     name: "Courier Edit",
     component: CouriersEdit,
+  },
+  {
+    path: "/coupons",
+    name: "Coupons",
+    component: CouponList,
+    exact: true,
   },
   { path: "/theme", name: "Theme", component: Colors, exact: true },
   { path: "/theme/colors", name: "Colors", component: Colors },

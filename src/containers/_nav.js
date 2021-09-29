@@ -14,6 +14,12 @@ const _nav = [
     to: "/couriers",
     icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Coupons",
+    to: "/coupons",
+    icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
+  },
   // {
   //   _tag: 'CSidebarNavTitle',
   //   _children: ['Theme']

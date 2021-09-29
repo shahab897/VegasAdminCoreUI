@@ -34,8 +34,12 @@ const ProductTypeDropDown = (props) => {
       );
     else {
       const defaultSelected = options.findIndex(
-        (element) => defaultProductType
+        ({ value }) => value === defaultProductType
       );
+      console.log(defaultSelected, "kia horha hai jigr");
+      console.log(defaultProductType, "defaultProductType kia horha hai jigr");
+      console.log(options, "options kia horha hai jigr");
+
       return (
         <>
           <DropDown
