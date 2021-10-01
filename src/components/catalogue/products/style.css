@@ -37,3 +37,7 @@ label.cross_icon {
 .hide {
   display: none;
 }
+
+.variation_options p {
+  margin-bottom: 2px;
+}

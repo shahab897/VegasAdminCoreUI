@@ -79,6 +79,8 @@ function ProductsCreate() {
   const [selected, setSelected] = useState([]);
   const [freeProduct, setFreeProduct] = useState("YES");
   const [variantions, setVariations] = useState();
+  const [variationOptions, setVariationptions] = useState([]);
+
   const [youtube, setYoutube] = useState(undefined);
   const [productsList, setProductsList] = useState(undefined);
   const [categoryList, setCategoryList] = useState(undefined);
@@ -218,6 +220,13 @@ function ProductsCreate() {
               };
             })
           );
+          setVariationptions(
+            result.data.data.map((variant) => {
+              return {
+                options: variant.options,
+              };
+            })
+          );
         })
         .catch((error) => console.log("error", error));
     }
@@ -344,87 +353,87 @@ function ProductsCreate() {
       youtube: youtube,
       sub_category_id: subcategoryId,
     };
-   productData = {
-    title: "maSER",
-    product_slug: "product",
-    category_id: "3",
-    brand_id: "1",
-    meta_description: "product",
-    keywords: "product",
-    details: "Product Test",
-    status: "Enabled",
-    view_order: "0",
-    multi_colors: "No",
-    pictures: "Test",
-    menu_title: "Test",
-    heading: "Test",
-    youtube: "Test",
-    price: "10",
-    store_only: "No",
-    web_only: "No",
-    barcode: "Test",
-    sub_category_id: "3",
-    product_type: "configurable",
-    quantity: "Test quantity",
-    short_detail: "short detail",
-    visibility: "Visible",
-    variations: [
-      {
-        title: "XL-75Hz",
-        price: "500",
-        sku: "alienware-XL-75Hz",
-        status: "Enabled",
-        option_ids: "31-36",
-      },
-      {
-        title: "XL-120Hz",
-        price: "500",
-        sku: "alienware-XL-120Hz",
-        status: "Enabled",
-        option_ids: "31-35",
-      },
-      {
-        title: "L-75Hz",
-        price: "500",
-        sku: "alienware-L-75Hz",
-        status: "Enabled",
-        option_ids: "37-36",
-      },
-      {
-        title: "L-120Hz",
-        price: "500",
-        sku: "alienware-L-120Hz",
-        status: "Enabled",
-        option_ids: "37-35",
-      },
-    ],
-    productoption: {
-      29: [
-        {
-          id: "31",
-          value: "XL",
-          parent_id: 29,
-        },
-        {
-          id: "37",
-          value: "L",
-          parent_id: 29,
-        },
-      ],
-      32: [
-        {
-          id: "36",
-          value: "75Hz",
-          parent_id: 32,
-        },
-        {
-          id: "35",
-          value: "120Hz",
-          parent_id: 32,
-        },
-      ],
-    },
-  };
+  //  productData = {
+  //   title: "maSER",
+  //   product_slug: "product",
+  //   category_id: "3",
+  //   brand_id: "1",
+  //   meta_description: "product",
+  //   keywords: "product",
+  //   details: "Product Test",
+  //   status: "Enabled",
+  //   view_order: "0",
+  //   multi_colors: "No",
+  //   pictures: "Test",
+  //   menu_title: "Test",
+  //   heading: "Test",
+  //   youtube: "Test",
+  //   price: "10",
+  //   store_only: "No",
+  //   web_only: "No",
+  //   barcode: "Test",
+  //   sub_category_id: "3",
+  //   product_type: "configurable",
+  //   quantity: "Test quantity",
+  //   short_detail: "short detail",
+  //   visibility: "Visible",
+  //   variations: [
+  //     {
+  //       title: "XL-75Hz",
+  //       price: "500",
+  //       sku: "alienware-XL-75Hz",
+  //       status: "Enabled",
+  //       option_ids: "31-36",
+  //     },
+  //     {
+  //       title: "XL-120Hz",
+  //       price: "500",
+  //       sku: "alienware-XL-120Hz",
+  //       status: "Enabled",
+  //       option_ids: "31-35",
+  //     },
+  //     {
+  //       title: "L-75Hz",
+  //       price: "500",
+  //       sku: "alienware-L-75Hz",
+  //       status: "Enabled",
+  //       option_ids: "37-36",
+  //     },
+  //     {
+  //       title: "L-120Hz",
+  //       price: "500",
+  //       sku: "alienware-L-120Hz",
+  //       status: "Enabled",
+  //       option_ids: "37-35",
+  //     },
+  //   ],
+  //   productoption: {
+  //     29: [
+  //       {
+  //         id: "31",
+  //         value: "XL",
+  //         parent_id: 29,
+  //       },
+  //       {
+  //         id: "37",
+  //         value: "L",
+  //         parent_id: 29,
+  //       },
+  //     ],
+  //     32: [
+  //       {
+  //         id: "36",
+  //         value: "75Hz",
+  //         parent_id: 32,
+  //       },
+  //       {
+  //         id: "35",
+  //         value: "120Hz",
+  //         parent_id: 32,
+  //       },
+  //     ],
+  //   },
+  // };
   
     const formData = new FormData();
     jsonToFormData(productData,formData); //converting json to formdata
@@ -682,7 +691,7 @@ function ProductsCreate() {
                               </th>
                               <th>
                                 <CCol sm="8" className="ml-1">
-                                  Save
+                                  Options
                                 </CCol>
                               </th>
                             </tr>
@@ -740,6 +749,13 @@ function ProductsCreate() {
                                         <option>Enabled</option>
                                         <option>Disabled</option>
                                       </select>
+                                    </CCol>
+                                  </td>
+                                  <td>
+                                  <CCol sm="8" className="ml-1">
+                                      {variationOptions[index].options && variationOptions[index].options.map(({value,options},key)=>{
+                                              return <p><b>{options.name}</b> : {value}</p>
+                                      })}
                                     </CCol>
                                   </td>
                                 </tr>
