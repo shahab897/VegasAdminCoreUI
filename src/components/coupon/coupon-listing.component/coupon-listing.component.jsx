@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 
 import Loading from "../../Loading-component/loading-component";
 import CouponDelete from "../coupon-delete.component/coupon-delete.component";
-import SuppliersEditButton from "../../suppliers/suppliers-edit.component/suppliers-edit-button.component";
+import CouponEditButton from "../coupon-edit.component/coupon-edit-button.component";
 
 const CouponList = (props) => {
   const fields = [
@@ -111,7 +111,7 @@ const CouponList = (props) => {
                       );
                     },
                     edit: (item) => {
-                      return <SuppliersEditButton id={item.id} />;
+                      return <CouponEditButton id={item.id} />;
                     },
                   }}
                 />

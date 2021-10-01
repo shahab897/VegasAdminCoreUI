@@ -17,17 +17,46 @@ const DropDown = styled(Select)`
 `;
 
 const CouponTypeDropdown = (props) => {
-  const { options, setCouponType } = props;
-  return (
-    <>
-      <DropDown
-        placeholder="Select Coupon Type"
-        options={options}
-        values={[]}
-        onChange={(selected) => setCouponType(selected[0].value)}
-      />
-    </>
-  );
+  const { options, setCouponType, defaultCouponType } = props;
+  if (options !== undefined) {
+    if (defaultCouponType === "" || defaultCouponType === undefined)
+      return (
+        <>
+          <DropDown
+            placeholder="Select Coupon Type"
+            options={options}
+            values={[]}
+            onChange={(selected) => setCouponType(selected[0].value)}
+          />
+        </>
+      );
+    else {
+      const defaultSelected = options.findIndex(
+        ({ value }) => value === defaultCouponType
+      );
+      return (
+        <>
+          <DropDown
+            placeholder="Select Coupon Type"
+            options={options}
+            values={[options[defaultSelected]]}
+            onChange={(selected) => setCouponType(selected[0].value)}
+          />
+        </>
+      );
+    }
+  } else {
+    return (
+      <>
+        <DropDown
+          placeholder="Select a Brand"
+          options={options}
+          values={[]}
+          onChange={(selected) => setCouponType(selected[0].value)}
+        />
+      </>
+    );
+  }
 };
 
 export default CouponTypeDropdown;
