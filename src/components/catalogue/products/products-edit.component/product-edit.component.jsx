@@ -25,10 +25,12 @@ import ProductUpload from "../product-image-upload.component/product-image-uploa
 import styled from "styled-components";
 import { useLocation } from "react-router";
 import { PieChart } from "@material-ui/icons";
+import "../style.css";
 
 const Wrapper = styled.div`
   margin-bottom: 20px;
 `;
+
 
 function ProductsCreate() {
   const [productsName, setProductsName] = useState("");
@@ -64,9 +66,12 @@ function ProductsCreate() {
   const [isLoading, setIsLoading] = useState(true);
   const [redirect, setRedirect] = useState(undefined);
   const [selected, setSelected] = useState([]);
+  const [oldImages, setOldimages] = useState([]);
 
   const { productOptionValues } = useContext(ProductOptionValuesContext);
   const [fixedData, setFixedData] = useState(undefined);
+  const [previewImages, setPreviewimages] = useState([]);
+
 
   const { pathname } = useLocation();
   const id = pathname.slice(pathname.search("edit/") + 5);
@@ -93,7 +98,7 @@ function ProductsCreate() {
         setProductsSlug(cat.product_slug);
         setCategoryId(cat.category_id);
         setBrandId(cat.brand_id);
-        setPictures(cat.pictures);
+        setOldimages(cat.pictures);
         setPrice(cat.price);
         setMenuTitle(cat.menu_title);
         setStoreOnly(cat.store_only);
@@ -250,9 +255,36 @@ function ProductsCreate() {
 
     console.log(variantions, "variantions");
   };
+  const handleImageremove = (index,str)=>{
+      if(str == 'preview'){
+        setSelected(selected.filter((image,i)=>index!==i));
+        setPreviewimages(previewImages.filter((image,i)=>index!==i));
+      }else{
+        setOldimages(oldImages.filter((image,i)=>index!==i));
+      }
+  
+
+  }
+  function buildFormData(formData, data, parentKey) {
+    if (data && typeof data === 'object' && !(data instanceof Date) && !(data instanceof File)) {
+      Object.keys(data).forEach(key => {
+        buildFormData(formData, data[key], parentKey ? `${parentKey}[${key}]` : key);
+      });
+    } else {
+      const value = data == null ? '' : data;
+  
+      formData.append(parentKey, value);
+    }
+  }
+  
+  function jsonToFormData(data,formData) {
+    buildFormData(formData, data);
+    
+    return formData;
+  }
   const handleAdd = () => {
     let catergoryData = {
-      id: productData.id,
+      // id: productData.id,
       title: productsName,
       details: productsDetail,
       meta_description: productsMeta,
@@ -262,6 +294,7 @@ function ProductsCreate() {
       status: productsStatus,
       view_order: productsViewOrder,
       pictures: pictures,
+      oldImages:oldImages,
       menu_title: menuTitle,
       heading: heading,
       price: price,
@@ -278,109 +311,31 @@ function ProductsCreate() {
       youtube: youtube,
       sub_category_id: 3,
     };
-    const productDatas = {
-      title: "Product",
-      product_slug: "product",
-      category_id: "3",
-      brand_id: "1",
-      meta_description: "product",
-      keywords: "product",
-      details: "Product Test",
-      status: "Enabled",
-      view_order: "0",
-      multi_colors: "No",
-      pictures: "Test",
-      menu_title: "Test",
-      heading: "Test",
-      youtube: "Test",
-      price: "10",
-      store_only: "No",
-      web_only: "No",
-      barcode: "Test",
-      sub_category_id: "3",
-      product_type: "configurable",
-      quantity: "Test quantity",
-      short_detail: "short detail",
-      visibility: "Visible",
-      variations: [
-        {
-          title: "XL-75Hz",
-          price: "500",
-          sku: "alienware-XL-75Hz",
-          status: "Enabled",
-          option_ids: "31-36",
-        },
-        {
-          title: "XL-120Hz",
-          price: "500",
-          sku: "alienware-XL-120Hz",
-          status: "Enabled",
-          option_ids: "31-35",
-        },
-        {
-          title: "L-75Hz",
-          price: "500",
-          sku: "alienware-L-75Hz",
-          status: "Enabled",
-          option_ids: "37-36",
-        },
-        {
-          title: "L-120Hz",
-          price: "500",
-          sku: "alienware-L-120Hz",
-          status: "Enabled",
-          option_ids: "37-35",
-        },
-      ],
-      productoption: {
-        29: [
-          {
-            id: "31",
-            value: "XL",
-            parent_id: 29,
-          },
-          {
-            id: "37",
-            value: "L",
-            parent_id: 29,
-          },
-        ],
-        32: [
-          {
-            id: "36",
-            value: "75Hz",
-            parent_id: 32,
-          },
-          {
-            id: "35",
-            value: "120Hz",
-            parent_id: 32,
-          },
-        ],
-      },
-    };
-
+ 
     console.log(catergoryData);
 
-    let axiosConfig = {
+    let axiosConfig1 = {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${token_vegas}`,
       },
+      data: {}
     };
     console.log("should work ");
     const formData = new FormData();
-    formData.append("productData", JSON.stringify(productDatas));
+    jsonToFormData(catergoryData,formData); //converting json to formdata
+    formData.append("_method", 'PUT');
+
     // Update the formData object
     selected.forEach((image) => {
       formData.append("images[]", image);
     });
     axios
-      .put(
+      .post(
         `https://vegasapi.phebsoft-team.com/api/products/${id}`,
         formData,
-        axiosConfig
+        axiosConfig1
       )
       .then((result) => {
         console.log(result, "haha");
@@ -477,20 +432,7 @@ function ProductsCreate() {
             defaultBrand={brandId}
           />
         </div>
-        <div className="mb-3">
-          <CLabel htmlFor="Pictures">Pictures</CLabel>
-          <CInput
-            type="text"
-            id="Pictures"
-            value={pictures}
-            onChange={(e) => setPictures(e.target.value)}
-          />
-          <ProductUpload
-            id="Pictures"
-            selected={selected}
-            setSelected={setSelected}
-          />
-        </div>
+        
         <div className="mb-3">
           <CLabel htmlFor="Price">Price</CLabel>
           <CInput
@@ -721,6 +663,43 @@ function ProductsCreate() {
             onChange={(e) => setYoutube(e.target.value)}
           />
         </div>
+        <div className="galleryArea">
+
+        <div className="mb-3">
+          <h3>Pictures</h3>
+          
+          <ProductUpload
+            id="Pictures"
+            selected={selected}
+            setSelected={setSelected}
+            setPreviewimages={setPreviewimages}
+            previewImages={previewImages}
+          />
+        </div>
+        <div className="oldimages">
+        <CRow>
+              {oldImages.map((image,index)=>{
+
+               return (
+                   <div key={index}  className="py-3 p_image">
+                      <label onClick={(e)=>handleImageremove(index,'old')} className="cross_icon">X</label>
+                      <img src={`https://vegasapi.phebsoft-team.com${image}`}/>
+                   </div>
+               )     
+             })}
+                {previewImages && previewImages.map((image,index)=>{
+
+                  return (
+                      <div key={index}  className="py-3 p_image">
+                        <label onClick={()=>handleImageremove(index,'preview')}  className="cross_icon">X</label>
+                        <img src={image}/>
+                      </div>
+                  )     
+                  })}
+          </CRow>
+        </div>
+        </div>
+
         <CButton color="primary" onClick={handleAdd}>
           Add
         </CButton>

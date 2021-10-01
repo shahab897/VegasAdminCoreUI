@@ -174,6 +174,9 @@ const CouponList = React.lazy(() =>
     "./components/coupon/coupon-listing.component/coupon-listing.component"
   )
 );
+const CouponCreate = React.lazy(() =>
+  import("./components/coupon/coupon-create.component/coupon-create.component")
+);
 
 const routes = [
   { path: "/", exact: true, name: "Home" },
@@ -312,6 +315,11 @@ const routes = [
     name: "Coupons",
     component: CouponList,
     exact: true,
+  },
+  {
+    path: "/coupons/create",
+    name: "Coupons",
+    component: CouponCreate,
   },
   { path: "/theme", name: "Theme", component: Colors, exact: true },
   { path: "/theme/colors", name: "Colors", component: Colors },

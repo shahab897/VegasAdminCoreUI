@@ -25,6 +25,7 @@ import ProductUpload from "../product-image-upload.component/product-image-uploa
 import { ProductOptionValuesContext } from "../../../../context-providers/product-options.context";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
+import "../style.css";
 
 const Wrapper = styled.div`
   margin-bottom: 20px;
@@ -83,6 +84,7 @@ function ProductsCreate() {
   const [categoryList, setCategoryList] = useState(undefined);
   const [isLoading, setIsLoading] = useState(true);
   const [redirect, setRedirect] = useState(undefined);
+  const [previewImages, setPreviewimages] = useState([]);
 
   const {
     productOptionValues,
@@ -97,6 +99,7 @@ function ProductsCreate() {
   useEffect(() => {
     console.log(selected, "whatas going on here");
   }, [selected]);
+
 
   const token_vegas =
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMDBmOTU0Yjc4YjYxOGM5Yjg0OTFkMTkxYmUwMjAzNDdlMzFjODQ0NmQ5ZTY4OTRiOTkwZDdiMTQ1MmQ3ZWFiOGE0YTFjNDc0NjFjZjY5NjEiLCJpYXQiOjE2MjQ5NTc4NjUuMDk2ODk3LCJuYmYiOjE2MjQ5NTc4NjUuMDk2OTAzLCJleHAiOjE2NTY0OTM4NjUuMDg5NzA3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.OHSKmTqWfrPeYCo4tqGbgysoaLCXTctWhNMyxgzp74F3kAcS8bA2ii1t3A_r-auP3ZrHZ-zInuuHce_7ftwvS4bZpM3Xt2eDx6x1zttXo3CSh4ZBEXYR4NZjE2ijZCupgUlAniUIV6ynv2HVnz5Li2qrcltu5kpUwPh2ZI1rPNbezVpFL5qtc_l10jasAZSJP27Lt7UB8LU2WnZBGkpyQne7sbIgHLBTr2ajU_GgzHwf0kg2j2ZdNK6I5_NH1G1CfjMpilB6hy9Ahec1pPyrsc55_POfOuD0phOz1A9nT5P5-nAx7PECv0yvs7OD-CQRnNgjPblMMna87Vz-msXRxAZvsXa5Qtg7DPODyj7iUtLLw34YXftKPqoaRUwQzp6b6k1tMritCvKopo7CzbApNHb6bRex0BbiHJOZnju1NFj7hwoT3IhVzTIG6SdDpaboDNPqyhD5ZOznOYoUo84jlXoI8Pz5CCGuKSdx--tpRwJYzdUz7FTxFcLsekL_9YZB0pbODMGkw4VClBduR0gfsbFykBJ9z2RRgurANFSUvyRt-kDZaWX6ZwFopjkBCY9I3vCORvjRJ1X733WS4uBKUGyamzMHuMgEV5w44oPg_sbQhJL7UtCKgwPMJr8e3O4LjT7EhcrcmfVE6v3rhbO9LhAJHWJAvWc9G2P5ckQZagM";
@@ -244,7 +247,11 @@ function ProductsCreate() {
     setFixedData(groupBy(productOptionValues, "parent_id"));
     console.log("ye wala function");
   };
+  const handleImageremove = (index)=>{
+    setSelected(selected.filter((image,i)=>index!==i));
+    setPreviewimages(previewImages.filter((image,i)=>index!==i));
 
+}
   const handleOptionChange = (e, index, option) => {
     // this function adds checked values and removes unchecked values and also manages the state for showing checked and unchecked inside the check box
     if (e.target.checked === true) {
@@ -289,93 +296,28 @@ function ProductsCreate() {
       setFreeProduct("NO");
     }
   };
-
+  function buildFormData(formData, data, parentKey) {
+    if (data && typeof data === 'object' && !(data instanceof Date) && !(data instanceof File)) {
+      Object.keys(data).forEach(key => {
+        buildFormData(formData, data[key], parentKey ? `${parentKey}[${key}]` : key);
+      });
+    } else {
+      const value = data == null ? '' : data;
+  
+      formData.append(parentKey, value);
+    }
+  }
+  
+  function jsonToFormData(data,formData) {
+    buildFormData(formData, data);
+    
+    return formData;
+  }
   const handleAdd = () => {
     if (selected.length === 0) {
       return;
     }
 
-    // const productData = {
-    //   title: "maSER",
-    //   product_slug: "product",
-    //   category_id: "3",
-    //   brand_id: "1",
-    //   meta_description: "product",
-    //   keywords: "product",
-    //   details: "Product Test",
-    //   status: "Enabled",
-    //   view_order: "0",
-    //   multi_colors: "No",
-    //   pictures: "Test",
-    //   menu_title: "Test",
-    //   heading: "Test",
-    //   youtube: "Test",
-    //   price: "10",
-    //   store_only: "No",
-    //   web_only: "No",
-    //   barcode: "Test",
-    //   sub_category_id: "3",
-    //   product_type: "configurable",
-    //   quantity: "Test quantity",
-    //   short_detail: "short detail",
-    //   visibility: "Visible",
-    //   variations: [
-    //     {
-    //       title: "XL-75Hz",
-    //       price: "500",
-    //       sku: "alienware-XL-75Hz",
-    //       status: "Enabled",
-    //       option_ids: "31-36",
-    //     },
-    //     {
-    //       title: "XL-120Hz",
-    //       price: "500",
-    //       sku: "alienware-XL-120Hz",
-    //       status: "Enabled",
-    //       option_ids: "31-35",
-    //     },
-    //     {
-    //       title: "L-75Hz",
-    //       price: "500",
-    //       sku: "alienware-L-75Hz",
-    //       status: "Enabled",
-    //       option_ids: "37-36",
-    //     },
-    //     {
-    //       title: "L-120Hz",
-    //       price: "500",
-    //       sku: "alienware-L-120Hz",
-    //       status: "Enabled",
-    //       option_ids: "37-35",
-    //     },
-    //   ],
-    //   productoption: {
-    //     29: [
-    //       {
-    //         id: "31",
-    //         value: "XL",
-    //         parent_id: 29,
-    //       },
-    //       {
-    //         id: "37",
-    //         value: "L",
-    //         parent_id: 29,
-    //       },
-    //     ],
-    //     32: [
-    //       {
-    //         id: "36",
-    //         value: "75Hz",
-    //         parent_id: 32,
-    //       },
-    //       {
-    //         id: "35",
-    //         value: "120Hz",
-    //         parent_id: 32,
-    //       },
-    //     ],
-    //   },
-    // };
     let productData = {
       title: productsName,
       details: productsDetail,
@@ -402,9 +344,90 @@ function ProductsCreate() {
       youtube: youtube,
       sub_category_id: subcategoryId,
     };
-
+   productData = {
+    title: "maSER",
+    product_slug: "product",
+    category_id: "3",
+    brand_id: "1",
+    meta_description: "product",
+    keywords: "product",
+    details: "Product Test",
+    status: "Enabled",
+    view_order: "0",
+    multi_colors: "No",
+    pictures: "Test",
+    menu_title: "Test",
+    heading: "Test",
+    youtube: "Test",
+    price: "10",
+    store_only: "No",
+    web_only: "No",
+    barcode: "Test",
+    sub_category_id: "3",
+    product_type: "configurable",
+    quantity: "Test quantity",
+    short_detail: "short detail",
+    visibility: "Visible",
+    variations: [
+      {
+        title: "XL-75Hz",
+        price: "500",
+        sku: "alienware-XL-75Hz",
+        status: "Enabled",
+        option_ids: "31-36",
+      },
+      {
+        title: "XL-120Hz",
+        price: "500",
+        sku: "alienware-XL-120Hz",
+        status: "Enabled",
+        option_ids: "31-35",
+      },
+      {
+        title: "L-75Hz",
+        price: "500",
+        sku: "alienware-L-75Hz",
+        status: "Enabled",
+        option_ids: "37-36",
+      },
+      {
+        title: "L-120Hz",
+        price: "500",
+        sku: "alienware-L-120Hz",
+        status: "Enabled",
+        option_ids: "37-35",
+      },
+    ],
+    productoption: {
+      29: [
+        {
+          id: "31",
+          value: "XL",
+          parent_id: 29,
+        },
+        {
+          id: "37",
+          value: "L",
+          parent_id: 29,
+        },
+      ],
+      32: [
+        {
+          id: "36",
+          value: "75Hz",
+          parent_id: 32,
+        },
+        {
+          id: "35",
+          value: "120Hz",
+          parent_id: 32,
+        },
+      ],
+    },
+  };
+  
     const formData = new FormData();
-    formData.append("productData", JSON.stringify(productData));
+    jsonToFormData(productData,formData); //converting json to formdata
     // Update the formData object
     selected.forEach((image) => {
       formData.append("images[]", image);
@@ -529,14 +552,7 @@ function ProductsCreate() {
             onChange={(e) => setMultiColors(e.target.value)}
           />
         </div>
-        <div className="mb-3">
-          <CLabel htmlFor="Pictures">Pictures</CLabel>
-          <ProductUpload
-            id="Pictures"
-            selected={selected}
-            setSelected={setSelected}
-          />
-        </div>
+      
         <div className="mb-3">
           <CLabel htmlFor="Price">Price</CLabel>
           <CInput
@@ -765,6 +781,7 @@ function ProductsCreate() {
           />
         </div>
         <div className="mb-3">
+        <CLabel htmlFor="status">Status</CLabel>
           <select
             className="form-control"
             name="status"
@@ -783,6 +800,29 @@ function ProductsCreate() {
             onChange={(e) => setYoutube(e.target.value)}
           />
         </div>
+        <div className="galleryArea">
+        <div className="mb-3">
+          <h3>Pictures</h3>
+          <ProductUpload
+            id="Pictures"
+            selected={selected}
+            setSelected={setSelected}
+            setPreviewimages={setPreviewimages}
+            previewImages={previewImages}
+          />
+        </div>
+        <CRow>
+              {previewImages && previewImages.map((image,index)=>{
+
+               return (
+                   <div key={index}  className="py-3 p_image">
+                      <label onClick={()=>handleImageremove(index)}  className="cross_icon">X</label>
+                      <img src={image}/>
+                   </div>
+               )     
+             })}
+          </CRow>
+          </div>
         <CButton color="primary" onClick={handleAdd}>
           Add
         </CButton>

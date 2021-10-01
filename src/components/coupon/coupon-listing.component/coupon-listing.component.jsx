@@ -12,7 +12,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 import Loading from "../../Loading-component/loading-component";
-import SuppliersDelete from "../../suppliers/suppliers-delete.component/suppliers-delete.component";
+import CouponDelete from "../coupon-delete.component/coupon-delete.component";
 import SuppliersEditButton from "../../suppliers/suppliers-edit.component/suppliers-edit-button.component";
 
 const CouponList = (props) => {
@@ -107,7 +107,7 @@ const CouponList = (props) => {
                   scopedSlots={{
                     delete: (item) => {
                       return (
-                        <SuppliersDelete id={item.id} setUpdated={setUpdated} />
+                        <CouponDelete id={item.id} setUpdated={setUpdated} />
                       );
                     },
                     edit: (item) => {
