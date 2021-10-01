@@ -21,13 +21,16 @@ import BrandDropDown from "../brand-dropdown.component/brand-dropdown.component"
 import ProductTypeDropDown from "../product-type-dropdown.component/product-type-dropdown.component";
 import ProductOptionValues from "../product-checkbox-subcategories.component/product-checkbox-subcategories.component";
 import { ProductOptionValuesContext } from "../../../../context-providers/product-options.context";
+import ProductUpload from "../product-image-upload.component/product-image-upload.component";
 import styled from "styled-components";
 import { useLocation } from "react-router";
 import { PieChart } from "@material-ui/icons";
+import "../style.css";
 
 const Wrapper = styled.div`
   margin-bottom: 20px;
 `;
+
 
 function ProductsCreate() {
   const [productsName, setProductsName] = useState("");
@@ -62,9 +65,13 @@ function ProductsCreate() {
   const [categoryList, setCategoryList] = useState(undefined);
   const [isLoading, setIsLoading] = useState(true);
   const [redirect, setRedirect] = useState(undefined);
+  const [selected, setSelected] = useState([]);
+  const [oldImages, setOldimages] = useState([]);
 
   const { productOptionValues } = useContext(ProductOptionValuesContext);
   const [fixedData, setFixedData] = useState(undefined);
+  const [previewImages, setPreviewimages] = useState([]);
+
 
   const { pathname } = useLocation();
   const id = pathname.slice(pathname.search("edit/") + 5);
@@ -77,67 +84,52 @@ function ProductsCreate() {
       headers: { Authorization: `Bearer ${token_vegas}` },
     };
     axios
-      .get(`https://vegasapi.phebsoft-team.com/api/products/${id}`, config)
+      .get(`https://vegasapi.phebsoft-team.com/api/products/${id}/edit`, config)
       .then((response) => {
-        const cat = response.data.data;
-        console.log(cat);
+        const cat = response.data.data.product;
+        console.log(cat, "check this out man", response);
         setProductData(cat);
-        setProductsName(cat.Product.title);
-        setProductsDetail(cat.Product.details);
-        setProductsMeta(cat.Product.meta_description);
-        setProductsKeywords(cat.Product.keywords);
-        setProductsStatus(cat.Product.status);
-        setProductsViewOrder(cat.Product.view_order);
-        setProductsSlug(cat.Product.product_slug);
-        setCategoryId(cat.Product.category_id);
-        setBrandId(cat.Product.brand_id);
-        setPictures(cat.Product.pictures);
-        setPrice(cat.Product.price);
-        setMenuTitle(cat.Product.menu_title);
-        setStoreOnly(cat.Product.store_only);
-        setWebOnly(cat.Product.web_only);
-        setHeading(cat.Product.heading);
-        setQuantity(cat.Product.quantity);
-        setBarcode(cat.Product.barcode);
-        setShortDetail(cat.Product.short_detail);
-        setVisibility(cat.Product.visibility);
-        setYoutube(cat.Product.youtube);
-        setProductType(cat.Product.product_type);
-        setIsLoading(false);
-      })
-      .catch(console.log);
-    axios
-      .get("https://vegasapi.phebsoft-team.com/api/categories", config)
-      .then((response) => {
-        const cat = response.data.data.map((item) => {
+        setProductsName(cat.title);
+        setProductsDetail(cat.details);
+        setProductsMeta(cat.meta_description);
+        setProductsKeywords(cat.keywords);
+        setProductsStatus(cat.status);
+        setProductsViewOrder(cat.view_order);
+        setProductsSlug(cat.product_slug);
+        setCategoryId(cat.category_id);
+        setBrandId(cat.brand_id);
+        setOldimages(cat.pictures);
+        setPrice(cat.price);
+        setMenuTitle(cat.menu_title);
+        setStoreOnly(cat.store_only);
+        setWebOnly(cat.web_only);
+        setHeading(cat.heading);
+        setQuantity(cat.quantity);
+        setBarcode(cat.barcode);
+        setShortDetail(cat.short_detail);
+        setVisibility(cat.visibility);
+        setYoutube(cat.youtube);
+        setProductType(cat.product_type);
+        setVariations(cat.variations);
+        const categories = response.data.data.categories.map((item) => {
           return { value: item.id, label: item.title };
         });
-        setCategoryList(cat);
-        setIsLoading(false);
-      })
-      .catch(console.log);
-    axios
-      .get("https://vegasapi.phebsoft-team.com/api/brands", config)
-      .then((response) => {
-        const cat = response.data.data.map((item) => {
+        setCategoryList(categories);
+        const brands = response.data.data.brands.map((item) => {
           return { value: item.id, label: item.title };
         });
-        setBrandList(cat);
-        setIsLoading(false);
-      })
-      .catch(console.log);
+        setBrandList(brands);
 
-    axios
-      .get("https://vegasapi.phebsoft-team.com/api/options", config)
-      .then((response) => {
-        const cat = response.data.data.map((item) => {
+        const options1 = response.data.data.options;
+        const opts = options1.map((item) => {
           return { value: item.id, label: item.name, isChecked: false };
         });
-        setProductOptionList(cat);
+        setProductOptionList(opts);
+        console.log(options1, "options1");
         setProductOptionValuesList(
-          response.data.data
+          options1
             .map((item) =>
-              item.option_values.map((option) => {
+              item.option_value.map((option) => {
                 return {
                   id: option.id,
                   option_id: option.option_id,
@@ -160,9 +152,9 @@ function ProductsCreate() {
   }, []);
 
   useEffect(() => {
-    console.log("configurable");
+    console.log(variantions);
     // console.log(productsList);
-  }, [productType]);
+  }, [variantions]);
 
   // useEffect(() => {
   //   console.log(productOptionList, "ah yes teh power");
@@ -263,9 +255,36 @@ function ProductsCreate() {
 
     console.log(variantions, "variantions");
   };
+  const handleImageremove = (index,str)=>{
+      if(str == 'preview'){
+        setSelected(selected.filter((image,i)=>index!==i));
+        setPreviewimages(previewImages.filter((image,i)=>index!==i));
+      }else{
+        setOldimages(oldImages.filter((image,i)=>index!==i));
+      }
+  
+
+  }
+  function buildFormData(formData, data, parentKey) {
+    if (data && typeof data === 'object' && !(data instanceof Date) && !(data instanceof File)) {
+      Object.keys(data).forEach(key => {
+        buildFormData(formData, data[key], parentKey ? `${parentKey}[${key}]` : key);
+      });
+    } else {
+      const value = data == null ? '' : data;
+  
+      formData.append(parentKey, value);
+    }
+  }
+  
+  function jsonToFormData(data,formData) {
+    buildFormData(formData, data);
+    
+    return formData;
+  }
   const handleAdd = () => {
     let catergoryData = {
-      id: productData.Product.id,
+      // id: productData.id,
       title: productsName,
       details: productsDetail,
       meta_description: productsMeta,
@@ -275,6 +294,7 @@ function ProductsCreate() {
       status: productsStatus,
       view_order: productsViewOrder,
       pictures: pictures,
+      oldImages:oldImages,
       menu_title: menuTitle,
       heading: heading,
       price: price,
@@ -291,28 +311,37 @@ function ProductsCreate() {
       youtube: youtube,
       sub_category_id: 3,
     };
-
+ 
     console.log(catergoryData);
 
-    // let axiosConfig = {
-    //   headers: {
-    //     "Content-Type": "application/json;charset=UTF-8",
-    //     "Access-Control-Allow-Origin": "*",
-    //     Authorization: `Bearer ${token_vegas}`,
-    //   },
-    // };
-    // console.log("should work ");
-    // axios
-    //   .post(
-    //     "https://vegasapi.phebsoft-team.com/api/products",
-    //     catergoryData,
-    //     axiosConfig
-    //   )
-    //   .then((result) => {
-    //     console.log(result, "haha");
-    //     setRedirect(true);
-    //   })
-    //   .catch((error) => console.log("error", error));
+    let axiosConfig1 = {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token_vegas}`,
+      },
+      data: {}
+    };
+    console.log("should work ");
+    const formData = new FormData();
+    jsonToFormData(catergoryData,formData); //converting json to formdata
+    formData.append("_method", 'PUT');
+
+    // Update the formData object
+    selected.forEach((image) => {
+      formData.append("images[]", image);
+    });
+    axios
+      .post(
+        `https://vegasapi.phebsoft-team.com/api/products/${id}`,
+        formData,
+        axiosConfig1
+      )
+      .then((result) => {
+        console.log(result, "haha");
+        setRedirect(true);
+      })
+      .catch((error) => console.log("error", error));
   };
 
   if (isLoading === true) return <Loading />;
@@ -403,15 +432,7 @@ function ProductsCreate() {
             defaultBrand={brandId}
           />
         </div>
-        <div className="mb-3">
-          <CLabel htmlFor="Pictures">Pictures</CLabel>
-          <CInput
-            type="text"
-            id="Pictures"
-            value={pictures}
-            onChange={(e) => setPictures(e.target.value)}
-          />
-        </div>
+        
         <div className="mb-3">
           <CLabel htmlFor="Price">Price</CLabel>
           <CInput
@@ -545,11 +566,6 @@ function ProductsCreate() {
                                   Status
                                 </CCol>
                               </th>
-                              <th>
-                                <CCol sm="8" className="ml-1">
-                                  Save
-                                </CCol>
-                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -647,6 +663,43 @@ function ProductsCreate() {
             onChange={(e) => setYoutube(e.target.value)}
           />
         </div>
+        <div className="galleryArea">
+
+        <div className="mb-3">
+          <h3>Pictures</h3>
+          
+          <ProductUpload
+            id="Pictures"
+            selected={selected}
+            setSelected={setSelected}
+            setPreviewimages={setPreviewimages}
+            previewImages={previewImages}
+          />
+        </div>
+        <div className="oldimages">
+        <CRow>
+              {oldImages.map((image,index)=>{
+
+               return (
+                   <div key={index}  className="py-3 p_image">
+                      <label onClick={(e)=>handleImageremove(index,'old')} className="cross_icon">X</label>
+                      <img src={`https://vegasapi.phebsoft-team.com${image}`}/>
+                   </div>
+               )     
+             })}
+                {previewImages && previewImages.map((image,index)=>{
+
+                  return (
+                      <div key={index}  className="py-3 p_image">
+                        <label onClick={()=>handleImageremove(index,'preview')}  className="cross_icon">X</label>
+                        <img src={image}/>
+                      </div>
+                  )     
+                  })}
+          </CRow>
+        </div>
+        </div>
+
         <CButton color="primary" onClick={handleAdd}>
           Add
         </CButton>

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Select from "react-dropdown-select";
-import { Math } from "core-js";
+import { useState, useEffect } from "react";
 
 const DropDown = styled(Select)`
   width: 100%;
@@ -17,36 +17,42 @@ const DropDown = styled(Select)`
   margin-bottom: 10px;
 `;
 
-const ProductTypeDropDown = (props) => {
-  const { options, setProductType, defaultProductType } = props;
+const SubcategoryDropDown = (props) => {
+  const { options, setSubcategoryId, defaultSubcategory } = props;
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  useEffect(() => {
+    if (options.length !== 0) setIsDisabled(false);
+  }, [options]);
+  const handleChange = async (selected) => {
+    setSubcategoryId(selected[0].value);
+  };
+
   if (options !== undefined) {
-    if (defaultProductType === "" || defaultProductType === undefined)
+    if (defaultSubcategory === "" || defaultSubcategory === undefined)
       return (
         <>
           <DropDown
-            key={Math.random()}
-            placeholder="Select a Product Type"
+            placeholder="Select a Subcategory"
             options={options}
             values={[]}
-            onChange={(selected) => setProductType(selected[0].value)}
+            onChange={(selected) => handleChange(selected)}
+            disabled={isDisabled}
           />
         </>
       );
     else {
       const defaultSelected = options.findIndex(
-        ({ value }) => value === defaultProductType
+        (element) => defaultSubcategory
       );
-      console.log(defaultSelected, "kia horha hai jigr");
-      console.log(defaultProductType, "defaultProductType kia horha hai jigr");
-      console.log(options, "options kia horha hai jigr");
-
       return (
         <>
           <DropDown
-            placeholder="Select a Brand"
+            placeholder="Select a Subcategory"
             options={options}
             values={[options[defaultSelected]]}
-            onChange={(selected) => setProductType(selected[0].value)}
+            onChange={(selected) => handleChange(selected)}
+            disabled={isDisabled}
           />
         </>
       );
@@ -55,15 +61,15 @@ const ProductTypeDropDown = (props) => {
     return (
       <>
         <DropDown
-          key={Math.random()}
-          placeholder="Select a Product Type"
+          placeholder="Select a Subcategory"
           options={options}
           values={[]}
-          onChange={(selected) => setProductType(selected[0].value)}
+          onChange={(selected) => handleChange(selected)}
+          disabled={isDisabled}
         />
       </>
     );
   }
 };
 
-export default ProductTypeDropDown;
+export default SubcategoryDropDown;

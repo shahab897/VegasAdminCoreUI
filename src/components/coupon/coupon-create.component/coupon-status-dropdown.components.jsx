@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Select from "react-dropdown-select";
-import { Math } from "core-js";
 
 const DropDown = styled(Select)`
   width: 100%;
@@ -17,36 +16,31 @@ const DropDown = styled(Select)`
   margin-bottom: 10px;
 `;
 
-const ProductTypeDropDown = (props) => {
-  const { options, setProductType, defaultProductType } = props;
+const StatusDropDown = (props) => {
+  const { options, setStatus, defaultStatus } = props;
   if (options !== undefined) {
-    if (defaultProductType === "" || defaultProductType === undefined)
+    if (defaultStatus === "" || defaultStatus === undefined)
       return (
         <>
           <DropDown
-            key={Math.random()}
-            placeholder="Select a Product Type"
+            placeholder="Select Status"
             options={options}
             values={[]}
-            onChange={(selected) => setProductType(selected[0].value)}
+            onChange={(selected) => setStatus(selected[0].value)}
           />
         </>
       );
     else {
       const defaultSelected = options.findIndex(
-        ({ value }) => value === defaultProductType
+        ({ value }) => value === defaultStatus
       );
-      console.log(defaultSelected, "kia horha hai jigr");
-      console.log(defaultProductType, "defaultProductType kia horha hai jigr");
-      console.log(options, "options kia horha hai jigr");
-
       return (
         <>
           <DropDown
-            placeholder="Select a Brand"
+            placeholder="Select Status"
             options={options}
             values={[options[defaultSelected]]}
-            onChange={(selected) => setProductType(selected[0].value)}
+            onChange={(selected) => setStatus(selected[0].value)}
           />
         </>
       );
@@ -55,15 +49,14 @@ const ProductTypeDropDown = (props) => {
     return (
       <>
         <DropDown
-          key={Math.random()}
-          placeholder="Select a Product Type"
+          placeholder="Select Status"
           options={options}
           values={[]}
-          onChange={(selected) => setProductType(selected[0].value)}
+          onChange={(selected) => setStatus(selected[0].value)}
         />
       </>
     );
   }
 };
 
-export default ProductTypeDropDown;
+export default StatusDropDown;

@@ -141,6 +141,43 @@ const ProductsEdit = React.lazy(() =>
   )
 );
 
+const SuppliersListing = React.lazy(() =>
+  import(
+    "./components/suppliers/suppliers-listing.component/suppliers-listing.component"
+  )
+);
+const SuppliersCreate = React.lazy(() =>
+  import(
+    "./components/suppliers/suppliers-create.component/suppliers-create.component"
+  )
+);
+const SuppliersEdit = React.lazy(() =>
+  import(
+    "./components/suppliers/suppliers-edit.component/suppliers-edit.component"
+  )
+);
+
+const CouriersList = React.lazy(() =>
+  import("./components/courier/courier-list.component/courier-list.component")
+);
+const CourierCreate = React.lazy(() =>
+  import(
+    "./components/courier/courier-create.component/courier-create.component"
+  )
+);
+const CouriersEdit = React.lazy(() =>
+  import("./components/courier/courier-edit.component/courier-edit.component")
+);
+
+const CouponList = React.lazy(() =>
+  import(
+    "./components/coupon/coupon-listing.component/coupon-listing.component"
+  )
+);
+const CouponCreate = React.lazy(() =>
+  import("./components/coupon/coupon-create.component/coupon-create.component")
+);
+
 const routes = [
   { path: "/", exact: true, name: "Home" },
   { path: "/dashboard", name: "Dashboard", component: Dashboard },
@@ -240,6 +277,49 @@ const routes = [
     path: "/catalogue/products/edit/:editID",
     name: "Products Edit",
     component: ProductsEdit,
+  },
+  {
+    path: "/purchase-order/suppliers/",
+    name: "Suppliers",
+    component: SuppliersListing,
+    exact: true,
+  },
+  {
+    path: "/purchase-order/suppliers/create",
+    name: "Suppliers Create",
+    component: SuppliersCreate,
+  },
+  {
+    path: "/purchase-order/suppliers/edit/:editID",
+    name: "Suppliers Edit",
+    component: SuppliersEdit,
+  },
+  {
+    path: "/couriers",
+    name: "Couriers",
+    component: CouriersList,
+    exact: true,
+  },
+  {
+    path: "/couriers/create",
+    name: "Courier Create",
+    component: CourierCreate,
+  },
+  {
+    path: "/couriers/edit/:editId",
+    name: "Courier Edit",
+    component: CouriersEdit,
+  },
+  {
+    path: "/coupons",
+    name: "Coupons",
+    component: CouponList,
+    exact: true,
+  },
+  {
+    path: "/coupons/create",
+    name: "Coupons",
+    component: CouponCreate,
   },
   { path: "/theme", name: "Theme", component: Colors, exact: true },
   { path: "/theme/colors", name: "Colors", component: Colors },

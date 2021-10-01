@@ -1,0 +1,39 @@
+label.cross_icon {
+  background: red;
+  border-radius: 50%;
+  color: white;
+  padding: 0px 5px;
+  font-size: 13px;
+  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: -4px;
+  cursor: pointer;
+}
+
+.p_image img {
+  height: 120px;
+  object-fit: cover;
+  width: 120px !important;
+}
+
+.p_image {
+  margin-left: 20px;
+  position: relative;
+}
+
+.cross_icon:hover {
+  background: #ff5700;
+}
+
+.galleryArea {
+  border: 1px solid;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-style: dotted;
+  background: white;
+}
+
+.hide {
+  display: none;
+}
