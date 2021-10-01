@@ -12,7 +12,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 import Loading from "../../../Loading-component/loading-component";
-import CategoriesDelete from "../../categories/categories-delete/categories-delete.component";
+import ProductDelete from "../product-delete.component/product-delete.component";
 import ProductEditButton from "../products-edit.component/product-edit-button.component";
 
 const ProductsList = (props) => {
@@ -109,7 +109,7 @@ const ProductsList = (props) => {
                   scopedSlots={{
                     delete: (item) => {
                       return (
-                        <CategoriesDelete
+                        <ProductDelete
                           id={item.id}
                           setUpdated={setUpdated}
                         />

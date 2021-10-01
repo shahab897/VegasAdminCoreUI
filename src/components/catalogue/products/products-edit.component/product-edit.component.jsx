@@ -60,6 +60,8 @@ function ProductsCreate() {
     useState(undefined);
 
   const [variantions, setVariations] = useState();
+  const [variationOptions, setVariationptions] = useState([]);
+
   const [youtube, setYoutube] = useState(undefined);
   const [productData, setProductData] = useState(undefined);
   const [categoryList, setCategoryList] = useState(undefined);
@@ -111,6 +113,13 @@ function ProductsCreate() {
         setYoutube(cat.youtube);
         setProductType(cat.product_type);
         setVariations(cat.variations);
+        setVariationptions(
+          cat.variations.map((variant) => {
+            return {
+              options: variant.options,
+            };
+          })
+        );
         const categories = response.data.data.categories.map((item) => {
           return { value: item.id, label: item.title };
         });
@@ -197,6 +206,13 @@ function ProductsCreate() {
                 sku: `${productsSlug}-${variant.p_name}`,
                 status: "Enabled",
                 option_ids: variant.ids,
+              };
+            })
+          );
+          setVariationptions(
+            result.data.data.map((variant) => {
+              return {
+                options: variant.options,
               };
             })
           );
@@ -566,6 +582,11 @@ function ProductsCreate() {
                                   Status
                                 </CCol>
                               </th>
+                              <th>
+                                <CCol sm="8" className="ml-1">
+                                  Options
+                                </CCol>
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -621,6 +642,13 @@ function ProductsCreate() {
                                         <option>Enabled</option>
                                         <option>Disabled</option>
                                       </select>
+                                    </CCol>
+                                  </td>
+                                  <td>
+                                  <CCol sm="8" className="ml-1 variation_options">
+                                      {variationOptions[index].options && variationOptions[index].options.map(({value,options},key)=>{
+                                              return <p><b>{options.name}</b> : {value}</p>
+                                      })}
                                     </CCol>
                                   </td>
                                 </tr>
