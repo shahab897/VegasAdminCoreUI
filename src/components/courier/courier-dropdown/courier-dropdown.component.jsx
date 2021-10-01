@@ -17,36 +17,30 @@ const DropDown = styled(Select)`
   margin-bottom: 10px;
 `;
 
-const ProductTypeDropDown = (props) => {
-  const { options, setProductType, defaultProductType } = props;
+const CourierDropDown = (props) => {
+  const { options, setStatus, defaultStatus } = props;
   if (options !== undefined) {
-    if (defaultProductType === "" || defaultProductType === undefined)
+    if (defaultStatus === "" || defaultStatus === undefined)
       return (
         <>
           <DropDown
             key={Math.random()}
-            placeholder="Select a Product Type"
+            placeholder="Select Status"
             options={options}
             values={[]}
-            onChange={(selected) => setProductType(selected[0].value)}
+            onChange={(selected) => setStatus(selected[0].value)}
           />
         </>
       );
     else {
-      const defaultSelected = options.findIndex(
-        ({ value }) => value === defaultProductType
-      );
-      console.log(defaultSelected, "kia horha hai jigr");
-      console.log(defaultProductType, "defaultProductType kia horha hai jigr");
-      console.log(options, "options kia horha hai jigr");
-
+      const defaultSelected = options.findIndex((element) => defaultStatus);
       return (
         <>
           <DropDown
-            placeholder="Select a Brand"
+            placeholder="Select Status"
             options={options}
             values={[options[defaultSelected]]}
-            onChange={(selected) => setProductType(selected[0].value)}
+            onChange={(selected) => setStatus(selected[0].value)}
           />
         </>
       );
@@ -56,14 +50,14 @@ const ProductTypeDropDown = (props) => {
       <>
         <DropDown
           key={Math.random()}
-          placeholder="Select a Product Type"
+          placeholder="Select Status"
           options={options}
           values={[]}
-          onChange={(selected) => setProductType(selected[0].value)}
+          onChange={(selected) => setStatus(selected[0].value)}
         />
       </>
     );
   }
 };
 
-export default ProductTypeDropDown;
+export default CourierDropDown;
