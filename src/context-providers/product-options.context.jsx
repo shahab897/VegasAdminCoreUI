@@ -4,11 +4,11 @@ export const ProductOptionValuesContext = createContext({
   productOptionValues: [],
   optionsValues: [],
   optionList: [],
-  changeOptionValueList: () => {},
-  setChecked: () => {},
-  setUnchecked: () => {},
-  setCheckedSubOptions: () => {},
-  setUncheckedSubOptions: () => {},
+  changeOptions: () => {},
+  checkValues: () => {},
+  unCheckValues: () => {},
+  checkOptions: () => {},
+  unCheckOptions: () => {},
   setCheckBoxCategories: () => {},
   setCheckBoxSubCategories: () => {},
   addProductOptionValues: () => {},
@@ -20,11 +20,6 @@ const ProductOptionValuesProdvider = ({ children }) => {
   const [productOptionValues, setProductOptionValues] = useState([]);
   const [optionsValues, setOptionsValues] = useState([]);
   const [optionList, setOptionList] = useState([]);
-  // const [allOptionValueList, setAllOptionValueList] = useState([]);
-
-  // setCheckBoxSubCategories(type, e) {
-
-  // }
 
   const setChecked = (options, clicked) => {
     if (clicked.state === true)
@@ -47,13 +42,50 @@ const ProductOptionValuesProdvider = ({ children }) => {
       );
     else setOptionList(options);
   };
+
+  const changeOptions = (options) => setOptionList(options);
+
   const setOptionValues = (options) => {
     setOptionsValues(options);
   };
 
+  const checkValues = (id) => {
+    const correctValues = optionsValues.map((item) => {
+      if (item.id === id) {
+        return {
+          id: item.id,
+          option_id: item.option_id,
+          sort_order: item.sort_order,
+          value: item.value,
+          isChecked: true,
+        };
+      } else {
+        return item;
+      }
+    });
+    setOptionValues(correctValues);
+  };
+
+  const unCheckValues = (id) => {
+    const correctValues = optionsValues.map((item) => {
+      if (item.id === id) {
+        return {
+          id: item.id,
+          option_id: item.option_id,
+          sort_order: item.sort_order,
+          value: item.value,
+          isChecked: false,
+        };
+      } else {
+        return item;
+      }
+    });
+    setOptionValues(correctValues);
+  };
+
   useEffect(() => {
-    console.log(optionList);
-  }, [optionList]);
+    console.log(productOptionValues, "finally changed ;)");
+  }, [productOptionValues]);
 
   useEffect(() => {
     console.log(
@@ -77,18 +109,35 @@ const ProductOptionValuesProdvider = ({ children }) => {
       ]);
     }
   };
-  const removeProductOptionValues = (e) =>
+  const addProductOptionValuesWithoutClick = (options) => {
+    const arr = [];
+    options.map((option) =>
+      arr.push({
+        id: `${option.id}`,
+        value: option.value,
+        parent_id: option.option_id,
+      })
+    );
+    setProductOptionValues(arr);
+  };
+
+  const removeProductOptionValues = (e) => {
     setProductOptionValues(
       productOptionValues.filter((option) => e.target.value !== option.id)
     );
+  };
   return (
     <ProductOptionValuesContext.Provider
       value={{
         productOptionValues,
         addProductOptionValues,
+        addProductOptionValuesWithoutClick,
         removeProductOptionValues,
+        changeOptions,
         setChecked,
         setUnchecked,
+        checkValues,
+        unCheckValues,
         optionsValues,
         optionList,
         setOptionValues,
