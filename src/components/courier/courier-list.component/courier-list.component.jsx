@@ -95,6 +95,9 @@ const CouriersList = (props) => {
               <CCardHeader>Couriers</CCardHeader>
               <CCardBody>
                 <CDataTable
+                  sorter
+                  tableFilter
+                  columnFilter
                   items={data}
                   fields={fields}
                   hover

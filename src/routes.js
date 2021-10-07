@@ -180,6 +180,16 @@ const CouponCreate = React.lazy(() =>
 const CouponEdit = React.lazy(() =>
   import("./components/coupon/coupon-edit.component/coupon-edit.component")
 );
+const ManagePurchaseOrder = React.lazy(() =>
+  import(
+    "./components/purchase-orders/manage-purchase-order/manage-purchase-order.component"
+  )
+);
+const ManagePOCreate = React.lazy(() =>
+  import(
+    "./components/purchase-orders/manage-purchase-order/manage-purchase-order-create.compoent/manage-purchase-order-create.component"
+  )
+);
 
 const routes = [
   { path: "/", exact: true, name: "Home" },
@@ -328,6 +338,17 @@ const routes = [
     path: "/coupons/edit/:editId",
     name: "Edit Coupon",
     component: CouponEdit,
+  },
+  {
+    path: "/purchase-order/manage-purchase-order",
+    name: "Manage Purchase Orders",
+    component: ManagePurchaseOrder,
+    exact: true,
+  },
+  {
+    path: "/purchase-order/manage-purchase-order/create",
+    name: "Manage Purchase Order Create",
+    component: ManagePOCreate,
   },
   { path: "/theme", name: "Theme", component: Colors, exact: true },
   { path: "/theme/colors", name: "Colors", component: Colors },

@@ -105,6 +105,11 @@ const _nav = [
         name: "Suppliers",
         to: "/purchase-order/suppliers",
       },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Manage Purchase Orders",
+        to: "/purchase-order/manage-purchase-order",
+      },
     ],
   },
   //     {

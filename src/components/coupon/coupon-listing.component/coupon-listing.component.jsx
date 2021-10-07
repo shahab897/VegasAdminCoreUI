@@ -100,6 +100,9 @@ const CouponList = (props) => {
                   fields={fields}
                   hover
                   striped
+                  sorter
+                  tableFilter
+                  columnFilter
                   bordered
                   size="sm"
                   itemsPerPage={10}

@@ -37,6 +37,7 @@
     "classnames": "^2.2.6",
     "core-js": "^3.9.1",
     "enzyme": "^3.11.0",
+    "eslint-config-prettier": "^8.3.0",
     "node-sass": "^5.0.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
@@ -53,6 +54,7 @@
   "devDependencies": {
     "@babel/core": "^7.13.14",
     "auto-changelog": "~2.2.1",
+    "prettier": "2.4.1",
     "react-scripts": "^4.0.3"
   },
   "scripts": {
@@ -62,7 +64,8 @@
     "test:cov": "npm test -- --coverage --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand",
     "eject": "react-scripts eject",
-    "changelog": "auto-changelog --starting-version 3.0.0 --commit-limit false --hide-credit"
+    "changelog": "auto-changelog --starting-version 3.0.0 --commit-limit false --hide-credit",
+    "format": "prettier --write \"src/**/*.{js,jsx}\""
   },
   "bugs": {
     "url": "https://github.com/coreui/coreui-free-react-admin-template/issues"

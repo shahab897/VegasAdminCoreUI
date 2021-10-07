@@ -16,31 +16,30 @@ const DropDown = styled(Select)`
   margin-bottom: 10px;
 `;
 
-const BrandDropDown = (props) => {
-  const { options, setBrandId, defaultBrand, disabled } = props;
+const SuppliersDropDown = (props) => {
+  const { options, setSupplierId, defaultSupplier } = props;
+
   if (options !== undefined) {
-    if (defaultBrand === "" || defaultBrand === undefined)
+    if (defaultSupplier === "" || defaultSupplier === undefined)
       return (
         <>
           <DropDown
-            placeholder="Select a Brand"
+            placeholder="Select a Supplier"
             options={options}
             values={[]}
-            onChange={(selected) => setBrandId(selected[0].value)}
-            disabled={disabled}
+            onChange={(selected) => setSupplierId(selected[0].value)}
           />
         </>
       );
     else {
-      const defaultSelected = options.findIndex((element) => defaultBrand);
+      const defaultSelected = options.findIndex((element) => defaultSupplier);
       return (
         <>
           <DropDown
-            placeholder="Select a Brand"
+            placeholder="Select a Supplier"
             options={options}
             values={[options[defaultSelected]]}
-            onChange={(selected) => setBrandId(selected[0].value)}
-            disabled={disabled}
+            onChange={(selected) => setSupplierId(selected[0].value)}
           />
         </>
       );
@@ -49,15 +48,14 @@ const BrandDropDown = (props) => {
     return (
       <>
         <DropDown
-          placeholder="Select a Brand"
+          placeholder="Select a Supplier"
           options={options}
           values={[]}
-          onChange={(selected) => setBrandId(selected[0].value)}
-          disabled={disabled}
+          onChange={(selected) => setSupplierId(selected[0].value)}
         />
       </>
     );
   }
 };
 
-export default BrandDropDown;
+export default SuppliersDropDown;

@@ -102,6 +102,9 @@ const BrandList = (props) => {
                   items={data}
                   fields={fields}
                   hover
+                  sorter
+                  tableFilter
+                  columnFilter
                   striped
                   bordered
                   size="sm"
