@@ -1,15 +1,29 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { CButton, CInput, CLabel, CForm } from "@coreui/react";
+import {
+  CButton,
+  CInput,
+  CLabel,
+  CForm,
+  CRow,
+  CCol,
+  CDataTable,
+  CCardHeader,
+  CCardBody,
+  CCard,
+} from "@coreui/react";
 import { Redirect } from "react-router-dom";
 import SuppliersDropDown from "../dropdowns/suppliers-dropdown.component";
 import BrandDropDown from "../../../catalogue/products/brand-dropdown.component/brand-dropdown.component";
+import Loading2Component from "../../../Loading-component/loading2-component";
 
 function ManagePOCreate() {
   const [suppliers, setSuppliers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [supplierId, setSupplierId] = useState(undefined);
+  const [products, setProducts] = useState([]);
   const [brands, setBrands] = useState([]);
-  const [brandId, setBrandId] = useState([]);
+  const [brandId, setBrandId] = useState(undefined);
   const [days, setDays] = useState("");
 
   const token_vegas =
@@ -21,6 +35,14 @@ function ManagePOCreate() {
       "Access-Control-Allow-Origin": "*",
       Authorization: `Bearer ${token_vegas}`,
     },
+  };
+
+  const handleVariationchange = (index, e) => {
+    let newFormValues = [...products];
+    newFormValues[index][e.target.name] = e.target.value;
+    setProducts(newFormValues);
+
+    console.log(products, "products");
   };
 
   const fetch_supplierBrand = () => {
@@ -39,10 +61,63 @@ function ManagePOCreate() {
       .catch((error) => console.log("error", error));
   };
 
+  const fetch_brandProduct = () => {
+    setIsLoading(true);
+    axios
+      .get(
+        `http://vegasapi.phebsoft-team.com/api/getBrandproducts/${brandId}`,
+        axiosConfig
+      )
+      .then((result) => {
+        console.log(result, "dekh lete hain");
+        const prod = result.data.data
+          .map((item) => {
+            if (item.product_type === "configurable") {
+              return item.variations.map((conproduct) => {
+                return {
+                  title: item.title,
+                  barcode: conproduct.barcode,
+                  options: conproduct.options,
+                  parent_id: conproduct.parent_id,
+                  product_type: item.product_type,
+                  id: conproduct.id,
+                  variant_title: conproduct.title,
+                  quantity: "",
+                  amount: "",
+                };
+              });
+            } else {
+              return {
+                title: item.title,
+                barcode: item.barcode,
+                id: item.id,
+                product_type: item.product_type,
+                options: "",
+                variant_title: item.title,
+                quantity: "",
+                amount: "",
+              };
+            }
+          })
+          .flat();
+        console.log(prod, "meri mehnat");
+        setProducts(prod);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.log("error", error);
+      });
+  };
+
   useEffect(() => {
     console.log(supplierId);
     if (supplierId !== undefined) fetch_supplierBrand();
   }, [supplierId]);
+
+  useEffect(() => {
+    if (brandId !== undefined) fetch_brandProduct();
+  }, [brandId]);
 
   const [redirect, setRedirect] = useState(undefined);
 
@@ -67,7 +142,7 @@ function ManagePOCreate() {
   }, []);
 
   if (redirect === true) {
-    return <Redirect to="/purchase-order/suppliers" />;
+    return <Redirect to="/purchase-order/manage-purchase-order" />;
   }
 
   return (
@@ -100,6 +175,195 @@ function ManagePOCreate() {
           />
         </div>
 
+        {isLoading && (
+          <Loading2Component
+            className="mb-3 mt-3"
+            style={{ display: "block", width: "100%" }}
+          />
+        )}
+        <div>
+          {products.length > 0 && (
+            <div>
+              <CRow>
+                <CCol>
+                  <CCard>
+                    <CCardHeader>Products</CCardHeader>
+                    <CCardBody className="position-relative table-responsive">
+                      <div className="position-relative table-responsive">
+                        <table className="table table-sm  table-hover">
+                          <thead
+                            style={{
+                              background: "rgb(48 60 84)",
+                              color: "#fff",
+                            }}
+                          >
+                            <tr>
+                              <th>
+                                <CCol sm="8" className="ml-1">
+                                  Title
+                                </CCol>
+                              </th>
+                              <th>
+                                <CCol sm="8" className="ml-1">
+                                  Variant Title
+                                </CCol>
+                              </th>
+                              <th>
+                                <CCol sm="8" className="ml-1">
+                                  Barcode
+                                </CCol>
+                              </th>
+                              <th>
+                                <CCol sm="8" className="ml-1">
+                                  Options
+                                </CCol>
+                              </th>
+                              <th>
+                                <CCol sm="8" className="ml-1">
+                                  Quantity
+                                </CCol>
+                              </th>
+                              <th>
+                                <CCol sm="8" className="ml-1">
+                                  Amount
+                                </CCol>
+                              </th>
+                              <th>
+                                <CCol sm="8" className="ml-1">
+                                  Remove
+                                </CCol>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {products.map(
+                              (
+                                {
+                                  title,
+                                  barcode,
+                                  product_type,
+                                  quantity,
+                                  options,
+                                  variant_title,
+                                  amount,
+                                },
+                                index
+                              ) => {
+                                return (
+                                  <tr key={index}>
+                                    {product_type === "simple" && (
+                                      <>
+                                        <td>
+                                          <CCol sm="8">{title}</CCol>
+                                        </td>
+                                        <td>
+                                          <CCol sm="8">{variant_title}</CCol>
+                                        </td>
+                                        <td>
+                                          <CCol sm="8">{barcode}</CCol>
+                                        </td>
+                                        <td>
+                                          <CCol sm="8">{options}</CCol>
+                                        </td>
+                                        <td>
+                                          <CCol sm="8" className="ml-1">
+                                            <CInput
+                                              value={quantity}
+                                              name="quantity"
+                                              onChange={(e) =>
+                                                handleVariationchange(index, e)
+                                              }
+                                            />
+                                          </CCol>
+                                        </td>
+                                        <td>
+                                          <CCol sm="8" className="ml-1">
+                                            <CInput
+                                              value={amount}
+                                              name="amount"
+                                              onChange={(e) =>
+                                                handleVariationchange(index, e)
+                                              }
+                                            />
+                                          </CCol>
+                                        </td>
+                                        <td>
+                                          <CCol sm="8" className="ml-1">
+                                            Delete
+                                          </CCol>
+                                        </td>
+                                      </>
+                                    )}
+                                    {product_type === "configurable" && (
+                                      <>
+                                        <td>
+                                          <CCol sm="8">{title}</CCol>
+                                        </td>
+                                        <td>
+                                          <CCol sm="8">{variant_title}</CCol>
+                                        </td>
+                                        <td>
+                                          <CCol sm="8">{barcode}</CCol>
+                                        </td>
+                                        <td>
+                                          <CCol sm="8">
+                                            {options.map(
+                                              (
+                                                { value, options: { name } },
+                                                key
+                                              ) => {
+                                                return (
+                                                  <p key={key}>
+                                                    <b>{name}</b> : {value}
+                                                  </p>
+                                                );
+                                              }
+                                            )}
+                                          </CCol>
+                                        </td>
+                                        <td>
+                                          <CCol sm="8" className="ml-1">
+                                            <CInput
+                                              value={quantity}
+                                              name="quantity"
+                                              onChange={(e) =>
+                                                handleVariationchange(index, e)
+                                              }
+                                            />
+                                          </CCol>
+                                        </td>
+                                        <td>
+                                          <CCol sm="8" className="ml-1">
+                                            <CInput
+                                              value={amount}
+                                              name="amount"
+                                              onChange={(e) =>
+                                                handleVariationchange(index, e)
+                                              }
+                                            />
+                                          </CCol>
+                                        </td>
+                                        <td>
+                                          <CCol sm="8" className="ml-1">
+                                            Delete
+                                          </CCol>
+                                        </td>
+                                      </>
+                                    )}
+                                  </tr>
+                                );
+                              }
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </CCardBody>
+                  </CCard>
+                </CCol>
+              </CRow>
+            </div>
+          )}
+        </div>
         <CButton color="primary">Add</CButton>
         <CButton
           color="danger"

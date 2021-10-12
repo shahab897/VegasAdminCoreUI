@@ -465,15 +465,6 @@ function ProductsCreate() {
           />
         </div>
         <div className="mb-3">
-          <CLabel htmlFor="CategoryStatus">Status</CLabel>
-          <CInput
-            type="text"
-            id="CategoryStatus"
-            aria-describedby="category-Status"
-            onChange={(e) => setProductsStatus(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
           <CLabel htmlFor="CategoryViewOrder">View Order</CLabel>
           <CInput
             type="text"

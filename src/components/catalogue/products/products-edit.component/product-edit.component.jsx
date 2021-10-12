@@ -141,6 +141,14 @@ function ProductsEdit() {
   }, [productOptionValuesList]);
 
   useEffect(() => {
+    return () => {
+      setOptionValues([]);
+      changeOptions([]);
+      console.log(optionsValues, "options cleared");
+    };
+  }, []);
+
+  useEffect(() => {
     if (isClicked === true) {
       fetchVariants();
     }
@@ -182,13 +190,6 @@ function ProductsEdit() {
         setVisibility(cat.visibility);
         setYoutube(cat.youtube);
         setProductType(cat.product_type);
-        setVariations(cat.variations);
-        const varitionOptions = cat.variations.map((variant) => {
-          return {
-            options: variant.options,
-          };
-        });
-        setVariationptions(varitionOptions);
         const categories = response.data.data.categories.map((item) => {
           return { value: item.id, label: item.title };
         });
@@ -197,89 +198,100 @@ function ProductsEdit() {
           return { value: item.id, label: item.title };
         });
         setBrandList(brands);
+        if (cat.product_type === "configurable") {
+          setVariations(cat.variations);
+          const varitionOptions = cat.variations.map((variant) => {
+            return {
+              options: variant.options,
+            };
+          });
+          setVariationptions(varitionOptions);
 
-        const options1 = response.data.data.options;
-        const opts = options1.map((item) => {
-          return {
-            value: item.id,
-            label: item.name,
-            isChecked: item.isChecked,
-          };
-        });
-        setOptionValues(opts);
-        const optionData = response.data.data.options.map((item) => {
-          if (
-            selectedProductOption.find((option) => option.option_id === item.id)
-          ) {
-            return { value: item.id, label: item.name, isChecked: true };
-          } else {
-            return { value: item.id, label: item.name, isChecked: false };
-          }
-        });
-        console.log(optionData, "ye dekhien");
-        changeOptions(optionData);
-        // setProductOptionValuesList(
-        //   options1
-        //     .map((item) =>
-        //       item.option_value.map((option) => {
-        //         return {
-        //           id: option.id,
-        //           option_id: option.option_id,
-        //           sort_order: option.sort_order,
-        //           value: option.value,
-        //           isChecked: option.isChecked,
-        //         };
-        //       })
-        //     )
-        //     .flat()
-        // );
-        setOptionValues(
-          options1
-            .map((item) =>
-              item.option_value.map((option) => {
-                if (
-                  selectedProductOption.find(
-                    (options) => parseInt(options.value) === option.id
-                  )
-                ) {
-                  return {
-                    id: option.id,
-                    option_id: option.option_id,
-                    sort_order: option.sort_order,
-                    value: option.value,
-                    isChecked: true,
-                  };
-                } else {
-                  return {
-                    id: option.id,
-                    option_id: option.option_id,
-                    sort_order: option.sort_order,
-                    value: option.value,
-                    isChecked: false,
-                  };
-                }
-              })
-            )
-            .flat()
-        );
-
-        const what = response.data.data.options.map((item) =>
-          item.option_value.map((option) => {
+          const options1 = response.data.data.options;
+          const opts = options1.map((item) => {
+            return {
+              value: item.id,
+              label: item.name,
+              isChecked: item.isChecked,
+            };
+          });
+          setOptionValues(opts);
+          const optionData = response.data.data.options.map((item) => {
             if (
               selectedProductOption.find(
-                (options) => parseInt(options.value) === option.id
+                (option) => option.option_id === item.id
               )
             ) {
-              // addProductOptionValuesWithoutClick(option);
-              return option;
+              return { value: item.id, label: item.name, isChecked: true };
+            } else {
+              return { value: item.id, label: item.name, isChecked: false };
             }
-          })
-        );
-        const what2 = what.flat().filter((item) => item !== undefined);
-        console.log(what2, "what does this one have ");
-        console.log(productOptionValues, "is this what I want");
-        addProductOptionValuesWithoutClick(what2);
-        handleGenerate(false);
+          });
+          console.log(optionData, "ye dekhien");
+          changeOptions(optionData);
+          // setProductOptionValuesList(
+          //   options1
+          //     .map((item) =>
+          //       item.option_value.map((option) => {
+          //         return {
+          //           id: option.id,
+          //           option_id: option.option_id,
+          //           sort_order: option.sort_order,
+          //           value: option.value,
+          //           isChecked: option.isChecked,
+          //         };
+          //       })
+          //     )
+          //     .flat()
+          // );
+          setOptionValues(
+            options1
+              .map((item) =>
+                item.option_value.map((option) => {
+                  if (
+                    selectedProductOption.find(
+                      (options) => parseInt(options.value) === option.id
+                    )
+                  ) {
+                    return {
+                      id: option.id,
+                      option_id: option.option_id,
+                      sort_order: option.sort_order,
+                      value: option.value,
+                      isChecked: true,
+                    };
+                  } else {
+                    return {
+                      id: option.id,
+                      option_id: option.option_id,
+                      sort_order: option.sort_order,
+                      value: option.value,
+                      isChecked: false,
+                    };
+                  }
+                })
+              )
+              .flat()
+          );
+
+          const what = response.data.data.options.map((item) =>
+            item.option_value.map((option) => {
+              if (
+                selectedProductOption.find(
+                  (options) => parseInt(options.value) === option.id
+                )
+              ) {
+                // addProductOptionValuesWithoutClick(option);
+                return option;
+              }
+            })
+          );
+          const what2 = what.flat().filter((item) => item !== undefined);
+          console.log(what2, "what does this one have ");
+          console.log(productOptionValues, "is this what I want");
+          addProductOptionValuesWithoutClick(what2);
+          handleGenerate(false);
+        }
         setIsLoading(false);
       })
       .catch(console.log);

@@ -3,15 +3,17 @@ import { CButton, CInput, CLabel, CForm } from "@coreui/react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { useLocation } from "react-router";
+import WareHousesDropDownMulti from "../stores-dropdown.component/stores-warehouses-dropdown.component";
 import Loading from "../../Loading-component/loading-component";
 
 function StoresEdit(props) {
   const [storeName, setStoreName] = useState(undefined);
   const [city, setCity] = useState(undefined);
   const [address, setAddress] = useState(undefined);
-  const [warehouseId, setWarehouseId] = useState(undefined);
+  const [warehouses, setWarehouses] = useState([]);
   const [redirect, setRedirect] = useState(undefined);
   const [data, setData] = useState(undefined);
+  const [warehousesIds, setWarehousesIds] = useState([]);
 
   //using location pathname to find the id for warehouse
   const { pathname } = useLocation();
@@ -24,10 +26,27 @@ function StoresEdit(props) {
     const config = {
       headers: { Authorization: `Bearer ${token_vegas}` },
     };
+
+    axios
+      .get("https://vegasapi.phebsoft-team.com/api/warehouses", config)
+      .then((result) => {
+        console.log(result);
+        setWarehouses(
+          result.data.data.map((warehouse) => {
+            return { value: warehouse.id, label: warehouse.name };
+          })
+        );
+      })
+      .catch((error) => console.log("error", error));
     axios
       .get(`https://vegasapi.phebsoft-team.com/api/stores/${id}`, config)
       .then((response) => {
         setData(response.data.data);
+        const ids = `${response.data.data.warehouse_id}`;
+        setWarehousesIds([
+          ...warehouses,
+          ...ids.split("|").map((el) => parseInt(el, 10)),
+        ]);
         console.log(response);
       })
       .catch(console.log);
@@ -49,17 +68,17 @@ function StoresEdit(props) {
     if (address == undefined || address === "") {
       if (data != undefined) setAddress(data.address);
     }
-    if (warehouseId == undefined || warehouseId === "") {
-      if (data != undefined) setWarehouseId(data.warehouse_id);
-    }
-  }, [data, storeName, city, address, warehouseId]);
+    // if (warehouseId == undefined || warehouseId === "") {
+    //   if (data != undefined) setWarehouseId(data.warehouse_id);
+    // }
+  }, [data, storeName, city, address]);
 
   const handleAdd = () => {
     let storesData = {
       name: storeName,
       city: city,
       address: address,
-      warehouse_id: warehouseId,
+      warehouse_id: warehousesIds,
     };
     let axiosConfig = {
       headers: {
@@ -121,12 +140,11 @@ function StoresEdit(props) {
           />
         </div>
         <div className="mb-3">
-          <CLabel htmlFor="StoreWarehouseId">Warehouse Id</CLabel>
-          <CInput
-            type="text"
-            id="StoreWarehouseId"
-            defaultValue={data.warehouse_id}
-            onChange={(e) => setWarehouseId(e.target.value)}
+          <CLabel htmlFor="StoreWarehouseId">Warehouse(s)</CLabel>
+          <WareHousesDropDownMulti
+            options={warehouses}
+            setWarehousesIds={setWarehousesIds}
+            warehousesIds={warehousesIds}
           />
         </div>
         <CButton color="primary" onClick={handleAdd}>
