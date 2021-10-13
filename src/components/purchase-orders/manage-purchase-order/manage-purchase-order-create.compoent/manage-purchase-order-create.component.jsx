@@ -80,6 +80,7 @@ function ManagePOCreate() {
                   options: conproduct.options,
                   parent_id: conproduct.parent_id,
                   product_type: item.product_type,
+                  product_variation_ids: conproduct.product_variation_ids,
                   id: conproduct.id,
                   variant_title: conproduct.title,
                   quantity: "",
@@ -140,6 +141,36 @@ function ManagePOCreate() {
   useEffect(() => {
     fetch_a();
   }, []);
+
+  const handleAdd = () => {
+    let purchaseOrder = {
+      supplier_id: supplierId,
+      days: days,
+      brand_id: brandId,
+      products: products,
+    };
+
+    console.log(purchaseOrder, "yeh horaha hai send");
+    let axiosConfig = {
+      headers: {
+        "Content-Type": "application/json;charset=UTF-8",
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token_vegas}`,
+      },
+    };
+
+    // axios
+    //   .post(
+    //     "https://vegasapi.phebsoft-team.com/api/purchase",
+    //     purchaseOrder,
+    //     axiosConfig
+    //   )
+    //   .then((result) => {
+    //     console.log(result);
+    //     setRedirect(true);
+    //   })
+    //   .catch((error) => console.log("error", error));
+  };
 
   if (redirect === true) {
     return <Redirect to="/purchase-order/manage-purchase-order" />;
@@ -364,7 +395,9 @@ function ManagePOCreate() {
             </div>
           )}
         </div>
-        <CButton color="primary">Add</CButton>
+        <CButton color="primary" onClick={handleAdd}>
+          Add
+        </CButton>
         <CButton
           color="danger"
           variant="outline"

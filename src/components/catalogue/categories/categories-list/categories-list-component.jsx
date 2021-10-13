@@ -19,7 +19,6 @@ const ProductCategoriesList = (props) => {
   const fields = [
     "title",
     "details",
-    "keywords",
     "status",
     "view_order",
     {

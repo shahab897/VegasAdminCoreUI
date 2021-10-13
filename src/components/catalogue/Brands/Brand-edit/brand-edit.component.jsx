@@ -4,6 +4,8 @@ import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { useLocation } from "react-router";
 import Loading from "../../../Loading-component/loading-component";
+import KeywordsTagsComponent from "../../../Keywords-tag.component/keywords-tag-component";
+import StatusDropDown from "../../../Dropdown/status-dropdown.component";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -14,8 +16,8 @@ function BrandsEdit(props) {
   const [brandsName, setBrandsName] = useState(undefined);
   const [brandsDetail, setBrandsDetail] = useState(undefined);
   const [brandsMeta, setBrandsMeta] = useState(undefined);
-  const [brandsKeywords, setBrandsKeywords] = useState(undefined);
-  const [brandsStatus, setBrandsStatus] = useState(undefined);
+  const [tags, setTags] = useState([]);
+  const [status, setStatus] = useState("YES");
   const [brandsViewOrder, setBrandsViewOrder] = useState(undefined);
   const [brandsSlug, setBrandsSlug] = useState(undefined);
   const [brandsFeatured, setBrandsFeatured] = useState(undefined);
@@ -28,7 +30,6 @@ function BrandsEdit(props) {
   //using location pathname to find the id for Brands, this needs to be changed to one of the built-in methdos from react-router-dom
   const { pathname } = useLocation();
   const id = pathname.slice(pathname.search("edit/") + 5);
-
   const token_vegas =
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMDBmOTU0Yjc4YjYxOGM5Yjg0OTFkMTkxYmUwMjAzNDdlMzFjODQ0NmQ5ZTY4OTRiOTkwZDdiMTQ1MmQ3ZWFiOGE0YTFjNDc0NjFjZjY5NjEiLCJpYXQiOjE2MjQ5NTc4NjUuMDk2ODk3LCJuYmYiOjE2MjQ5NTc4NjUuMDk2OTAzLCJleHAiOjE2NTY0OTM4NjUuMDg5NzA3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.OHSKmTqWfrPeYCo4tqGbgysoaLCXTctWhNMyxgzp74F3kAcS8bA2ii1t3A_r-auP3ZrHZ-zInuuHce_7ftwvS4bZpM3Xt2eDx6x1zttXo3CSh4ZBEXYR4NZjE2ijZCupgUlAniUIV6ynv2HVnz5Li2qrcltu5kpUwPh2ZI1rPNbezVpFL5qtc_l10jasAZSJP27Lt7UB8LU2WnZBGkpyQne7sbIgHLBTr2ajU_GgzHwf0kg2j2ZdNK6I5_NH1G1CfjMpilB6hy9Ahec1pPyrsc55_POfOuD0phOz1A9nT5P5-nAx7PECv0yvs7OD-CQRnNgjPblMMna87Vz-msXRxAZvsXa5Qtg7DPODyj7iUtLLw34YXftKPqoaRUwQzp6b6k1tMritCvKopo7CzbApNHb6bRex0BbiHJOZnju1NFj7hwoT3IhVzTIG6SdDpaboDNPqyhD5ZOznOYoUo84jlXoI8Pz5CCGuKSdx--tpRwJYzdUz7FTxFcLsekL_9YZB0pbODMGkw4VClBduR0gfsbFykBJ9z2RRgurANFSUvyRt-kDZaWX6ZwFopjkBCY9I3vCORvjRJ1X733WS4uBKUGyamzMHuMgEV5w44oPg_sbQhJL7UtCKgwPMJr8e3O4LjT7EhcrcmfVE6v3rhbO9LhAJHWJAvWc9G2P5ckQZagM";
 
@@ -40,7 +41,11 @@ function BrandsEdit(props) {
       .get(`https://vegasapi.phebsoft-team.com/api/brands/${id}`, config)
       .then((response) => {
         setData(response.data.data);
-        console.log(response);
+        const stringToArray = response.data.data.keywords.split(",");
+        const tagsForUse = stringToArray.map((tag) => {
+          return { id: tag, text: tag };
+        });
+        setTags(tagsForUse);
       })
       .catch(console.log);
   };
@@ -64,11 +69,8 @@ function BrandsEdit(props) {
     if (brandsMeta == undefined || brandsMeta === "") {
       if (data != undefined) setBrandsMeta(data.meta_description);
     }
-    if (brandsKeywords == undefined || brandsKeywords === "") {
-      if (data != undefined) setBrandsKeywords(data.keywords);
-    }
-    if (brandsStatus == undefined || brandsStatus === "") {
-      if (data != undefined) setBrandsStatus(data.status);
+    if (status == undefined || status === "") {
+      if (data != undefined) setStatus(data.status);
     }
     if (brandsViewOrder == undefined || brandsViewOrder === "") {
       if (data != undefined) setBrandsViewOrder(data.view_order);
@@ -90,22 +92,26 @@ function BrandsEdit(props) {
     brandsDiscount,
     brandsFeatured,
     brandsFeaturedImage,
-    brandsKeywords,
     brandsMeta,
     brandsName,
     brandsSlug,
-    brandsStatus,
+    status,
     brandsViewOrder,
     data,
   ]);
 
   const handleAdd = () => {
+    let tagsToSend = "";
+    if (tags.length > 0) {
+      const convertTags = tags.map(({ text }) => text);
+      tagsToSend = convertTags.join(",");
+    }
     let BrandsData = {
       title: brandsName,
       details: brandsDetail,
       meta_description: brandsMeta,
-      keywords: brandsKeywords,
-      status: brandsStatus,
+      keywords: tagsToSend,
+      status,
       view_order: brandsViewOrder,
       brand_slug: brandsSlug,
       discount: brandsDiscount,
@@ -175,23 +181,14 @@ function BrandsEdit(props) {
           />
         </div>
         <div className="mb-3">
-          <CLabel htmlFor="BrandsKeywords">Keywords</CLabel>
-          <CInput
-            type="text"
-            id="BrandsKeywords"
-            aria-describedby="brands-keywords"
-            defaultValue={data.keywords}
-            onChange={(e) => setBrandsKeywords(e.target.value)}
-          />
+          <KeywordsTagsComponent tags={tags} setTags={setTags} />
         </div>
         <div className="mb-3">
           <CLabel htmlFor="BrandsStatus">Status</CLabel>
-          <CInput
-            type="text"
-            id="BrandsStatus"
-            aria-describedby="brands-Status"
-            defaultValue={data.status}
-            onChange={(e) => setBrandsStatus(e.target.value)}
+          <StatusDropDown
+            id="BrandStatus"
+            setStatus={setStatus}
+            defaultStatus={status}
           />
         </div>
         <div className="mb-3">

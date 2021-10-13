@@ -22,6 +22,7 @@ import ProductTypeDropDown from "../product-type-dropdown.component/product-type
 import ProductOptionValues from "../product-checkbox-subcategories.component/product-checkbox-subcategories.component";
 import ProductUpload from "../product-image-upload.component/product-image-upload.component";
 import { ProductOptionValuesContext } from "../../../../context-providers/product-options.context";
+import KeywordsTagsComponent from "../../../Keywords-tag.component/keywords-tag-component";
 import styled from "styled-components";
 import "../style.css";
 
@@ -33,11 +34,11 @@ function ProductsCreate() {
   const [productsName, setProductsName] = useState("");
   const [productsDetail, setProductsDetail] = useState("");
   const [productsMeta, setProductsMeta] = useState("");
-  const [productsKeywords, setProductsKeywords] = useState("");
+  const [tags, setTags] = useState([]);
   const [productsStatus, setProductsStatus] = useState("");
   const [productsViewOrder, setProductsViewOrder] = useState("");
   const [productsSlug, setProductsSlug] = useState("");
-  const [categoryId, setCategoryId] = useState("");
+  const [categoryId, setCategoryId] = useState(0);
   const [brandId, setBrandId] = useState("");
   const [brandList, setBrandList] = useState("");
   const [multiColors, setMultiColors] = useState("");
@@ -46,7 +47,8 @@ function ProductsCreate() {
   const [heading, setHeading] = useState("");
   const [storeOnly, setStoreOnly] = useState("");
   const [webOnly, setWebOnly] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [cost, setCost] = useState("");
+  const [gst, setGst] = useState("");
   const [barcode, setBarcode] = useState("");
   const [productType, setProductType] = useState("");
   const [shortDetail, setShortDetail] = useState("");
@@ -87,6 +89,8 @@ function ProductsCreate() {
       changeOptions([]);
     };
   }, []);
+
+  //TO Add cost and GST
 
   const token_vegas =
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMDBmOTU0Yjc4YjYxOGM5Yjg0OTFkMTkxYmUwMjAzNDdlMzFjODQ0NmQ5ZTY4OTRiOTkwZDdiMTQ1MmQ3ZWFiOGE0YTFjNDc0NjFjZjY5NjEiLCJpYXQiOjE2MjQ5NTc4NjUuMDk2ODk3LCJuYmYiOjE2MjQ5NTc4NjUuMDk2OTAzLCJleHAiOjE2NTY0OTM4NjUuMDg5NzA3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.OHSKmTqWfrPeYCo4tqGbgysoaLCXTctWhNMyxgzp74F3kAcS8bA2ii1t3A_r-auP3ZrHZ-zInuuHce_7ftwvS4bZpM3Xt2eDx6x1zttXo3CSh4ZBEXYR4NZjE2ijZCupgUlAniUIV6ynv2HVnz5Li2qrcltu5kpUwPh2ZI1rPNbezVpFL5qtc_l10jasAZSJP27Lt7UB8LU2WnZBGkpyQne7sbIgHLBTr2ajU_GgzHwf0kg2j2ZdNK6I5_NH1G1CfjMpilB6hy9Ahec1pPyrsc55_POfOuD0phOz1A9nT5P5-nAx7PECv0yvs7OD-CQRnNgjPblMMna87Vz-msXRxAZvsXa5Qtg7DPODyj7iUtLLw34YXftKPqoaRUwQzp6b6k1tMritCvKopo7CzbApNHb6bRex0BbiHJOZnju1NFj7hwoT3IhVzTIG6SdDpaboDNPqyhD5ZOznOYoUo84jlXoI8Pz5CCGuKSdx--tpRwJYzdUz7FTxFcLsekL_9YZB0pbODMGkw4VClBduR0gfsbFykBJ9z2RRgurANFSUvyRt-kDZaWX6ZwFopjkBCY9I3vCORvjRJ1X733WS4uBKUGyamzMHuMgEV5w44oPg_sbQhJL7UtCKgwPMJr8e3O4LjT7EhcrcmfVE6v3rhbO9LhAJHWJAvWc9G2P5ckQZagM";
@@ -185,7 +189,7 @@ function ProductsCreate() {
                 title: variant.p_name,
                 price: price,
                 sku: `${productsSlug}-${variant.p_name}`,
-                status: "Enabled",
+                status: "YES",
                 option_ids: variant.ids,
               };
             })
@@ -247,7 +251,7 @@ function ProductsCreate() {
   };
 
   const handleFreeProduct = (e) => {
-    if (e.target.value === "Enabled") {
+    if (e.target.value === "YES") {
       setFreeProduct("YES");
     } else {
       setFreeProduct("NO");
@@ -284,14 +288,20 @@ function ProductsCreate() {
       return;
     }
 
+    let tagsToSend = "";
+    if (tags.length > 0) {
+      const convertTags = tags.map(({ text }) => text);
+      tagsToSend = convertTags.join(",");
+    }
+
     let productData = {
       title: productsName,
       details: productsDetail,
       meta_description: productsMeta,
       category_id: categoryId,
       brand_id: brandId,
-      keywords: productsKeywords,
-      status: productsStatus,
+      keywords: tagsToSend,
+      status: freeProduct,
       view_order: productsViewOrder,
       multi_colors: multiColors,
       menu_title: menuTitle,
@@ -301,7 +311,8 @@ function ProductsCreate() {
       web_only: webOnly,
       barcode: barcode,
       product_type: productType,
-      quantity: quantity,
+      cost,
+      gst,
       short_detail: shortDetail,
       visibility: visibility,
       productoption: fixedData,
@@ -456,13 +467,7 @@ function ProductsCreate() {
           />
         </div>
         <div className="mb-3">
-          <CLabel htmlFor="CategoryKeywords">Keywords</CLabel>
-          <CInput
-            type="text"
-            id="CategoryKeywords"
-            aria-describedby="category-keywords"
-            onChange={(e) => setProductsKeywords(e.target.value)}
-          />
+          <KeywordsTagsComponent tags={tags} setTags={setTags} />
         </div>
         <div className="mb-3">
           <CLabel htmlFor="CategoryViewOrder">View Order</CLabel>
@@ -552,11 +557,19 @@ function ProductsCreate() {
           />
         </div>
         <div className="mb-3">
-          <CLabel htmlFor="Quantity">Quantity</CLabel>
+          <CLabel htmlFor="Cost">Cost</CLabel>
           <CInput
             type="text"
-            id="Quantity"
-            onChange={(e) => setQuantity(e.target.value)}
+            id="Cost"
+            onChange={(e) => setCost(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <CLabel htmlFor="GST">GST</CLabel>
+          <CInput
+            type="text"
+            id="GST"
+            onChange={(e) => setGst(e.target.value)}
           />
         </div>
         <div className="mb-3">
@@ -694,8 +707,8 @@ function ProductsCreate() {
                                           handleVariationchange(index, e)
                                         }
                                       >
-                                        <option>Enabled</option>
-                                        <option>Disabled</option>
+                                        <option>YES</option>
+                                        <option>NO</option>
                                       </select>
                                     </CCol>
                                   </td>
@@ -756,11 +769,11 @@ function ProductsCreate() {
           <select
             className="form-control"
             name="status"
-            defaultValue={"Enabled"}
+            defaultValue={"YES"}
             onChange={(e) => handleFreeProduct(e)}
           >
-            <option>Enabled</option>
-            <option>Disabled</option>
+            <option>YES</option>
+            <option>NO</option>
           </select>
         </div>
         <div className="mb-3">

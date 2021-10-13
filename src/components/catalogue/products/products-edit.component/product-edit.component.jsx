@@ -23,6 +23,7 @@ import { ProductOptionValuesContext } from "../../../../context-providers/produc
 import ProductUpload from "../product-image-upload.component/product-image-upload.component";
 import styled from "styled-components";
 import { useLocation } from "react-router";
+import KeywordsTagsComponent from "../../../Keywords-tag.component/keywords-tag-component";
 import "../style.css";
 
 const Wrapper = styled.div`
@@ -34,6 +35,7 @@ function ProductsEdit() {
   const [productsDetail, setProductsDetail] = useState("");
   const [productsMeta, setProductsMeta] = useState("");
   const [productsKeywords, setProductsKeywords] = useState("");
+  const [tags, setTags] = useState([]);
   const [productsStatus, setProductsStatus] = useState("");
   const [productsViewOrder, setProductsViewOrder] = useState("");
   const [productsSlug, setProductsSlug] = useState("");
@@ -46,7 +48,8 @@ function ProductsEdit() {
   const [heading, setHeading] = useState("");
   const [storeOnly, setStoreOnly] = useState("");
   const [webOnly, setWebOnly] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [cost, setCost] = useState("");
+  const [gst, setGst] = useState("");
   const [barcode, setBarcode] = useState("");
   const [productType, setProductType] = useState("");
   const [shortDetail, setShortDetail] = useState("");
@@ -184,7 +187,8 @@ function ProductsEdit() {
         setStoreOnly(cat.store_only);
         setWebOnly(cat.web_only);
         setHeading(cat.heading);
-        setQuantity(cat.quantity);
+        setCost(cat.cost);
+        setGst(cat.gst);
         setBarcode(cat.barcode);
         setShortDetail(cat.short_detail);
         setVisibility(cat.visibility);
@@ -402,6 +406,11 @@ function ProductsEdit() {
     return formData;
   }
   const handleAdd = () => {
+    let tagsToSend = "";
+    if (tags.length > 0) {
+      const convertTags = tags.map(({ text }) => text);
+      tagsToSend = convertTags.join(",");
+    }
     let catergoryData = {
       id: productData.id,
       title: productsName,
@@ -409,7 +418,7 @@ function ProductsEdit() {
       meta_description: productsMeta,
       category_id: categoryId,
       brand_id: brandId,
-      keywords: productsKeywords,
+      keywords: tagsToSend,
       status: productsStatus,
       view_order: productsViewOrder,
       pictures: pictures,
@@ -421,7 +430,8 @@ function ProductsEdit() {
       web_only: webOnly,
       barcode: barcode,
       product_type: productType,
-      quantity: quantity,
+      cost,
+      gst,
       short_detail: shortDetail,
       visibility: visibility,
       productoption: fixedData,
@@ -501,12 +511,7 @@ function ProductsEdit() {
         </div>
         <div className="mb-3">
           <CLabel htmlFor="CategoryKeywords">Keywords</CLabel>
-          <CInput
-            type="text"
-            id="CategoryKeywords"
-            value={productsKeywords}
-            onChange={(e) => setProductsKeywords(e.target.value)}
-          />
+          <KeywordsTagsComponent tags={tags} setTags={setTags} />
         </div>
         <div className="mb-3">
           <CLabel htmlFor="CategoryStatus">Status</CLabel>
@@ -598,12 +603,19 @@ function ProductsEdit() {
           />
         </div>
         <div className="mb-3">
-          <CLabel htmlFor="Quantity">Quantity</CLabel>
+          <CLabel htmlFor="Cost">Cost</CLabel>
           <CInput
             type="text"
-            id="Quantity"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            id="Cost"
+            onChange={(e) => setCost(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <CLabel htmlFor="GST">GST</CLabel>
+          <CInput
+            type="text"
+            id="GST"
+            onChange={(e) => setGst(e.target.value)}
           />
         </div>
         <div className="mb-3">

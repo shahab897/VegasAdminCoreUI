@@ -19,7 +19,6 @@ const ProductsList = (props) => {
   const fields = [
     "title",
     "short_detail",
-    "keywords",
     "quantity",
     "status",
     "view_order",

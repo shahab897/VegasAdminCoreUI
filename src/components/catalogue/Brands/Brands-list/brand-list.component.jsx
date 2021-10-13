@@ -19,7 +19,6 @@ const BrandList = (props) => {
   const fields = [
     "title",
     "details",
-    "keywords",
     "status",
     "featured",
     "discount",

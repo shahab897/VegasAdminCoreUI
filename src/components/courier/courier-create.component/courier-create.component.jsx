@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { CButton, CInput, CLabel, CForm } from "@coreui/react";
-import CourierDropDown from "../courier-dropdown/courier-dropdown.component";
+import StatusDropDown from "../../Dropdown/status-dropdown.component";
 import { Redirect } from "react-router-dom";
 
 function CourierCreate() {
@@ -66,14 +66,15 @@ function CourierCreate() {
           />
         </div>
         <div className="mb-3">
-          <CLabel htmlFor="status">Brands</CLabel>
-          <CourierDropDown
+          <CLabel htmlFor="status">Status</CLabel>
+          <StatusDropDown
             id="status"
             setStatus={setStatus}
             options={[
               { value: "YES", label: "Enabled" },
               { value: "NO", label: "Disabled" },
             ]}
+            defaultStatus={"YES"}
           />
         </div>
         <CButton color="primary" onClick={handleAdd}>
