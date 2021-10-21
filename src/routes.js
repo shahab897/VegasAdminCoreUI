@@ -190,6 +190,11 @@ const ManagePOCreate = React.lazy(() =>
     "./components/purchase-orders/manage-purchase-order/manage-purchase-order-create.compoent/manage-purchase-order-create.component"
   )
 );
+const ManagePOEdit = React.lazy(() =>
+  import(
+    "./components/purchase-orders/manage-purchase-order/manage-purchase-order-edit/manage-purchase-order-edit.component"
+  )
+);
 
 const routes = [
   { path: "/", exact: true, name: "Home" },
@@ -349,6 +354,11 @@ const routes = [
     path: "/purchase-order/manage-purchase-order/create",
     name: "Manage Purchase Order Create",
     component: ManagePOCreate,
+  },
+  {
+    path: "/manage-purchase-order/edit/:editId",
+    name: "Edit",
+    component: ManagePOEdit,
   },
   { path: "/theme", name: "Theme", component: Colors, exact: true },
   { path: "/theme/colors", name: "Colors", component: Colors },

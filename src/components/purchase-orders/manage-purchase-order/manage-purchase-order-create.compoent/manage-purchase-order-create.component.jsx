@@ -12,11 +12,12 @@ import {
   CCardBody,
   CCard,
 } from "@coreui/react";
-import { Redirect } from "react-router-dom";
+import { Redirect } from "react-router";
 import SuppliersDropDown from "../dropdowns/suppliers-dropdown.component";
 import BrandDropDown from "../../../catalogue/products/brand-dropdown.component/brand-dropdown.component";
 import Loading2Component from "../../../Loading-component/loading2-component";
 
+//add total cost and amount underneath
 function ManagePOCreate() {
   const [suppliers, setSuppliers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -159,17 +160,17 @@ function ManagePOCreate() {
       },
     };
 
-    // axios
-    //   .post(
-    //     "https://vegasapi.phebsoft-team.com/api/purchase",
-    //     purchaseOrder,
-    //     axiosConfig
-    //   )
-    //   .then((result) => {
-    //     console.log(result);
-    //     setRedirect(true);
-    //   })
-    //   .catch((error) => console.log("error", error));
+    axios
+      .post(
+        "https://vegasapi.phebsoft-team.com/api/purchaseorders",
+        purchaseOrder,
+        axiosConfig
+      )
+      .then((result) => {
+        console.log(result);
+        setRedirect(true);
+      })
+      .catch((error) => console.log("error", error));
   };
 
   if (redirect === true) {
