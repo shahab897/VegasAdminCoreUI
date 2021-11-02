@@ -180,6 +180,37 @@ const CouponCreate = React.lazy(() =>
 const CouponEdit = React.lazy(() =>
   import("./components/coupon/coupon-edit.component/coupon-edit.component")
 );
+const ManagePurchaseOrder = React.lazy(() =>
+  import(
+    "./components/purchase-orders/manage-purchase-order/manage-purchase-order.component"
+  )
+);
+const ManagePOCreate = React.lazy(() =>
+  import(
+    "./components/purchase-orders/manage-purchase-order/manage-purchase-order-create.compoent/manage-purchase-order-create.component"
+  )
+);
+const ManagePOEdit = React.lazy(() =>
+  import(
+    "./components/purchase-orders/manage-purchase-order/manage-purchase-order-edit/manage-purchase-order-edit.component"
+  )
+);
+
+const StockTransferCreate = React.lazy(() =>
+  import(
+    "./components/stock-transfer/stock-transfer-create/stock-transfer-create.component"
+  )
+);
+const StockTransferComponent = React.lazy(() =>
+  import(
+    "./components/stock-transfer/stock-transfer-list/stock-transfer-list.component"
+  )
+);
+const StockTransferEdit = React.lazy(() =>
+  import(
+    "./components/stock-transfer/stock-transfer-edit.component/stock-transfer-edit.component"
+  )
+);
 
 const routes = [
   { path: "/", exact: true, name: "Home" },
@@ -328,6 +359,38 @@ const routes = [
     path: "/coupons/edit/:editId",
     name: "Edit Coupon",
     component: CouponEdit,
+  },
+  {
+    path: "/purchase-order/manage-purchase-order",
+    name: "Manage Purchase Orders",
+    component: ManagePurchaseOrder,
+    exact: true,
+  },
+  {
+    path: "/purchase-order/manage-purchase-order/create",
+    name: "Manage Purchase Order Create",
+    component: ManagePOCreate,
+  },
+  {
+    path: "/manage-purchase-order/edit/:editId",
+    name: "Edit",
+    component: ManagePOEdit,
+  },
+  {
+    path: "/stock-transfer",
+    name: "Stock Transfer",
+    component: StockTransferComponent,
+    exact: true,
+  },
+  {
+    path: "/stock-transfer/create",
+    name: "Create Stock Transfer",
+    component: StockTransferCreate,
+  },
+  {
+    path: "/stock-transfer/edit/:editId",
+    name: "Stock Transfer Edit",
+    component: StockTransferEdit,
   },
   { path: "/theme", name: "Theme", component: Colors, exact: true },
   { path: "/theme/colors", name: "Colors", component: Colors },

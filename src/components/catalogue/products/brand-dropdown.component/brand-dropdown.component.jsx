@@ -17,7 +17,7 @@ const DropDown = styled(Select)`
 `;
 
 const BrandDropDown = (props) => {
-  const { options, setBrandId, defaultBrand } = props;
+  const { options, setBrandId, defaultBrand, disabled } = props;
   if (options !== undefined) {
     if (defaultBrand === "" || defaultBrand === undefined)
       return (
@@ -27,6 +27,7 @@ const BrandDropDown = (props) => {
             options={options}
             values={[]}
             onChange={(selected) => setBrandId(selected[0].value)}
+            disabled={disabled}
           />
         </>
       );
@@ -39,6 +40,7 @@ const BrandDropDown = (props) => {
             options={options}
             values={[options[defaultSelected]]}
             onChange={(selected) => setBrandId(selected[0].value)}
+            disabled={disabled}
           />
         </>
       );
@@ -51,6 +53,7 @@ const BrandDropDown = (props) => {
           options={options}
           values={[]}
           onChange={(selected) => setBrandId(selected[0].value)}
+          disabled={disabled}
         />
       </>
     );

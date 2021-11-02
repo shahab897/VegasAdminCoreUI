@@ -1,0 +1,26 @@
+.tag-wrapper {
+  background: #39f;
+  color: white;
+}
+.tag-wrapper:focus {
+  border: none;
+}
+.ReactTags__remove {
+  background: rgba(0, 0, 0, 0);
+  border: none;
+  color: white;
+  border: none;
+}
+.ReactTags__remove:focus {
+  outline: none;
+}
+.ReactTags__remove:active {
+  outline: none;
+}
+span.tag-wrapper {
+  padding: 5px;
+  margin: 2px;
+}
+.ReactTags__tagInput {
+  margin-top: 10px;
+}

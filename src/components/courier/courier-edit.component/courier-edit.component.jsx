@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { CButton, CInput, CLabel, CForm } from "@coreui/react";
-import CourierDropDown from "../courier-dropdown/courier-dropdown.component";
+import StatusDropDown from "../../Dropdown/status-dropdown.component";
 import { Redirect } from "react-router-dom";
 import { useLocation } from "react-router";
 import Loading from "../../Loading-component/loading-component";
@@ -98,7 +98,7 @@ function CouriersEdit() {
         </div>
         <div className="mb-3">
           <CLabel htmlFor="WarehouseLocation">Status</CLabel>
-          <CourierDropDown
+          <StatusDropDown
             options={[
               {
                 value: "YES",

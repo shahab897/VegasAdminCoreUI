@@ -20,7 +20,6 @@ const StoresList = (props) => {
     "name",
     "city",
     "address",
-    "warehouse_id",
     {
       key: "edit",
       label: "",
@@ -100,6 +99,9 @@ const StoresList = (props) => {
                   fields={fields}
                   hover
                   striped
+                  sorter
+                  tableFilter
+                  columnFilter
                   bordered
                   size="sm"
                   itemsPerPage={10}

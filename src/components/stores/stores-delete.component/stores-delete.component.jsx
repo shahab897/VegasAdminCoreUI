@@ -10,10 +10,13 @@ function StoresDelete(props) {
 
   const handleDelete = () => {
     const config = {
-      headers: { Authorization: `Bearer ${token_vegas}` },
+      headers: {
+        Authorization: `Bearer ${token_vegas}`,
+        Accept: "application/json",
+      },
     };
     axios
-      .delete(`https://vegasapi.phebsoft-team.com/stores/${id}`, config)
+      .delete(`https://vegasapi.phebsoft-team.com/api/stores/${id}`, config)
       .then(() => {
         console.log("Delete successful", `${id}`);
         setUpdated(true);

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Select from "react-dropdown-select";
-import { Math } from "core-js";
 
 const DropDown = styled(Select)`
   width: 100%;
@@ -17,30 +16,31 @@ const DropDown = styled(Select)`
   margin-bottom: 10px;
 `;
 
-const CourierDropDown = (props) => {
-  const { options, setStatus, defaultStatus } = props;
+const BrandDropDown = (props) => {
+  const { options, setBrandId, defaultBrand, disabled } = props;
   if (options !== undefined) {
-    if (defaultStatus === "" || defaultStatus === undefined)
+    if (defaultBrand === "" || defaultBrand === undefined)
       return (
         <>
           <DropDown
-            key={Math.random()}
-            placeholder="Select Status"
+            placeholder="Select a Brand"
             options={options}
             values={[]}
-            onChange={(selected) => setStatus(selected[0].value)}
+            onChange={(selected) => setBrandId(selected[0].value)}
+            disabled={disabled}
           />
         </>
       );
     else {
-      const defaultSelected = options.findIndex((element) => defaultStatus);
+      const defaultSelected = options.findIndex((element) => defaultBrand);
       return (
         <>
           <DropDown
-            placeholder="Select Status"
+            placeholder="Select a Brand"
             options={options}
             values={[options[defaultSelected]]}
-            onChange={(selected) => setStatus(selected[0].value)}
+            onChange={(selected) => setBrandId(selected[0].value)}
+            disabled={disabled}
           />
         </>
       );
@@ -49,15 +49,15 @@ const CourierDropDown = (props) => {
     return (
       <>
         <DropDown
-          key={Math.random()}
-          placeholder="Select Status"
+          placeholder="Select a Brand"
           options={options}
           values={[]}
-          onChange={(selected) => setStatus(selected[0].value)}
+          onChange={(selected) => setBrandId(selected[0].value)}
+          disabled={disabled}
         />
       </>
     );
   }
 };
 
-export default CourierDropDown;
+export default BrandDropDown;

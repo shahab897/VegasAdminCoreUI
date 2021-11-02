@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { CButton, CInput, CLabel, CForm } from "@coreui/react";
+import { CButton, CInput, CLabel, CForm, CAlert } from "@coreui/react";
 import BrandDropDown from "../suppliers-create.component/supplier-brand-dropdown.component";
+import TypeDropdown from "../supplier-dropdowns/supplier-type-dropdown.component";
 import { Redirect } from "react-router-dom";
 import { useLocation } from "react-router";
 import Loading from "../../Loading-component/loading-component";
@@ -10,11 +11,12 @@ function SuppliersEdit() {
   const [suppliersName, setSuppliersName] = useState("");
   const [suppliersEmail, setSuppliersEmail] = useState("");
   const [brands, setBrands] = useState("");
-  const [suppliersType, setSuppliersType] = useState("");
+  const [type, setType] = useState("");
   const [brandsIds, setBrandsIds] = useState([]);
   const [suppliersData, setSuppliersData] = useState([]);
   const [cell, setCell] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [errorOnSubmit, setErrorOnSubmit] = useState([]);
 
   const { pathname } = useLocation();
   const id = pathname.slice(pathname.search("edit/") + 5);
@@ -56,7 +58,7 @@ function SuppliersEdit() {
         setSuppliersData(cat);
         setSuppliersName(cat.name);
         setSuppliersEmail(cat.email);
-        setSuppliersType(cat.supplier_type);
+        setType(cat.supplier_type);
         setCell(cat.cell);
         Ids = cat.brand_ids.split("|").map((el) => parseInt(el, 10));
         setBrandsIds([
@@ -82,7 +84,7 @@ function SuppliersEdit() {
       id: suppliersData.id,
       name: suppliersName,
       email: suppliersEmail,
-      supplier_type: suppliersType,
+      supplier_type: type,
       brand_ids: brandsIds,
       cell: cell,
     };
@@ -95,9 +97,16 @@ function SuppliersEdit() {
       )
       .then((result) => {
         console.log(result);
+        if (result.data.status === false) {
+          setErrorOnSubmit(result.data.messages);
+          return;
+        }
         setRedirect(true);
       })
-      .catch((error) => console.log("error", error));
+      .catch((error) => {
+        console.log("error", error);
+        setErrorOnSubmit([error.response.statusText]);
+      });
   };
 
   if (isLoading === true) return <Loading />;
@@ -108,6 +117,15 @@ function SuppliersEdit() {
   return (
     <div>
       <CForm>
+        {errorOnSubmit.length > 0 && (
+          <>
+            {errorOnSubmit.map((error, index) => (
+              <CAlert key={index} color="danger" fade className="mb-3">
+                {error}
+              </CAlert>
+            ))}
+          </>
+        )}
         <div className="mb-3">
           <CLabel htmlFor="WarehouseName">Name</CLabel>
           <CInput
@@ -128,11 +146,20 @@ function SuppliersEdit() {
         </div>
         <div className="mb-3">
           <CLabel htmlFor="WarehouseLocation">Type</CLabel>
-          <CInput
-            type="text"
-            id="WarehouseLocation"
-            value={suppliersType}
-            onChange={(e) => setSuppliersType(e.target.value)}
+          <TypeDropdown
+            id="Type"
+            options={[
+              {
+                label: "Manage By Vegas",
+                value: 1,
+              },
+              {
+                label: "Manage Self",
+                value: 2,
+              },
+            ]}
+            defaultType={type}
+            setType={setType}
           />
         </div>
         <div className="mb-3">

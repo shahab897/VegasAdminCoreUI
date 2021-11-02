@@ -19,7 +19,6 @@ const OptionsList = (props) => {
   const fields = [
     "name",
     "type",
-    "option_values",
     {
       key: "edit",
       label: "",
@@ -100,6 +99,9 @@ const OptionsList = (props) => {
                   fields={fields}
                   hover
                   striped
+                  sorter
+                  tableFilter
+                  columnFilter
                   bordered
                   size="sm"
                   itemsPerPage={10}

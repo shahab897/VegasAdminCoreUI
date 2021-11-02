@@ -30,22 +30,36 @@
     "@coreui/react": "^3.4.6",
     "@coreui/react-chartjs": "^1.1.0",
     "@coreui/utils": "^1.3.1",
+    "@emotion/react": "^11.4.1",
+    "@emotion/styled": "^11.3.0",
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.60",
+    "@mui/material": "^5.0.4",
+    "@mui/styled-engine-sc": "^5.0.3",
+    "@syncfusion/ej2-react-calendars": "^19.3.44",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.0",
     "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "core-js": "^3.9.1",
+    "date-fns": "^2.25.0",
     "enzyme": "^3.11.0",
+    "eslint-config-prettier": "^8.3.0",
+    "moment": "^2.29.1",
     "node-sass": "^5.0.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-app-polyfill": "^2.0.0",
+    "react-csv": "^2.0.3",
+    "react-datepicker": "^4.2.1",
+    "react-dnd": "^14.0.2",
+    "react-dnd-html5-backend": "^14.0.0",
     "react-dom": "^17.0.2",
     "react-dropdown-select": "^4.7.4",
     "react-icons": "^4.2.0",
     "react-redux": "^7.2.3",
     "react-router-dom": "^5.2.0",
+    "react-tag-input": "^6.7.3",
     "redux": "^4.0.5",
     "sass": "^1.32.8",
     "styled-components": "^5.3.1"
@@ -53,6 +67,7 @@
   "devDependencies": {
     "@babel/core": "^7.13.14",
     "auto-changelog": "~2.2.1",
+    "prettier": "2.4.1",
     "react-scripts": "^4.0.3"
   },
   "scripts": {
@@ -62,7 +77,8 @@
     "test:cov": "npm test -- --coverage --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand",
     "eject": "react-scripts eject",
-    "changelog": "auto-changelog --starting-version 3.0.0 --commit-limit false --hide-credit"
+    "changelog": "auto-changelog --starting-version 3.0.0 --commit-limit false --hide-credit",
+    "format": "prettier --write \"src/**/*.{js,jsx}\""
   },
   "bugs": {
     "url": "https://github.com/coreui/coreui-free-react-admin-template/issues"

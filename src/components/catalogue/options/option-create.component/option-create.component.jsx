@@ -11,10 +11,28 @@ const Wrapper = styled.div`
 
 function OptionsCreate() {
   const [optionsName, setOptionsName] = useState(undefined);
-  const [optionsType, setOptionsType] = useState(undefined);
-  const [optionsSortOrder, setOptionsSortOrder] = useState(undefined);
+  const [optionsType, setOptionsType] = useState("hidden");
+  const [optionsSortOrder, setOptionsSortOrder] = useState("");
   const [optionsValue, setOptionsValue] = useState(undefined);
   const [redirect, setRedirect] = useState(undefined);
+
+  const SORT_ORDER_REGEX = /^[0-9]\d*$/;
+
+  const handleSortOrderChange = (e) => {
+    let newOption = optionsSortOrder;
+    if (
+      SORT_ORDER_REGEX.test(e.target.value) ||
+      e.target.value === null ||
+      e.target.value === ""
+    ) {
+      e.target.style.borderColor = "#d8dbe0";
+      newOption = e.target.value;
+    } else if (SORT_ORDER_REGEX.test(e.target.value) === false) {
+      e.target.style.borderColor = "red";
+      return;
+    }
+    setOptionsSortOrder(newOption);
+  };
 
   useEffect(() => {
     console.log(optionsValue, "ann de o");
@@ -73,20 +91,22 @@ function OptionsCreate() {
             onChange={(e) => setOptionsName(e.target.value)}
           />
         </div>
-        <div className="mb-3">
+        {/* This field is selecting the options Type, it is being set statically at the moment */}
+        {/* <div className="mb-3">
           <CLabel htmlFor="OptionType">Option Type</CLabel>
           <CInput
             type="text"
             id="OptionType"
             onChange={(e) => setOptionsType(e.target.value)}
           />
-        </div>
+        </div> */}
         <div className="mb-3">
           <CLabel htmlFor="optionSortOrder">Option Sort Order</CLabel>
           <CInput
             type="text"
             id="optionSortOrder"
-            onChange={(e) => setOptionsSortOrder(e.target.value)}
+            value={optionsSortOrder}
+            onChange={(e) => handleSortOrderChange(e)}
           />
         </div>
         <DualInputField

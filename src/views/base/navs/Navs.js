@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   CRow,
   CCol,
@@ -11,9 +11,9 @@ import {
   CDropdownToggle,
   CNav,
   CNavItem,
-  CNavLink
-} from '@coreui/react'
-import { DocsLink } from 'src/reusable'
+  CNavLink,
+} from "@coreui/react";
+import { DocsLink } from "src/reusable";
 
 const Navs = () => {
   return (
@@ -23,7 +23,7 @@ const Navs = () => {
           <CCard>
             <CCardHeader>
               Navs
-              <DocsLink name="CNav"/>
+              <DocsLink name="CNav" />
             </CCardHeader>
             <CCardBody>
               <small>List Based</small>
@@ -175,10 +175,14 @@ const Navs = () => {
               <hr />
 
               <CNav fill variant="pills">
-                <CNavLink active className="nav-item">Active</CNavLink>
+                <CNavLink active className="nav-item">
+                  Active
+                </CNavLink>
                 <CNavLink className="nav-item">Link</CNavLink>
                 <CNavLink className="nav-item">Link</CNavLink>
-                <CNavLink className="nav-item" disabled>Disabled</CNavLink>
+                <CNavLink className="nav-item" disabled>
+                  Disabled
+                </CNavLink>
               </CNav>
 
               <hr />
@@ -201,12 +205,15 @@ const Navs = () => {
               <hr />
 
               <CNav justified variant="pills">
-                <CNavLink className="nav-item" active>Active</CNavLink>
+                <CNavLink className="nav-item" active>
+                  Active
+                </CNavLink>
                 <CNavLink className="nav-item">Link</CNavLink>
                 <CNavLink className="nav-item">Link</CNavLink>
-                <CNavLink className="nav-item" disabled>Disabled</CNavLink>
+                <CNavLink className="nav-item" disabled>
+                  Disabled
+                </CNavLink>
               </CNav>
-
             </CCardBody>
           </CCard>
         </CCol>
@@ -221,10 +228,18 @@ const Navs = () => {
             </CCardHeader>
             <CCardBody>
               <CNav variant="pills" className="flex-sm-row">
-                  <CNavLink className="flex-sm-fill text-sm-center" active>Active</CNavLink>
-                  <CNavLink className="flex-sm-fill text-sm-center">Link</CNavLink>
-                  <CNavLink className="flex-sm-fill text-sm-center">Link</CNavLink>
-                  <CNavLink className="flex-sm-fill text-sm-center" disabled>Disabled</CNavLink>
+                <CNavLink className="flex-sm-fill text-sm-center" active>
+                  Active
+                </CNavLink>
+                <CNavLink className="flex-sm-fill text-sm-center">
+                  Link
+                </CNavLink>
+                <CNavLink className="flex-sm-fill text-sm-center">
+                  Link
+                </CNavLink>
+                <CNavLink className="flex-sm-fill text-sm-center" disabled>
+                  Disabled
+                </CNavLink>
               </CNav>
             </CCardBody>
           </CCard>
@@ -232,7 +247,6 @@ const Navs = () => {
       </CRow>
 
       <CRow>
-
         <CCol xs="6">
           <CCard>
             <CCardHeader>
@@ -245,9 +259,7 @@ const Navs = () => {
                   <CNavLink active>Link</CNavLink>
                 </CNavItem>
                 <CDropdown inNav>
-                  <CDropdownToggle caret>
-                    Dropdown
-                  </CDropdownToggle>
+                  <CDropdownToggle caret>Dropdown</CDropdownToggle>
                   <CDropdownMenu>
                     <CDropdownItem>Action</CDropdownItem>
                     <CDropdownItem>Another action</CDropdownItem>
@@ -279,9 +291,7 @@ const Navs = () => {
                   <CNavLink active>Link</CNavLink>
                 </CNavItem>
                 <CDropdown inNav>
-                  <CDropdownToggle caret>
-                    Dropdown
-                  </CDropdownToggle>
+                  <CDropdownToggle caret>Dropdown</CDropdownToggle>
                   <CDropdownMenu>
                     <CDropdownItem>Action</CDropdownItem>
                     <CDropdownItem>Another action</CDropdownItem>
@@ -302,7 +312,7 @@ const Navs = () => {
         </CCol>
       </CRow>
     </>
-  )
-}
+  );
+};
 
-export default Navs
+export default Navs;

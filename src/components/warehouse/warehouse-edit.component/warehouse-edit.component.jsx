@@ -4,11 +4,14 @@ import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { useLocation } from "react-router";
 import Loading from "../../Loading-component/loading-component";
+import StoresDropDownMulti from "../warehouse-dropdown.component/warehouse-dropdown.component";
 
 function WareHouseEdit(props) {
   const [warehouseName, setWarehouseName] = useState(undefined);
   const [warehouseDetail, setWarehouseDetail] = useState(undefined);
   const [warehouseLocation, setWarehouseLocation] = useState(undefined);
+  const [stores, setStores] = useState([]);
+  const [storesIds, setStoresIds] = useState([]);
   const [redirect, setRedirect] = useState(undefined);
   const [data, setData] = useState(undefined);
 
@@ -24,13 +27,35 @@ function WareHouseEdit(props) {
       headers: { Authorization: `Bearer ${token_vegas}` },
     };
     axios
+      .get("https://vegasapi.phebsoft-team.com/api/stores", config)
+      .then((result) => {
+        const stores = result.data.data.map(({ id, name }) => {
+          return { value: id, label: name };
+        });
+        setStores(stores);
+      })
+      .catch((error) => console.log("error", error));
+    axios
       .get(`https://vegasapi.phebsoft-team.com/api/warehouses/${id}`, config)
       .then((response) => {
         setData(response.data.data);
+        const store_ids = response.data.data.stores.map(
+          (store) => store.store_id
+        );
+        setStoresIds(store_ids);
+        // const ids = `${response.data.data.stores_ids}`;
+        // setStoresIds([
+        //   ...stores,
+        //   ...ids.split("|").map((el) => parseInt(el, 10)),
+        // ]);
         console.log(response);
       })
       .catch(console.log);
   };
+
+  useEffect(() => {
+    console.log(storesIds);
+  }, [storesIds]);
 
   useEffect(() => {
     fetch_a();
@@ -55,6 +80,7 @@ function WareHouseEdit(props) {
       name: warehouseName,
       detail: warehouseDetail,
       location: warehouseLocation,
+      stores_ids: storesIds,
     };
     let axiosConfig = {
       headers: {
@@ -116,6 +142,14 @@ function WareHouseEdit(props) {
             aria-describedby="warehouse-location"
             defaultValue={data.location}
             onChange={(e) => setWarehouseLocation(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <CLabel htmlFor="WarehouseStore">Associated Store(s)</CLabel>
+          <StoresDropDownMulti
+            options={stores}
+            setStoresIds={setStoresIds}
+            storesIds={storesIds}
           />
         </div>
         <CButton color="primary" onClick={handleAdd}>

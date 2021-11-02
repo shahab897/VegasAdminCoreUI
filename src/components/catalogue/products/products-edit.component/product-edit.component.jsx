@@ -23,6 +23,7 @@ import { ProductOptionValuesContext } from "../../../../context-providers/produc
 import ProductUpload from "../product-image-upload.component/product-image-upload.component";
 import styled from "styled-components";
 import { useLocation } from "react-router";
+import KeywordsTagsComponent from "../../../Keywords-tag.component/keywords-tag-component";
 import "../style.css";
 
 const Wrapper = styled.div`
@@ -34,6 +35,7 @@ function ProductsEdit() {
   const [productsDetail, setProductsDetail] = useState("");
   const [productsMeta, setProductsMeta] = useState("");
   const [productsKeywords, setProductsKeywords] = useState("");
+  const [tags, setTags] = useState([]);
   const [productsStatus, setProductsStatus] = useState("");
   const [productsViewOrder, setProductsViewOrder] = useState("");
   const [productsSlug, setProductsSlug] = useState("");
@@ -46,7 +48,8 @@ function ProductsEdit() {
   const [heading, setHeading] = useState("");
   const [storeOnly, setStoreOnly] = useState("");
   const [webOnly, setWebOnly] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [cost, setCost] = useState("");
+  const [gst, setGst] = useState("");
   const [barcode, setBarcode] = useState("");
   const [productType, setProductType] = useState("");
   const [shortDetail, setShortDetail] = useState("");
@@ -137,8 +140,16 @@ function ProductsEdit() {
   };
 
   useEffect(() => {
-    console.log(productOptionValuesList, "lets seee hwat is goiong on here");
-  }, [productOptionValuesList]);
+    console.log(productsKeywords);
+  }, [productsKeywords]);
+
+  useEffect(() => {
+    return () => {
+      setOptionValues([]);
+      changeOptions([]);
+      console.log(optionsValues, "options cleared");
+    };
+  }, []);
 
   useEffect(() => {
     if (isClicked === true) {
@@ -176,19 +187,13 @@ function ProductsEdit() {
         setStoreOnly(cat.store_only);
         setWebOnly(cat.web_only);
         setHeading(cat.heading);
-        setQuantity(cat.quantity);
+        setCost(cat.cost);
+        setGst(cat.gst);
         setBarcode(cat.barcode);
         setShortDetail(cat.short_detail);
         setVisibility(cat.visibility);
         setYoutube(cat.youtube);
         setProductType(cat.product_type);
-        setVariations(cat.variations);
-        const varitionOptions = cat.variations.map((variant) => {
-          return {
-            options: variant.options,
-          };
-        });
-        setVariationptions(varitionOptions);
         const categories = response.data.data.categories.map((item) => {
           return { value: item.id, label: item.title };
         });
@@ -197,89 +202,100 @@ function ProductsEdit() {
           return { value: item.id, label: item.title };
         });
         setBrandList(brands);
+        if (cat.product_type === "configurable") {
+          setVariations(cat.variations);
+          const varitionOptions = cat.variations.map((variant) => {
+            return {
+              options: variant.options,
+            };
+          });
+          setVariationptions(varitionOptions);
 
-        const options1 = response.data.data.options;
-        const opts = options1.map((item) => {
-          return {
-            value: item.id,
-            label: item.name,
-            isChecked: item.isChecked,
-          };
-        });
-        setOptionValues(opts);
-        const optionData = response.data.data.options.map((item) => {
-          if (
-            selectedProductOption.find((option) => option.option_id === item.id)
-          ) {
-            return { value: item.id, label: item.name, isChecked: true };
-          } else {
-            return { value: item.id, label: item.name, isChecked: false };
-          }
-        });
-        console.log(optionData, "ye dekhien");
-        changeOptions(optionData);
-        // setProductOptionValuesList(
-        //   options1
-        //     .map((item) =>
-        //       item.option_value.map((option) => {
-        //         return {
-        //           id: option.id,
-        //           option_id: option.option_id,
-        //           sort_order: option.sort_order,
-        //           value: option.value,
-        //           isChecked: option.isChecked,
-        //         };
-        //       })
-        //     )
-        //     .flat()
-        // );
-        setOptionValues(
-          options1
-            .map((item) =>
-              item.option_value.map((option) => {
-                if (
-                  selectedProductOption.find(
-                    (options) => parseInt(options.value) === option.id
-                  )
-                ) {
-                  return {
-                    id: option.id,
-                    option_id: option.option_id,
-                    sort_order: option.sort_order,
-                    value: option.value,
-                    isChecked: true,
-                  };
-                } else {
-                  return {
-                    id: option.id,
-                    option_id: option.option_id,
-                    sort_order: option.sort_order,
-                    value: option.value,
-                    isChecked: false,
-                  };
-                }
-              })
-            )
-            .flat()
-        );
-
-        const what = response.data.data.options.map((item) =>
-          item.option_value.map((option) => {
+          const options1 = response.data.data.options;
+          const opts = options1.map((item) => {
+            return {
+              value: item.id,
+              label: item.name,
+              isChecked: item.isChecked,
+            };
+          });
+          setOptionValues(opts);
+          const optionData = response.data.data.options.map((item) => {
             if (
               selectedProductOption.find(
-                (options) => parseInt(options.value) === option.id
+                (option) => option.option_id === item.id
               )
             ) {
-              // addProductOptionValuesWithoutClick(option);
-              return option;
+              return { value: item.id, label: item.name, isChecked: true };
+            } else {
+              return { value: item.id, label: item.name, isChecked: false };
             }
-          })
-        );
-        const what2 = what.flat().filter((item) => item !== undefined);
-        console.log(what2, "what does this one have ");
-        console.log(productOptionValues, "is this what I want");
-        addProductOptionValuesWithoutClick(what2);
-        handleGenerate(false);
+          });
+          console.log(optionData, "ye dekhien");
+          changeOptions(optionData);
+          // setProductOptionValuesList(
+          //   options1
+          //     .map((item) =>
+          //       item.option_value.map((option) => {
+          //         return {
+          //           id: option.id,
+          //           option_id: option.option_id,
+          //           sort_order: option.sort_order,
+          //           value: option.value,
+          //           isChecked: option.isChecked,
+          //         };
+          //       })
+          //     )
+          //     .flat()
+          // );
+          setOptionValues(
+            options1
+              .map((item) =>
+                item.option_value.map((option) => {
+                  if (
+                    selectedProductOption.find(
+                      (options) => parseInt(options.value) === option.id
+                    )
+                  ) {
+                    return {
+                      id: option.id,
+                      option_id: option.option_id,
+                      sort_order: option.sort_order,
+                      value: option.value,
+                      isChecked: true,
+                    };
+                  } else {
+                    return {
+                      id: option.id,
+                      option_id: option.option_id,
+                      sort_order: option.sort_order,
+                      value: option.value,
+                      isChecked: false,
+                    };
+                  }
+                })
+              )
+              .flat()
+          );
+
+          const what = response.data.data.options.map((item) =>
+            item.option_value.map((option) => {
+              if (
+                selectedProductOption.find(
+                  (options) => parseInt(options.value) === option.id
+                )
+              ) {
+                // addProductOptionValuesWithoutClick(option);
+                return option;
+              }
+            })
+          );
+          const what2 = what.flat().filter((item) => item !== undefined);
+          console.log(what2, "what does this one have ");
+          console.log(productOptionValues, "is this what I want");
+          addProductOptionValuesWithoutClick(what2);
+          handleGenerate(false);
+        }
         setIsLoading(false);
       })
       .catch(console.log);
@@ -390,6 +406,11 @@ function ProductsEdit() {
     return formData;
   }
   const handleAdd = () => {
+    let tagsToSend = "";
+    if (tags.length > 0) {
+      const convertTags = tags.map(({ text }) => text);
+      tagsToSend = convertTags.join(",");
+    }
     let catergoryData = {
       id: productData.id,
       title: productsName,
@@ -397,7 +418,7 @@ function ProductsEdit() {
       meta_description: productsMeta,
       category_id: categoryId,
       brand_id: brandId,
-      keywords: productsKeywords,
+      keywords: tagsToSend,
       status: productsStatus,
       view_order: productsViewOrder,
       pictures: pictures,
@@ -409,7 +430,8 @@ function ProductsEdit() {
       web_only: webOnly,
       barcode: barcode,
       product_type: productType,
-      quantity: quantity,
+      cost,
+      gst,
       short_detail: shortDetail,
       visibility: visibility,
       productoption: fixedData,
@@ -489,12 +511,7 @@ function ProductsEdit() {
         </div>
         <div className="mb-3">
           <CLabel htmlFor="CategoryKeywords">Keywords</CLabel>
-          <CInput
-            type="text"
-            id="CategoryKeywords"
-            value={productsKeywords}
-            onChange={(e) => setProductsKeywords(e.target.value)}
-          />
+          <KeywordsTagsComponent tags={tags} setTags={setTags} />
         </div>
         <div className="mb-3">
           <CLabel htmlFor="CategoryStatus">Status</CLabel>
@@ -524,7 +541,7 @@ function ProductsEdit() {
           />
         </div>
         <div className="mb-3">
-          <CLabel htmlFor="CategoryId">Category Id</CLabel>
+          <CLabel htmlFor="CategoryId">Category</CLabel>
           <CategoryDropDown
             defaultCategory={categoryId}
             options={categoryList}
@@ -586,12 +603,19 @@ function ProductsEdit() {
           />
         </div>
         <div className="mb-3">
-          <CLabel htmlFor="Quantity">Quantity</CLabel>
+          <CLabel htmlFor="Cost">Cost</CLabel>
           <CInput
             type="text"
-            id="Quantity"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            id="Cost"
+            onChange={(e) => setCost(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <CLabel htmlFor="GST">GST</CLabel>
+          <CInput
+            type="text"
+            id="GST"
+            onChange={(e) => setGst(e.target.value)}
           />
         </div>
         <div className="mb-3">

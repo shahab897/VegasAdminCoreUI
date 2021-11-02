@@ -19,11 +19,8 @@ const BrandList = (props) => {
   const fields = [
     "title",
     "details",
-    "keywords",
     "status",
-    "featured",
     "discount",
-    "view_order",
     {
       key: "edit",
       label: "",
@@ -102,6 +99,9 @@ const BrandList = (props) => {
                   items={data}
                   fields={fields}
                   hover
+                  sorter
+                  tableFilter
+                  columnFilter
                   striped
                   bordered
                   size="sm"

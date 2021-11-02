@@ -19,7 +19,6 @@ const ProductCategoriesList = (props) => {
   const fields = [
     "title",
     "details",
-    "keywords",
     "status",
     "view_order",
     {
@@ -101,6 +100,9 @@ const ProductCategoriesList = (props) => {
                   fields={fields}
                   hover
                   striped
+                  sorter
+                  tableFilter
+                  columnFilter
                   bordered
                   size="sm"
                   itemsPerPage={10}

@@ -4,14 +4,16 @@ import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { useLocation } from "react-router";
 import DropDownCore from "../../../Dropdown/dropdown.component";
+import KeywordsTagsComponent from "../../../Keywords-tag.component/keywords-tag-component";
+import StatusDropDown from "../../../Dropdown/status-dropdown.component";
 import Loading from "../../../Loading-component/loading-component";
 
 function CategoriesEdit(props) {
   const [categoryName, setCategoryName] = useState(undefined);
   const [categoryDetail, setCategoryDetail] = useState(undefined);
   const [categoryMeta, setCategoryMeta] = useState(undefined);
-  const [categoryKeywords, setCategoryKeywords] = useState(undefined);
-  const [categoryStatus, setCategoryStatus] = useState(undefined);
+  const [tags, setTags] = useState([]);
+  const [status, setStatus] = useState(undefined);
   const [categoryParentId, setCategoryParentId] = useState(undefined);
   const [categoryViewOrder, setCategoryViewOrder] = useState(undefined);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,6 +36,11 @@ function CategoriesEdit(props) {
       .get(`https://vegasapi.phebsoft-team.com/api/categories/${id}`, config)
       .then((response) => {
         setData(response.data.data);
+        const stringToArray = response.data.data.keywords.split(",");
+        const tagsForUse = stringToArray.map((tag) => {
+          return { id: tag, text: tag };
+        });
+        setTags(tagsForUse);
         console.log(response);
       })
       .catch(console.log);
@@ -75,11 +82,8 @@ function CategoriesEdit(props) {
     if (categoryMeta == undefined || categoryMeta === "") {
       if (data != undefined) setCategoryMeta(data.meta_description);
     }
-    if (categoryKeywords == undefined || categoryKeywords === "") {
-      if (data != undefined) setCategoryKeywords(data.keywords);
-    }
-    if (categoryStatus == undefined || categoryStatus === "") {
-      if (data != undefined) setCategoryStatus(data.status);
+    if (status == undefined || setStatus === "") {
+      if (data != undefined) setStatus(data.status);
     }
     if (categoryViewOrder == undefined || categoryViewOrder === "") {
       if (data != undefined) setCategoryViewOrder(data.view_order);
@@ -89,22 +93,28 @@ function CategoriesEdit(props) {
     }
   }, [
     categoryDetail,
-    categoryKeywords,
+    tags,
     categoryMeta,
     categoryName,
     categoryParentId,
-    categoryStatus,
+    status,
     categoryViewOrder,
     data,
   ]);
 
   const handleAdd = () => {
+    let tagsToSend = "";
+    if (tags.length > 0) {
+      const convertTags = tags.map(({ text }) => text);
+      tagsToSend = convertTags.join(",");
+    }
+
     let CatergoryData = {
       title: categoryName,
       details: categoryDetail,
       meta_description: categoryMeta,
-      keywords: categoryKeywords,
-      status: categoryStatus,
+      keywords: tagsToSend,
+      status: status,
       view_order: categoryViewOrder,
       cat_slug: data.cat_slug,
       parent_id: categoryParentId,
@@ -176,24 +186,11 @@ function CategoriesEdit(props) {
           />
         </div>
         <div className="mb-3">
-          <CLabel htmlFor="CategoryKeywords">Keywords</CLabel>
-          <CInput
-            type="text"
-            id="CategoryKeywords"
-            aria-describedby="category-keywords"
-            defaultValue={data.keywords}
-            onChange={(e) => setCategoryKeywords(e.target.value)}
-          />
+          <KeywordsTagsComponent tags={tags} setTags={setTags} />
         </div>
         <div className="mb-3">
           <CLabel htmlFor="CategoryStatus">Status</CLabel>
-          <CInput
-            type="text"
-            id="CategoryStatus"
-            aria-describedby="category-Status"
-            defaultValue={data.status}
-            onChange={(e) => setCategoryStatus(e.target.value)}
-          />
+          <StatusDropDown setStatus={setStatus} defaultStatus={status} />
         </div>
         <div className="mb-3">
           <CLabel htmlFor="CategoryViewOrder">View Order</CLabel>

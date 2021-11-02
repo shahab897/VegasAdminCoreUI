@@ -9,7 +9,6 @@ function StoresEdit(props) {
   const [storeName, setStoreName] = useState(undefined);
   const [city, setCity] = useState(undefined);
   const [address, setAddress] = useState(undefined);
-  const [warehouseId, setWarehouseId] = useState(undefined);
   const [redirect, setRedirect] = useState(undefined);
   const [data, setData] = useState(undefined);
 
@@ -24,11 +23,11 @@ function StoresEdit(props) {
     const config = {
       headers: { Authorization: `Bearer ${token_vegas}` },
     };
+
     axios
       .get(`https://vegasapi.phebsoft-team.com/api/stores/${id}`, config)
       .then((response) => {
         setData(response.data.data);
-        console.log(response);
       })
       .catch(console.log);
   };
@@ -49,17 +48,13 @@ function StoresEdit(props) {
     if (address == undefined || address === "") {
       if (data != undefined) setAddress(data.address);
     }
-    if (warehouseId == undefined || warehouseId === "") {
-      if (data != undefined) setWarehouseId(data.warehouse_id);
-    }
-  }, [data, storeName, city, address, warehouseId]);
+  }, [data, storeName, city, address]);
 
   const handleAdd = () => {
     let storesData = {
       name: storeName,
       city: city,
       address: address,
-      warehouse_id: warehouseId,
     };
     let axiosConfig = {
       headers: {
@@ -118,15 +113,6 @@ function StoresEdit(props) {
             id="StoreLocation"
             defaultValue={data.address}
             onChange={(e) => setAddress(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <CLabel htmlFor="StoreWarehouseId">Warehouse Id</CLabel>
-          <CInput
-            type="text"
-            id="StoreWarehouseId"
-            defaultValue={data.warehouse_id}
-            onChange={(e) => setWarehouseId(e.target.value)}
           />
         </div>
         <CButton color="primary" onClick={handleAdd}>

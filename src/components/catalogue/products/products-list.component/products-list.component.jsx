@@ -19,7 +19,6 @@ const ProductsList = (props) => {
   const fields = [
     "title",
     "short_detail",
-    "keywords",
     "quantity",
     "status",
     "view_order",
@@ -102,6 +101,9 @@ const ProductsList = (props) => {
                   fields={fields}
                   hover
                   striped
+                  sorter
+                  tableFilter
+                  columnFilter
                   bordered
                   size="sm"
                   itemsPerPage={10}
@@ -109,10 +111,7 @@ const ProductsList = (props) => {
                   scopedSlots={{
                     delete: (item) => {
                       return (
-                        <ProductDelete
-                          id={item.id}
-                          setUpdated={setUpdated}
-                        />
+                        <ProductDelete id={item.id} setUpdated={setUpdated} />
                       );
                     },
                     edit: (item) => {
