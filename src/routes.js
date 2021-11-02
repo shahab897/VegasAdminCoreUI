@@ -1,4 +1,7 @@
 import React from "react";
+import componentLoader from "./utils/component-loader";
+
+const maxAttempts = 10;
 
 const Toaster = React.lazy(() =>
   import("./views/notifications/toaster/Toaster")
@@ -43,162 +46,337 @@ const ButtonGroups = React.lazy(() =>
 );
 const Buttons = React.lazy(() => import("./views/buttons/buttons/Buttons"));
 const Charts = React.lazy(() => import("./views/charts/Charts"));
-const Dashboard = React.lazy(() => import("./views/dashboard/Dashboard"));
+const Dashboard = React.lazy(() =>
+  componentLoader(() => import("./views/dashboard/Dashboard"), maxAttempts)
+);
 const CoreUIIcons = React.lazy(() =>
-  import("./views/icons/coreui-icons/CoreUIIcons")
+  componentLoader(
+    () => import("./views/icons/coreui-icons/CoreUIIcons"),
+    maxAttempts
+  )
 );
-const Flags = React.lazy(() => import("./views/icons/flags/Flags"));
-const Brands = React.lazy(() => import("./views/icons/brands/Brands"));
-const Alerts = React.lazy(() => import("./views/notifications/alerts/Alerts"));
-const Badges = React.lazy(() => import("./views/notifications/badges/Badges"));
-const Modals = React.lazy(() => import("./views/notifications/modals/Modals"));
-const Colors = React.lazy(() => import("./views/theme/colors/Colors"));
+const Flags = React.lazy(() =>
+  componentLoader(() => import("./views/icons/flags/Flags"), maxAttempts)
+);
+const Brands = React.lazy(() =>
+  componentLoader(() => import("./views/icons/brands/Brands"), maxAttempts)
+);
+const Alerts = React.lazy(() =>
+  componentLoader(
+    () => import("./views/notifications/alerts/Alerts"),
+    maxAttempts
+  )
+);
+const Badges = React.lazy(() =>
+  componentLoader(
+    () => import("./views/notifications/badges/Badges"),
+    maxAttempts
+  )
+);
+const Modals = React.lazy(() =>
+  componentLoader(
+    () => import("./views/notifications/modals/Modals"),
+    maxAttempts
+  )
+);
+const Colors = React.lazy(() =>
+  componentLoader(() => import("./views/theme/colors/Colors"), maxAttempts)
+);
 const Typography = React.lazy(() =>
-  import("./views/theme/typography/Typography")
+  componentLoader(
+    () => import("./views/theme/typography/Typography"),
+    maxAttempts
+  )
 );
-const Widgets = React.lazy(() => import("./views/widgets/Widgets"));
-const Users = React.lazy(() => import("./views/users/Users"));
-const User = React.lazy(() => import("./views/users/User"));
-const Login = React.lazy(() => import("./views/pages/login/Login"));
+const Widgets = React.lazy(() =>
+  componentLoader(() => import("./views/widgets/Widgets"), maxAttempts)
+);
+const Users = React.lazy(() =>
+  componentLoader(() => import("./views/users/Users"), maxAttempts)
+);
+const User = React.lazy(() =>
+  componentLoader(() => import("./views/users/User"), maxAttempts)
+);
+const Login = React.lazy(() =>
+  componentLoader(() => import("./views/pages/login/Login"), maxAttempts)
+);
 
 const WarehouseListComponent = React.lazy(() =>
-  import("./components/warehouse/warehouse.component/warehouse-list.component")
+  componentLoader(
+    () =>
+      import(
+        "./components/warehouse/warehouse.component/warehouse-list.component"
+      ),
+    maxAttempts
+  )
 );
 const WarehouseCreate = React.lazy(() =>
-  import(
-    "./components/warehouse/warehouse-create.component/warehouse-create.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/warehouse/warehouse-create.component/warehouse-create.component"
+      ),
+    maxAttempts
   )
 );
 const WarehouseEdit = React.lazy(() =>
-  import(
-    "./components/warehouse/warehouse-edit.component/warehouse-edit.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/warehouse/warehouse-edit.component/warehouse-edit.component"
+      ),
+    maxAttempts
   )
 );
 
 const StoresListComponent = React.lazy(() =>
-  import("./components/stores/stores-list.component/stores-list.component")
+  componentLoader(
+    () =>
+      import("./components/stores/stores-list.component/stores-list.component"),
+    maxAttempts
+  )
 );
 const StoresCreate = React.lazy(() =>
-  import("./components/stores/stores-create.component/stores-create.component")
+  componentLoader(
+    () =>
+      import(
+        "./components/stores/stores-create.component/stores-create.component"
+      ),
+    maxAttempts
+  )
 );
 const StoresEdit = React.lazy(() =>
-  import("./components/stores/stores-edit.component/stores-edit.component")
+  componentLoader(
+    () =>
+      import("./components/stores/stores-edit.component/stores-edit.component"),
+    maxAttempts
+  )
 );
 
 const CategoriesListComponent = React.lazy(() =>
-  import(
-    "./components/catalogue/categories/categories-list/categories-list-component"
+  componentLoader(
+    () =>
+      import(
+        "./components/catalogue/categories/categories-list/categories-list-component"
+      ),
+    maxAttempts
   )
 );
 const CategoriesEdit = React.lazy(() =>
-  import(
-    "./components/catalogue/categories/categories-edit/categories-edit.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/catalogue/categories/categories-edit/categories-edit.component"
+      ),
+    maxAttempts
   )
 );
 const CategoriesCreate = React.lazy(() =>
-  import(
-    "./components/catalogue/categories/categories-create/categories-create.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/catalogue/categories/categories-create/categories-create.component"
+      ),
+    maxAttempts
   )
 );
 
 const BrandList = React.lazy(() =>
-  import("./components/catalogue/Brands/Brands-list/brand-list.component")
+  componentLoader(
+    () =>
+      import("./components/catalogue/Brands/Brands-list/brand-list.component"),
+    maxAttempts
+  )
 );
 const BrandsCreate = React.lazy(() =>
-  import("./components/catalogue/Brands/Brand-create/brand-create.component")
+  componentLoader(
+    () =>
+      import(
+        "./components/catalogue/Brands/Brand-create/brand-create.component"
+      ),
+    maxAttempts
+  )
 );
 const BrandsEdit = React.lazy(() =>
-  import("./components/catalogue/Brands/Brand-edit/brand-edit.component")
+  componentLoader(
+    () =>
+      import("./components/catalogue/Brands/Brand-edit/brand-edit.component"),
+    maxAttempts
+  )
 );
 
 const OptionsList = React.lazy(() =>
-  import("./components/catalogue/options/option.component/option.component")
+  componentLoader(
+    () =>
+      import(
+        "./components/catalogue/options/option.component/option.component"
+      ),
+    maxAttempts
+  )
 );
 const OptionsCreate = React.lazy(() =>
-  import(
-    "./components/catalogue/options/option-create.component/option-create.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/catalogue/options/option-create.component/option-create.component"
+      ),
+    maxAttempts
   )
 );
 const OptionsEdit = React.lazy(() =>
-  import(
-    "./components/catalogue/options/options-edit.component/options-edit.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/catalogue/options/options-edit.component/options-edit.component"
+      ),
+    maxAttempts
   )
 );
 
 const ProductsList = React.lazy(() =>
-  import(
-    "./components/catalogue/products/products-list.component/products-list.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/catalogue/products/products-list.component/products-list.component"
+      ),
+    maxAttempts
   )
 );
 const ProductsCreate = React.lazy(() =>
-  import(
-    "./components/catalogue/products/products-create.component/products-create.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/catalogue/products/products-create.component/products-create.component"
+      ),
+    maxAttempts
   )
 );
 const ProductsEdit = React.lazy(() =>
-  import(
-    "./components/catalogue/products/products-edit.component/product-edit.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/catalogue/products/products-edit.component/product-edit.component"
+      ),
+    maxAttempts
   )
 );
 
 const SuppliersListing = React.lazy(() =>
-  import(
-    "./components/suppliers/suppliers-listing.component/suppliers-listing.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/suppliers/suppliers-listing.component/suppliers-listing.component"
+      ),
+    maxAttempts
   )
 );
 const SuppliersCreate = React.lazy(() =>
-  import(
-    "./components/suppliers/suppliers-create.component/suppliers-create.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/suppliers/suppliers-create.component/suppliers-create.component"
+      ),
+    maxAttempts
   )
 );
 const SuppliersEdit = React.lazy(() =>
-  import(
-    "./components/suppliers/suppliers-edit.component/suppliers-edit.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/suppliers/suppliers-edit.component/suppliers-edit.component"
+      ),
+    maxAttempts
   )
 );
 
 const CouriersList = React.lazy(() =>
-  import("./components/courier/courier-list.component/courier-list.component")
+  componentLoader(
+    () =>
+      import(
+        "./components/courier/courier-list.component/courier-list.component"
+      ),
+    maxAttempts
+  )
 );
 const CourierCreate = React.lazy(() =>
-  import(
-    "./components/courier/courier-create.component/courier-create.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/courier/courier-create.component/courier-create.component"
+      ),
+    maxAttempts
   )
 );
 const CouriersEdit = React.lazy(() =>
-  import("./components/courier/courier-edit.component/courier-edit.component")
+  componentLoader(
+    () =>
+      import(
+        "./components/courier/courier-edit.component/courier-edit.component"
+      ),
+    maxAttempts
+  )
 );
 
 const CouponList = React.lazy(() =>
-  import(
-    "./components/coupon/coupon-listing.component/coupon-listing.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/coupon/coupon-listing.component/coupon-listing.component"
+      ),
+    maxAttempts
   )
 );
 const CouponCreate = React.lazy(() =>
-  import("./components/coupon/coupon-create.component/coupon-create.component")
+  componentLoader(
+    () =>
+      import(
+        "./components/coupon/coupon-create.component/coupon-create.component"
+      ),
+    maxAttempts
+  )
 );
 const CouponEdit = React.lazy(() =>
-  import("./components/coupon/coupon-edit.component/coupon-edit.component")
+  componentLoader(
+    () =>
+      import("./components/coupon/coupon-edit.component/coupon-edit.component"),
+    maxAttempts
+  )
 );
 const ManagePurchaseOrder = React.lazy(() =>
-  import(
-    "./components/purchase-orders/manage-purchase-order/manage-purchase-order.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/purchase-orders/manage-purchase-order/manage-purchase-order.component"
+      ),
+    maxAttempts
   )
 );
 const ManagePOCreate = React.lazy(() =>
-  import(
-    "./components/purchase-orders/manage-purchase-order/manage-purchase-order-create.compoent/manage-purchase-order-create.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/purchase-orders/manage-purchase-order/manage-purchase-order-create.compoent/manage-purchase-order-create.component"
+      ),
+    maxAttempts
   )
 );
 const ManagePOEdit = React.lazy(() =>
-  import(
-    "./components/purchase-orders/manage-purchase-order/manage-purchase-order-edit/manage-purchase-order-edit.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/purchase-orders/manage-purchase-order/manage-purchase-order-edit/manage-purchase-order-edit.component"
+      ),
+    maxAttempts
   )
 );
 
 const StockTransferCreate = React.lazy(() =>
-  import(
-    "./components/stock-transfer/stock-transfer-create/stock-transfer-create.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/stock-transfer/stock-transfer-create/stock-transfer-create.component"
+      ),
+    maxAttempts
   )
 );
 const StockTransferComponent = React.lazy(() =>
@@ -207,8 +385,12 @@ const StockTransferComponent = React.lazy(() =>
   )
 );
 const StockTransferEdit = React.lazy(() =>
-  import(
-    "./components/stock-transfer/stock-transfer-edit.component/stock-transfer-edit.component"
+  componentLoader(
+    () =>
+      import(
+        "./components/stock-transfer/stock-transfer-edit.component/stock-transfer-edit.component"
+      ),
+    maxAttempts
   )
 );
 
