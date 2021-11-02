@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import axios from "axios";
 import {
   CButton,
@@ -217,266 +217,280 @@ function StockTransferCreate() {
   }
   // po id, product id
   return (
-    <div>
-      <CForm>
-        <div className="mb-3">
-          <CLabel htmlFor="TransferTypeDropDown">Transfer Type</CLabel>
-          <TransferTypeDropDown
-            id="TransferTypeDropDown"
-            options={[
-              { label: "Store To Store", value: 2 },
-              { label: "Warehouse To Store", value: 1 },
-            ]}
-            disabled={stockProducts.length > 0}
-            setTransferType={setTransferType}
-          />
-        </div>
-        <div className="mb-3">
-          <CLabel htmlFor="brand">Brand</CLabel>
-          <BrandDropDown
-            id="brand"
-            options={brands}
-            setBrandId={setBrandId}
-            disabled={stockProducts.length > 0}
-          />
-        </div>
-        {transferType === 1 && warehouses.length > 0 && (
-          <>
-            <div className="mb-3">
-              <CLabel htmlFor="warhouse">Warehouse</CLabel>
-              <WarehouseTransferDropDown
-                id="warhouse"
-                options={warehouses}
-                setWarehouseId={setWarehouseId}
-                disabled={stockProducts.length > 0}
-              />
-            </div>
-            {stores.length > 0 && (
-              <>
-                <div className="mb-3">
-                  <CLabel htmlFor="store">Store</CLabel>
-                  <StoreDropDown
-                    id="store"
-                    options={stores}
-                    setStoreId={setStoreId}
-                    disabled={stockProducts.length > 0}
-                  />
-                </div>
-                <p>
-                  <small>
-                    <strong>Note:</strong> You must select all the above options
-                    carefully before clicking fetch!
-                  </small>
-                </p>
-                {stockProducts.length === 0 && (
+    <Suspense fallback={Loading2Component}>
+      <div>
+        <CForm>
+          <div className="mb-3">
+            <CLabel htmlFor="TransferTypeDropDown">Transfer Type</CLabel>
+            <TransferTypeDropDown
+              id="TransferTypeDropDown"
+              options={[
+                { label: "Store To Store", value: 2 },
+                { label: "Warehouse To Store", value: 1 },
+              ]}
+              disabled={stockProducts.length > 0}
+              setTransferType={setTransferType}
+            />
+          </div>
+          <div className="mb-3">
+            <CLabel htmlFor="brand">Brand</CLabel>
+            <BrandDropDown
+              id="brand"
+              options={brands}
+              setBrandId={setBrandId}
+              disabled={stockProducts.length > 0}
+            />
+          </div>
+          {transferType === 1 && warehouses.length > 0 && (
+            <>
+              <div className="mb-3">
+                <CLabel htmlFor="warhouse">Warehouse</CLabel>
+                <WarehouseTransferDropDown
+                  id="warhouse"
+                  options={warehouses}
+                  setWarehouseId={setWarehouseId}
+                  disabled={stockProducts.length > 0}
+                />
+              </div>
+              {stores.length > 0 && (
+                <>
                   <div className="mb-3">
-                    <CButton color="primary" onClick={handleFetchProducts}>
-                      Fetch Products
-                    </CButton>
+                    <CLabel htmlFor="store">Store</CLabel>
+                    <StoreDropDown
+                      id="store"
+                      options={stores}
+                      setStoreId={setStoreId}
+                      disabled={stockProducts.length > 0}
+                    />
                   </div>
-                )}
-              </>
-            )}
-          </>
-        )}
-        {stockProducts.length > 0 && (
-          <CAlert fade color="info">
-            Stock transfer generated successfully!
-          </CAlert>
-        )}
-        <div>
-          {stockProducts.length > 0 && (
-            <div>
-              <CRow>
-                <CCol>
-                  <CCard>
-                    <CCardHeader>Products</CCardHeader>
-                    <CCardBody className="position-relative table-responsive">
-                      <div className="position-relative table-responsive">
-                        <table className="table table-sm  table-hover">
-                          <thead
-                            style={{
-                              background: "rgb(48 60 84)",
-                              color: "#fff",
-                            }}
-                          >
-                            <tr>
-                              <th>
-                                <CCol sm="8" className="ml-1">
-                                  Title
-                                </CCol>
-                              </th>
-                              <th>
-                                <CCol sm="8" className="ml-1">
-                                  Variant Title
-                                </CCol>
-                              </th>
-                              <th>
-                                <CCol sm="8" className="ml-1">
-                                  Barcode
-                                </CCol>
-                              </th>
-                              <th>
-                                <CCol sm="8" className="ml-1">
-                                  Options
-                                </CCol>
-                              </th>
-                              <th>
-                                <CCol sm="8" className="ml-1">
-                                  Available Quantity
-                                </CCol>
-                              </th>
-                              <th>
-                                <CCol sm="8" className="ml-1">
-                                  Transfer Quantity
-                                </CCol>
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {stockProducts.map(
-                              (
-                                {
-                                  title,
-                                  barcode,
-                                  product_type,
-                                  availableQuantity,
-                                  options,
-                                  variant_title,
-                                  transferQuantity,
-                                },
-                                index
-                              ) => {
-                                return (
-                                  <tr key={index}>
-                                    {product_type === "simple" && (
-                                      <>
-                                        <td>
-                                          <CCol sm="8">{title}</CCol>
-                                        </td>
-                                        <td>
-                                          <CCol sm="8">{variant_title}</CCol>
-                                        </td>
-                                        <td>
-                                          <CCol sm="8">{barcode}</CCol>
-                                        </td>
-                                        <td>
-                                          <CCol sm="8">{options}</CCol>
-                                        </td>
-                                        <td>
-                                          <CCol sm="8" className="ml-1">
-                                            <CInput
-                                              value={availableQuantity}
-                                              name="availableQuantity"
-                                              disabled
-                                              onChange={(e) =>
-                                                handleVariationchange(index, e)
-                                              }
-                                            />
-                                          </CCol>
-                                        </td>
-                                        <td>
-                                          <CCol sm="8" className="ml-1">
-                                            <CInput
-                                              value={transferQuantity}
-                                              name="transferQuantity"
-                                              innerRef={addToRef}
-                                              onBlur={(e) =>
-                                                handleOnBlur(index, e)
-                                              }
-                                              onChange={(e) =>
-                                                handleVariationchange(index, e)
-                                              }
-                                            />
-                                          </CCol>
-                                        </td>
-                                      </>
-                                    )}
-                                    {product_type === "configurable" && (
-                                      <>
-                                        <td>
-                                          <CCol sm="8">{title}</CCol>
-                                        </td>
-                                        <td>
-                                          <CCol sm="8">{variant_title}</CCol>
-                                        </td>
-                                        <td>
-                                          <CCol sm="8">{barcode}</CCol>
-                                        </td>
-                                        <td>
-                                          <CCol sm="8">
-                                            {options.map(
-                                              (
-                                                { value, options: { name } },
-                                                key
-                                              ) => {
-                                                return (
-                                                  <p key={key}>
-                                                    <b>{name}</b> : {value}
-                                                  </p>
-                                                );
-                                              }
-                                            )}
-                                          </CCol>
-                                        </td>
-                                        <td>
-                                          <CCol sm="8" className="ml-1">
-                                            <CInput
-                                              value={availableQuantity}
-                                              name="availableQuantity"
-                                              disabled
-                                              onChange={(e) =>
-                                                handleVariationchange(index, e)
-                                              }
-                                            />
-                                          </CCol>
-                                        </td>
-                                        <td>
-                                          <CCol sm="8" className="ml-1">
-                                            <CInput
-                                              value={transferQuantity}
-                                              name="transferQuantity"
-                                              innerRef={addToRef}
-                                              onBlur={(e) =>
-                                                handleOnBlur(index, e)
-                                              }
-                                              onChange={(e) =>
-                                                handleVariationchange(index, e)
-                                              }
-                                            />
-                                          </CCol>
-                                        </td>
-                                      </>
-                                    )}
-                                  </tr>
-                                );
-                              }
-                            )}
-                          </tbody>
-                        </table>
-                      </div>
-                    </CCardBody>
-                  </CCard>
-                </CCol>
-              </CRow>
-            </div>
+                  <p>
+                    <small>
+                      <strong>Note:</strong> You must select all the above
+                      options carefully before clicking fetch!
+                    </small>
+                  </p>
+                  {stockProducts.length === 0 && (
+                    <div className="mb-3">
+                      <CButton color="primary" onClick={handleFetchProducts}>
+                        Fetch Products
+                      </CButton>
+                    </div>
+                  )}
+                </>
+              )}
+            </>
           )}
-        </div>
-        <CButton color="primary" onClick={handleAdd}>
-          Add
-        </CButton>
-        <CButton
-          color="danger"
-          variant="outline"
-          style={{ marginLeft: "15px" }}
-          onClick={() => {
-            setRedirect(true);
-          }}
-        >
-          Cancel
-        </CButton>
-      </CForm>
-    </div>
+          {stockProducts.length > 0 && (
+            <CAlert fade color="info">
+              Stock transfer generated successfully!
+            </CAlert>
+          )}
+          <div>
+            {stockProducts.length > 0 && (
+              <div>
+                <CRow>
+                  <CCol>
+                    <CCard>
+                      <CCardHeader>Products</CCardHeader>
+                      <CCardBody className="position-relative table-responsive">
+                        <div className="position-relative table-responsive">
+                          <table className="table table-sm  table-hover">
+                            <thead
+                              style={{
+                                background: "rgb(48 60 84)",
+                                color: "#fff",
+                              }}
+                            >
+                              <tr>
+                                <th>
+                                  <CCol sm="8" className="ml-1">
+                                    Title
+                                  </CCol>
+                                </th>
+                                <th>
+                                  <CCol sm="8" className="ml-1">
+                                    Variant Title
+                                  </CCol>
+                                </th>
+                                <th>
+                                  <CCol sm="8" className="ml-1">
+                                    Barcode
+                                  </CCol>
+                                </th>
+                                <th>
+                                  <CCol sm="8" className="ml-1">
+                                    Options
+                                  </CCol>
+                                </th>
+                                <th>
+                                  <CCol sm="8" className="ml-1">
+                                    Available Quantity
+                                  </CCol>
+                                </th>
+                                <th>
+                                  <CCol sm="8" className="ml-1">
+                                    Transfer Quantity
+                                  </CCol>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {stockProducts.map(
+                                (
+                                  {
+                                    title,
+                                    barcode,
+                                    product_type,
+                                    availableQuantity,
+                                    options,
+                                    variant_title,
+                                    transferQuantity,
+                                  },
+                                  index
+                                ) => {
+                                  return (
+                                    <tr key={index}>
+                                      {product_type === "simple" && (
+                                        <>
+                                          <td>
+                                            <CCol sm="8">{title}</CCol>
+                                          </td>
+                                          <td>
+                                            <CCol sm="8">{variant_title}</CCol>
+                                          </td>
+                                          <td>
+                                            <CCol sm="8">{barcode}</CCol>
+                                          </td>
+                                          <td>
+                                            <CCol sm="8">{options}</CCol>
+                                          </td>
+                                          <td>
+                                            <CCol sm="8" className="ml-1">
+                                              <CInput
+                                                value={availableQuantity}
+                                                name="availableQuantity"
+                                                disabled
+                                                onChange={(e) =>
+                                                  handleVariationchange(
+                                                    index,
+                                                    e
+                                                  )
+                                                }
+                                              />
+                                            </CCol>
+                                          </td>
+                                          <td>
+                                            <CCol sm="8" className="ml-1">
+                                              <CInput
+                                                value={transferQuantity}
+                                                name="transferQuantity"
+                                                innerRef={addToRef}
+                                                onBlur={(e) =>
+                                                  handleOnBlur(index, e)
+                                                }
+                                                onChange={(e) =>
+                                                  handleVariationchange(
+                                                    index,
+                                                    e
+                                                  )
+                                                }
+                                              />
+                                            </CCol>
+                                          </td>
+                                        </>
+                                      )}
+                                      {product_type === "configurable" && (
+                                        <>
+                                          <td>
+                                            <CCol sm="8">{title}</CCol>
+                                          </td>
+                                          <td>
+                                            <CCol sm="8">{variant_title}</CCol>
+                                          </td>
+                                          <td>
+                                            <CCol sm="8">{barcode}</CCol>
+                                          </td>
+                                          <td>
+                                            <CCol sm="8">
+                                              {options.map(
+                                                (
+                                                  { value, options: { name } },
+                                                  key
+                                                ) => {
+                                                  return (
+                                                    <p key={key}>
+                                                      <b>{name}</b> : {value}
+                                                    </p>
+                                                  );
+                                                }
+                                              )}
+                                            </CCol>
+                                          </td>
+                                          <td>
+                                            <CCol sm="8" className="ml-1">
+                                              <CInput
+                                                value={availableQuantity}
+                                                name="availableQuantity"
+                                                disabled
+                                                onChange={(e) =>
+                                                  handleVariationchange(
+                                                    index,
+                                                    e
+                                                  )
+                                                }
+                                              />
+                                            </CCol>
+                                          </td>
+                                          <td>
+                                            <CCol sm="8" className="ml-1">
+                                              <CInput
+                                                value={transferQuantity}
+                                                name="transferQuantity"
+                                                innerRef={addToRef}
+                                                onBlur={(e) =>
+                                                  handleOnBlur(index, e)
+                                                }
+                                                onChange={(e) =>
+                                                  handleVariationchange(
+                                                    index,
+                                                    e
+                                                  )
+                                                }
+                                              />
+                                            </CCol>
+                                          </td>
+                                        </>
+                                      )}
+                                    </tr>
+                                  );
+                                }
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      </CCardBody>
+                    </CCard>
+                  </CCol>
+                </CRow>
+              </div>
+            )}
+          </div>
+          <CButton color="primary" onClick={handleAdd}>
+            Add
+          </CButton>
+          <CButton
+            color="danger"
+            variant="outline"
+            style={{ marginLeft: "15px" }}
+            onClick={() => {
+              setRedirect(true);
+            }}
+          >
+            Cancel
+          </CButton>
+        </CForm>
+      </div>
+    </Suspense>
   );
 }
 
