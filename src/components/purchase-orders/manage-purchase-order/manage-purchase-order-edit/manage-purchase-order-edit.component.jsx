@@ -12,7 +12,6 @@ import {
   CCard,
 } from "@coreui/react";
 import { Redirect, useLocation } from "react-router";
-import POStatusDropDown from "../dropdowns/purchase-order-status.component";
 import Loading from "../../../Loading-component/loading-component";
 import { DatePickerComponent } from "@syncfusion/ej2-react-calendars";
 import { CSVLink } from "react-csv";
@@ -25,6 +24,7 @@ function ManagePOEdit() {
   const [products, setProducts] = useState([]);
   const [brand, setBrand] = useState(undefined);
   const [brandId, setBrandId] = useState(undefined);
+  const [warehouse, setWarehouse] = useState("");
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("");
   const [dateValue, setDateValue] = useState(new Date());
@@ -32,6 +32,9 @@ function ManagePOEdit() {
   const [queryData, setQueryData] = useState([]);
   const [headers, setHeaders] = useState([]);
   const [data, setData] = useState([]);
+  const [totalPrice, setTotalPrice] = useState([]);
+  const [totalQuantity, setTotalQuantity] = useState([]);
+  const [totalRecievedQty, setTotalRecievedQty] = useState("");
 
   const quantityRef = useRef([]);
   quantityRef.current = [];
@@ -62,81 +65,6 @@ function ManagePOEdit() {
     console.log(products, "products");
   };
 
-  //   const fetch_supplierBrand = () => {
-  //     axios
-  //       .get(
-  //         `http://vegasapi.phebsoft-team.com/api/getSupplierbrands/${supplierId}`,
-  //         axiosConfig
-  //       )
-  //       .then((result) => {
-  //         console.log(result);
-  //         const sup = result.data.data.map((brand) => {
-  //           return { value: brand.id, label: brand.title };
-  //         });
-  //         setBrands(sup);
-  //       })
-  //       .catch((error) => console.log("error", error));
-  //   };
-
-  //   const fetch_brandProduct = () => {
-  //     setIsLoading(true);
-  //     axios
-  //       .get(
-  //         `http://vegasapi.phebsoft-team.com/api/getBrandproducts/${brandId}`,
-  //         axiosConfig
-  //       )
-  //       .then((result) => {
-  //         console.log(result, "dekh lete hain");
-  //         const prod = result.data.data
-  //           .map((item) => {
-  //             if (item.product_type === "configurable") {
-  //               return item.variations.map((conproduct) => {
-  //                 return {
-  //                   title: item.title,
-  //                   barcode: conproduct.barcode,
-  //                   options: conproduct.options,
-  //                   parent_id: conproduct.parent_id,
-  //                   product_type: item.product_type,
-  //                   product_variation_ids: conproduct.product_variation_ids,
-  //                   id: conproduct.id,
-  //                   variant_title: conproduct.title,
-  //                   quantity: "",
-  //                   amount: "",
-  //                 };
-  //               });
-  //             } else {
-  //               return {
-  //                 title: item.title,
-  //                 barcode: item.barcode,
-  //                 id: item.id,
-  //                 product_type: item.product_type,
-  //                 options: "",
-  //                 variant_title: item.title,
-  //                 quantity: "",
-  //                 amount: "",
-  //               };
-  //             }
-  //           })
-  //           .flat();
-  //         console.log(prod, "meri mehnat");
-  //         setProducts(prod);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((error) => {
-  //         setIsLoading(false);
-  //         console.log("error", error);
-  //       });
-  //   };
-
-  //   useEffect(() => {
-  //     console.log(supplierId);
-  //     if (supplierId !== undefined) fetch_supplierBrand();
-  //   }, [supplierId]);
-
-  //   useEffect(() => {
-  //     if (brandId !== undefined) fetch_brandProduct();
-  //   }, [brandId]);
-
   const [redirect, setRedirect] = useState(undefined);
 
   const fetch_a = () => {
@@ -147,6 +75,7 @@ function ManagePOEdit() {
       )
       .then((result) => {
         console.log(result);
+        const { warehouse_id } = result.data.data.purchaseOrder;
         setQueryData(result.data.data);
         setSupplier(result.data.data.supplier.name);
         setDate(result.data.data.purchaseOrder.purchase_order_date);
@@ -154,6 +83,11 @@ function ManagePOEdit() {
         setStatus(result.data.data.purchaseOrder.status);
         setBrandId(result.data.data.purchaseOrder.brand_id);
         setSupplierId(result.data.data.purchaseOrder.supplier_id);
+        const findWarehouse = result.data.data.warehouses.find(
+          ({ id }) => id === warehouse_id
+        );
+        console.log(findWarehouse, " hello warehouses");
+        setWarehouse(findWarehouse);
         const prod = result.data.data.purchaseOrder.po_products.map((item) => {
           if (item.product_type === "configurable") {
             return {
@@ -190,7 +124,23 @@ function ManagePOEdit() {
             };
           }
         });
-        console.log(prod, "meri mehnat");
+
+        const filterTotal = prod.map(({ cost, quantity }) => totalPrice);
+        const filterQuantity = prod.map(({ quantity }) => quantity);
+        const reducer = (previous, current) => previous + current;
+        const finalQuantity = filterQuantity.reduce(reducer);
+        const finalTotal = filterTotal.reduce(reducer);
+        setTotalPrice(finalTotal);
+        setTotalQuantity(finalQuantity);
+
+        if (prod[0].recieved_qty !== "") {
+          const filterRecievedQuantity = prod.map(
+            ({ recieved_qty }) => recieved_qty
+          );
+          const finalRecievedQuantity = filterRecievedQuantity.reduce(reducer);
+          setTotalRecievedQty(finalRecievedQuantity);
+        }
+
         setProducts(prod);
         setIsLoading(false);
       })
@@ -230,17 +180,17 @@ function ManagePOEdit() {
       },
     };
 
-    // axios
-    //   .put(
-    //     `https://vegasapi.phebsoft-team.com/api/purchaseorders/${id}`,
-    //     purchaseOrder,
-    //     axiosConfig
-    //   )
-    //   .then((result) => {
-    //     console.log(result);
-    //     setRedirect(true);
-    //   })
-    //   .catch((error) => console.log("error", error));
+    axios
+      .put(
+        `https://vegasapi.phebsoft-team.com/api/purchaseorders/${id}`,
+        purchaseOrder,
+        axiosConfig
+      )
+      .then((result) => {
+        console.log(result);
+        setRedirect(true);
+      })
+      .catch((error) => console.log("error", error));
   };
 
   useEffect(() => {
@@ -342,6 +292,49 @@ function ManagePOEdit() {
     if (productError.includes(true) === false) {
       setRecievedQtyError(false);
     }
+
+    let purchaseOrder;
+    if (status === "approved") {
+      purchaseOrder = {
+        supplier_id: supplierId,
+        po_recieve_date: dateValue,
+        brand_id: brandId,
+        warehouse_id: 15,
+        status: status,
+        products: products,
+      };
+    } else {
+      purchaseOrder = {
+        supplier_id: supplier,
+        brand_id: brandId,
+        warehouse_id: 15,
+        status: status,
+        products: products,
+      };
+    }
+
+    console.log(purchaseOrder, "yeh horaha hai send");
+    let axiosConfig = {
+      headers: {
+        "Content-Type": "application/json;charset=UTF-8",
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token_vegas}`,
+      },
+    };
+
+    if (recievedQtyError === true) return;
+
+    axios
+      .post(
+        `http://vegasapi.phebsoft-team.com/api/stock/receive/${id}`,
+        purchaseOrder,
+        axiosConfig
+      )
+      .then((result) => {
+        console.log(result);
+        setRedirect(true);
+      })
+      .catch((error) => console.log("error", error));
   };
 
   const isFilled = (e) => {
@@ -363,6 +356,19 @@ function ManagePOEdit() {
             Download Purchase Order
           </CButton>
         </CSVLink>
+        <div className="mb-3">
+          <CLabel htmlFor="Warehouse">Warehouse</CLabel>
+          <p
+            id="Warehouse"
+            style={{
+              background: "white",
+              padding: "8px",
+              borderRadius: "5px",
+            }}
+          >
+            {warehouse.name}
+          </p>
+        </div>
         <div className="mb-3">
           <CLabel htmlFor="Supplier">Supplier</CLabel>
           <p
@@ -404,15 +410,17 @@ function ManagePOEdit() {
         </div>
         <div className="mb-3">
           <CLabel htmlFor="status">Status</CLabel>
-          <POStatusDropDown
+          <p
             id="status"
-            options={[
-              { value: "pending", label: "Pending" },
-              { value: "approved", label: "Approved" },
-            ]}
-            setStatus={setStatus}
-            defaultStatus={status}
-          />
+            style={{
+              background: "white",
+              padding: "8px",
+              borderRadius: "5px",
+              textTransform: "uppercase",
+            }}
+          >
+            {status}
+          </p>
         </div>
         {status === "approved" && (
           <>
@@ -437,24 +445,6 @@ function ManagePOEdit() {
             </div>
           </>
         )}
-        {/* <div className="mb-3">
-          <CLabel htmlFor="days">No of Days</CLabel>
-          <CInput
-            type="text"
-            id="days"
-            value={days}
-            onChange={(e) => setDays(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <CLabel htmlFor="Brands">Brands</CLabel>
-          <BrandDropDown
-            id="Brands"
-            options={brands}
-            setBrandId={setBrandId}
-            disabled={supplierId === undefined}
-          />
-        </div> */}
         <div>
           {products.length > 0 && (
             <div>
@@ -504,12 +494,12 @@ function ManagePOEdit() {
                               </th>
                               <th>
                                 <CCol sm="8" className="ml-1">
-                                  Recieved Quantity
+                                  Total Cost
                                 </CCol>
                               </th>
                               <th>
                                 <CCol sm="8" className="ml-1">
-                                  Remove
+                                  Recieved Quantity
                                 </CCol>
                               </th>
                             </tr>
@@ -526,6 +516,7 @@ function ManagePOEdit() {
                                   variant_title,
                                   cost,
                                   recieved_qty,
+                                  totalPrice,
                                 },
                                 index
                               ) => {
@@ -568,6 +559,9 @@ function ManagePOEdit() {
                                           </CCol>
                                         </td>
                                         <td>
+                                          <CCol sm="8">{totalPrice}</CCol>
+                                        </td>
+                                        <td>
                                           <CCol sm="8" className="ml-1">
                                             <CInput
                                               value={recieved_qty}
@@ -592,11 +586,6 @@ function ManagePOEdit() {
                                                   Add Recieved Quantities first!
                                                 </p>
                                               )}
-                                          </CCol>
-                                        </td>
-                                        <td>
-                                          <CCol sm="8" className="ml-1">
-                                            Delete
                                           </CCol>
                                         </td>
                                       </>
@@ -651,6 +640,9 @@ function ManagePOEdit() {
                                           </CCol>
                                         </td>
                                         <td>
+                                          <CCol sm="8">{totalPrice}</CCol>
+                                        </td>
+                                        <td>
                                           <CCol sm="8" className="ml-1">
                                             <CInput
                                               value={recieved_qty}
@@ -677,17 +669,28 @@ function ManagePOEdit() {
                                               )}
                                           </CCol>
                                         </td>
-                                        <td>
-                                          <CCol sm="8" className="ml-1">
-                                            Delete
-                                          </CCol>
-                                        </td>
                                       </>
                                     )}
                                   </tr>
                                 );
                               }
                             )}
+                            <tr>
+                              <td colSpan={4}></td>
+                              <td colSpan={2}>
+                                Total Quantity: <strong>{totalQuantity}</strong>
+                              </td>
+                              <td colSpan={1}>
+                                Total Cost: <strong>{totalPrice}</strong> PKR
+                              </td>
+                              {status === "Received" && (
+                                <td>
+                                  Total Recieved Quantity:{" "}
+                                  <strong>{totalRecievedQty}</strong>
+                                </td>
+                              )}
+                              {status !== "Received" && <td></td>}
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -699,16 +702,20 @@ function ManagePOEdit() {
           )}
         </div>
         <div style={{ marginBottom: "15px" }}>
-          <CButton
-            color="primary"
-            style={{ margin: "0 15px" }}
-            onClick={handleRecieved}
-          >
-            Recieved
-          </CButton>
-          <CButton color="primary" onClick={handleAdd}>
-            Add
-          </CButton>
+          {status !== "Received" && (
+            <>
+              <CButton
+                color="primary"
+                style={{ margin: "0 15px" }}
+                onClick={handleRecieved}
+              >
+                Recieved
+              </CButton>
+              <CButton color="primary" onClick={handleAdd}>
+                Edit
+              </CButton>
+            </>
+          )}
           <CButton
             color="danger"
             variant="outline"
@@ -717,7 +724,7 @@ function ManagePOEdit() {
               setRedirect(true);
             }}
           >
-            Cancel
+            Back
           </CButton>
         </div>
       </CForm>

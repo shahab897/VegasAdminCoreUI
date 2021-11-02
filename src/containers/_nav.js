@@ -2,12 +2,12 @@ import React from "react";
 import CIcon from "@coreui/icons-react";
 
 const _nav = [
-  {
-    _tag: "CSidebarNavItem",
-    name: "Dashboard",
-    to: "/dashboard",
-    icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
-  },
+  // {
+  //   _tag: "CSidebarNavItem",
+  //   name: "Dashboard",
+  //   to: "/dashboard",
+  //   icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
+  // },
   {
     _tag: "CSidebarNavItem",
     name: "Couriers",
@@ -88,12 +88,12 @@ const _nav = [
     to: "/stores",
     icon: <CIcon name="cil-building" customClasses="c-sidebar-nav-icon" />,
   },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Orders",
-    to: "/orders",
-    icon: <CIcon name="cil-building" customClasses="c-sidebar-nav-icon" />,
-  },
+  // {
+  //   _tag: "CSidebarNavItem",
+  //   name: "Orders",
+  //   to: "/orders",
+  //   icon: <CIcon name="cil-building" customClasses="c-sidebar-nav-icon" />,
+  // },
   {
     _tag: "CSidebarNavDropdown",
     name: "Purchase Order",
@@ -111,6 +111,12 @@ const _nav = [
         to: "/purchase-order/manage-purchase-order",
       },
     ],
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Stock Transfer",
+    to: "/stock-transfer",
+    icon: <CIcon name="cil-building" customClasses="c-sidebar-nav-icon" />,
   },
   //     {
   //       _tag: 'CSidebarNavItem',

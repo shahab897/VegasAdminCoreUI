@@ -20,7 +20,6 @@ const StoresList = (props) => {
     "name",
     "city",
     "address",
-    "warehouse_id",
     {
       key: "edit",
       label: "",

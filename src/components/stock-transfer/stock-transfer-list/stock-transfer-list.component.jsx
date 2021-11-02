@@ -10,15 +10,14 @@ import {
 } from "@coreui/react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-
 import Loading from "../../Loading-component/loading-component";
-import ManagePODelete from "../manage-purchase-order/manage-purchase-order-delete/manage-purchase-order-delete.component";
-import ManagePOEditButton from "./manage-purchase-order-edit/manage-purchase-order-edit-button.component";
+import WarehouseDelete from "../../warehouse/warehouse-delete.component/warehouse-delete.component";
+import StockTransferEditButton from "../stock-transfer-edit.component/stock-transfer-edit-button.component";
 
-function ManagePurchaseOrder() {
+function StockTransferComponent() {
   const fields = [
-    "purchase_number",
-    "brand_name",
+    "transfer_no",
+    "transfer_type",
     "status",
     {
       key: "edit",
@@ -40,63 +39,6 @@ function ManagePurchaseOrder() {
     },
   ];
 
-  // const data = [
-  //   {
-  //     id: 2,
-  //     supplier_id: "2",
-  //     purchase_number: "purchase-test111",
-  //     no_of_days: 2,
-  //     status: "Enabled",
-  //     brand_id: "1",
-  //     brand_name: "test",
-  //   },
-  //   {
-  //     id: 3,
-  //     supplier_id: "2",
-  //     brand_name: "test",
-  //     purchase_number: "purchase-test111",
-  //     no_of_days: 2,
-  //     status: "Enabled",
-  //     brand_id: "1",
-  //   },
-  //   {
-  //     id: 4,
-  //     supplier_id: "2",
-  //     brand_name: "test",
-  //     purchase_number: "purchase-test111",
-  //     no_of_days: 2,
-  //     status: "Enabled",
-  //     brand_id: "1",
-  //   },
-  //   {
-  //     id: 6,
-  //     supplier_id: "2",
-  //     brand_name: "test",
-  //     purchase_number: "purchase-test111",
-  //     no_of_days: 2,
-  //     status: "Enabled",
-  //     brand_id: "1",
-  //   },
-  //   {
-  //     id: 9,
-  //     supplier_id: "2",
-  //     brand_name: "test",
-  //     purchase_number: "purchase-test111",
-  //     no_of_days: 2,
-  //     status: "Enabled",
-  //     brand_id: "1",
-  //   },
-  //   {
-  //     id: 8,
-  //     supplier_id: "2",
-  //     brand_name: "test",
-  //     purchase_number: "purchase-test111",
-  //     no_of_days: 2,
-  //     status: "Enabled",
-  //     brand_id: "1",
-  //   },
-  // ];
-
   const [data, setData] = useState(undefined);
   const [updated, setUpdated] = useState(undefined);
 
@@ -108,17 +50,19 @@ function ManagePurchaseOrder() {
       headers: { Authorization: `Bearer ${token_vegas}` },
     };
     axios
-      .get("http://vegasapi.phebsoft-team.com/api/purchaseorders", config)
+      .get("https://vegasapi.phebsoft-team.com/api/stocktransfers", config)
       .then((response) => {
-        const poData = response.data.data.map((data) => {
+        const responseData = response.data.data.map((res) => {
           return {
-            id: data.id,
-            purchase_number: data.purchase_order_no,
-            brand_name: data.brand.title,
-            status: data.status,
+            id: res.id,
+            transfer_no: res.transfer_no,
+            ...(res.transfer_type === "1" && {
+              transfer_type: "WareHouse To Store",
+            }),
+            status: res.status,
           };
         });
-        setData(poData);
+        setData(responseData);
         console.log(response);
       })
       .catch(console.log);
@@ -141,7 +85,7 @@ function ManagePurchaseOrder() {
   } else {
     return (
       <>
-        <Link to="/purchase-order/manage-purchase-order/create">
+        <Link to="/stock-transfer/create">
           <CButton
             style={{
               marginBottom: "20px",
@@ -156,33 +100,35 @@ function ManagePurchaseOrder() {
         <CRow>
           <CCol>
             <CCard>
-              <CCardHeader>Purchase Order</CCardHeader>
+              <CCardHeader>Stock Transfers</CCardHeader>
               <CCardBody>
                 <CDataTable
                   items={data}
                   fields={fields}
                   hover
-                  striped
                   sorter
                   tableFilter
                   columnFilter
+                  striped
                   bordered
                   size="sm"
                   itemsPerPage={10}
                   pagination
                   scopedSlots={{
                     delete: (item) => {
-                      if (item.status === "pending") {
+                      if (item.status !== "Transferred") {
                         return (
-                          <ManagePODelete
+                          <WarehouseDelete
                             id={item.id}
                             setUpdated={setUpdated}
                           />
                         );
-                      } else return <></>;
+                      } else {
+                        return <></>;
+                      }
                     },
                     edit: (item) => {
-                      return <ManagePOEditButton id={item.id} />;
+                      return <StockTransferEditButton id={item.id} />;
                     },
                   }}
                 />
@@ -195,4 +141,4 @@ function ManagePurchaseOrder() {
   }
 }
 
-export default ManagePurchaseOrder;
+export default StockTransferComponent;

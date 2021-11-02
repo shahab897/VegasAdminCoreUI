@@ -39,6 +39,10 @@ function WareHouseEdit(props) {
       .get(`https://vegasapi.phebsoft-team.com/api/warehouses/${id}`, config)
       .then((response) => {
         setData(response.data.data);
+        const store_ids = response.data.data.stores.map(
+          (store) => store.store_id
+        );
+        setStoresIds(store_ids);
         // const ids = `${response.data.data.stores_ids}`;
         // setStoresIds([
         //   ...stores,
@@ -48,6 +52,10 @@ function WareHouseEdit(props) {
       })
       .catch(console.log);
   };
+
+  useEffect(() => {
+    console.log(storesIds);
+  }, [storesIds]);
 
   useEffect(() => {
     fetch_a();

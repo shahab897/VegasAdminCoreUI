@@ -43,7 +43,10 @@ const StatusDropDown = (props) => {
       </>
     );
   else {
-    const defaultSelected = options.findIndex((element) => defaultStatus);
+    const defaultSelected = options.findIndex(
+      (element) => defaultStatus === element.value
+    );
+    console.log(defaultSelected, "hekasdk");
     return (
       <>
         <DropDown

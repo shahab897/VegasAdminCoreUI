@@ -140,8 +140,8 @@ function ProductsEdit() {
   };
 
   useEffect(() => {
-    console.log(productOptionValuesList, "lets seee hwat is goiong on here");
-  }, [productOptionValuesList]);
+    console.log(productsKeywords);
+  }, [productsKeywords]);
 
   useEffect(() => {
     return () => {
@@ -541,7 +541,7 @@ function ProductsEdit() {
           />
         </div>
         <div className="mb-3">
-          <CLabel htmlFor="CategoryId">Category Id</CLabel>
+          <CLabel htmlFor="CategoryId">Category</CLabel>
           <CategoryDropDown
             defaultCategory={categoryId}
             options={categoryList}

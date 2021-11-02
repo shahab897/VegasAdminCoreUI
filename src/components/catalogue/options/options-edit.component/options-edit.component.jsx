@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 function OptionsEdit(props) {
   const [optionsName, setOptionsName] = useState(undefined);
   const [optionsType, setOptionsType] = useState(undefined);
-  const [optionsSortOrder, setOptionsSortOrder] = useState(undefined);
+  const [optionsSortOrder, setOptionsSortOrder] = useState("");
   const [optionValues, setOptionsValues] = useState({
     id: uuidv4(),
     value: "",
@@ -53,9 +53,9 @@ function OptionsEdit(props) {
     if (optionsType == undefined || optionsType === "") {
       if (data != undefined) setOptionsType(data.type);
     }
-    if (optionsSortOrder == undefined || optionsSortOrder === "") {
-      if (data != undefined) setOptionsSortOrder(data.sort_order);
-    }
+    // if (optionsSortOrder == undefined || optionsSortOrder === "") {
+    //   if (data != undefined) setOptionsSortOrder(data.sort_order);
+    // }
     if (data != undefined) {
       if (
         typeof data.option_values === `object` &&
@@ -83,6 +83,11 @@ function OptionsEdit(props) {
       }
     }
   }, [data, optionsName, optionsType, optionsSortOrder, optionValues]);
+
+  const handleSortOrderChange = (e) => {
+    e.target.value = e.target.value.replace(/[^0-9]/g, "").toLowerCase();
+    setOptionsSortOrder(e.target.value);
+  };
 
   const handleAdd = () => {
     let optionsData = {
@@ -133,7 +138,7 @@ function OptionsEdit(props) {
             onChange={(e) => setOptionsName(e.target.value)}
           />
         </div>
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <CLabel htmlFor="OptionsType">Type</CLabel>
           <CInput
             type="text"
@@ -141,14 +146,14 @@ function OptionsEdit(props) {
             defaultValue={data.type}
             onChange={(e) => setOptionsType(e.target.value)}
           />
-        </div>
+        </div> */}
         <div className="mb-3">
           <CLabel htmlFor="OptionsSortOrder">Sort Order</CLabel>
           <CInput
             type="text"
             id="OptionsSortOrder"
-            defaultValue={data.sort_order}
-            onChange={(e) => setOptionsSortOrder(e.target.value)}
+            value={optionsSortOrder}
+            onChange={(e) => handleSortOrderChange(e)}
           />
         </div>
         <DualInputField

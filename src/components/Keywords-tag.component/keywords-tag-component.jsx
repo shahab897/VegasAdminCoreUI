@@ -46,7 +46,6 @@ function KeywordsTagsComponent(props) {
   const delimiters = [...KeyCodes.enter, KeyCodes.comma];
   return (
     <>
-      <CLabel htmlFor="CategoryKeywords">Keywords</CLabel>
       <ReactTags
         type="text"
         id="CategoryKeywords"

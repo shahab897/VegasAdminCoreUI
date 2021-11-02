@@ -18,7 +18,7 @@ function BrandsEdit(props) {
   const [brandsMeta, setBrandsMeta] = useState(undefined);
   const [tags, setTags] = useState([]);
   const [status, setStatus] = useState("YES");
-  const [brandsViewOrder, setBrandsViewOrder] = useState(undefined);
+  const [brandsViewOrder, setBrandsViewOrder] = useState("");
   const [brandsSlug, setBrandsSlug] = useState(undefined);
   const [brandsFeatured, setBrandsFeatured] = useState(undefined);
   const [brandsDiscount, setBrandsDiscount] = useState(undefined);
@@ -41,6 +41,7 @@ function BrandsEdit(props) {
       .get(`https://vegasapi.phebsoft-team.com/api/brands/${id}`, config)
       .then((response) => {
         setData(response.data.data);
+        setBrandsViewOrder(response.data.data.view_order);
         const stringToArray = response.data.data.keywords.split(",");
         const tagsForUse = stringToArray.map((tag) => {
           return { id: tag, text: tag };
@@ -72,9 +73,9 @@ function BrandsEdit(props) {
     if (status == undefined || status === "") {
       if (data != undefined) setStatus(data.status);
     }
-    if (brandsViewOrder == undefined || brandsViewOrder === "") {
-      if (data != undefined) setBrandsViewOrder(data.view_order);
-    }
+    // if (brandsViewOrder == undefined || brandsViewOrder === "") {
+    //   if (data != undefined) setBrandsViewOrder(data.view_order);
+    // }
     if (brandsSlug == undefined || brandsSlug === "") {
       if (data != undefined) setBrandsSlug(data.brand_slug);
     }
@@ -99,6 +100,11 @@ function BrandsEdit(props) {
     brandsViewOrder,
     data,
   ]);
+
+  const handleSortOrderChange = (e) => {
+    e.target.value = e.target.value.replace(/[^0-9]/g, "").toLowerCase();
+    setBrandsViewOrder(e.target.value);
+  };
 
   const handleAdd = () => {
     let tagsToSend = "";
@@ -197,8 +203,8 @@ function BrandsEdit(props) {
             type="text"
             id="BrandsViewOrder"
             aria-describedby="brands-view-order"
-            defaultValue={data.view_order}
-            onChange={(e) => setBrandsViewOrder(e.target.value)}
+            value={brandsViewOrder}
+            onChange={(e) => handleSortOrderChange(e)}
           />
         </div>
         <div className="mb-3">

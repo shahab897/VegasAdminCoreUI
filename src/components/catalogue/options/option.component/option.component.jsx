@@ -19,7 +19,6 @@ const OptionsList = (props) => {
   const fields = [
     "name",
     "type",
-    "option_values",
     {
       key: "edit",
       label: "",

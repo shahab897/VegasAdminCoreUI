@@ -46,6 +46,7 @@ function WarehouseCreate() {
       stores_ids: storesIds,
     };
 
+    console.log(warehouseData, "warehouse ka data");
     axios
       .post(
         "https://vegasapi.phebsoft-team.com/api/warehouses",

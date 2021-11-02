@@ -20,9 +20,7 @@ const BrandList = (props) => {
     "title",
     "details",
     "status",
-    "featured",
     "discount",
-    "view_order",
     {
       key: "edit",
       label: "",

@@ -1,38 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import {
   CButton,
   CInput,
   CLabel,
   CForm,
-  CRow,
   CCol,
-  CCardHeader,
-  CCardBody,
+  CRow,
   CCard,
+  CCardBody,
+  CCardHeader,
   CAlert,
 } from "@coreui/react";
-import { Redirect } from "react-router";
-import SuppliersDropDown from "../dropdowns/suppliers-dropdown.component";
-import BrandDropDown from "../../../catalogue/products/brand-dropdown.component/brand-dropdown.component";
-import WarehouseTransferDropDown from "../dropdowns/manage-purchsse-order-warehouse.component";
-import Loading2Component from "../../../Loading-component/loading2-component";
+import { Redirect, useLocation } from "react-router";
+import LoadingComponent from "../../Loading-component/loading-component";
 
-//add total cost and amount underneath
-function ManagePOCreate() {
-  const [suppliers, setSuppliers] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [supplierId, setSupplierId] = useState(undefined);
-  const [warhouseId, setWarehouseId] = useState("");
-  const [warehouses, setWarehouses] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [brands, setBrands] = useState([]);
-  const [brandId, setBrandId] = useState(undefined);
-  const [days, setDays] = useState("");
-  const [errorOnSubmit, setErrorOnSubmit] = useState([]);
+function StockTransferEdit() {
+  const [transferType, setTransferType] = useState("");
+  const [transferred, setTransferred] = useState(false);
+  const [store, setStore] = useState("");
+  const [warehouse, setWarehouse] = useState("");
+  const [data, setData] = useState(undefined);
+  const [stockProducts, setStockProducts] = useState([]);
+  const [redirect, setRedirect] = useState(undefined);
+
+  const quantityRef = useRef([]);
+  quantityRef.current = [];
+
+  const { pathname } = useLocation();
+  const id = pathname.slice(pathname.search("edit/") + 5);
+
   const token_vegas =
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMDBmOTU0Yjc4YjYxOGM5Yjg0OTFkMTkxYmUwMjAzNDdlMzFjODQ0NmQ5ZTY4OTRiOTkwZDdiMTQ1MmQ3ZWFiOGE0YTFjNDc0NjFjZjY5NjEiLCJpYXQiOjE2MjQ5NTc4NjUuMDk2ODk3LCJuYmYiOjE2MjQ5NTc4NjUuMDk2OTAzLCJleHAiOjE2NTY0OTM4NjUuMDg5NzA3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.OHSKmTqWfrPeYCo4tqGbgysoaLCXTctWhNMyxgzp74F3kAcS8bA2ii1t3A_r-auP3ZrHZ-zInuuHce_7ftwvS4bZpM3Xt2eDx6x1zttXo3CSh4ZBEXYR4NZjE2ijZCupgUlAniUIV6ynv2HVnz5Li2qrcltu5kpUwPh2ZI1rPNbezVpFL5qtc_l10jasAZSJP27Lt7UB8LU2WnZBGkpyQne7sbIgHLBTr2ajU_GgzHwf0kg2j2ZdNK6I5_NH1G1CfjMpilB6hy9Ahec1pPyrsc55_POfOuD0phOz1A9nT5P5-nAx7PECv0yvs7OD-CQRnNgjPblMMna87Vz-msXRxAZvsXa5Qtg7DPODyj7iUtLLw34YXftKPqoaRUwQzp6b6k1tMritCvKopo7CzbApNHb6bRex0BbiHJOZnju1NFj7hwoT3IhVzTIG6SdDpaboDNPqyhD5ZOznOYoUo84jlXoI8Pz5CCGuKSdx--tpRwJYzdUz7FTxFcLsekL_9YZB0pbODMGkw4VClBduR0gfsbFykBJ9z2RRgurANFSUvyRt-kDZaWX6ZwFopjkBCY9I3vCORvjRJ1X733WS4uBKUGyamzMHuMgEV5w44oPg_sbQhJL7UtCKgwPMJr8e3O4LjT7EhcrcmfVE6v3rhbO9LhAJHWJAvWc9G2P5ckQZagM";
-
   let axiosConfig = {
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -41,107 +40,105 @@ function ManagePOCreate() {
     },
   };
 
+  // useEffect(() => {
+  //   if (warehouseId !== "" && warehouseId != undefined) {
+  //     let assosStores = [];
+  //     warehouseId.stores.map((store) => {
+  //       data.stores.map((selStore) => {
+  //         if (selStore.id === store.store_id) {
+  //           assosStores.push({ value: selStore.id, label: selStore.name });
+  //         }
+  //       });
+  //     });
+  //     setStores(assosStores);
+  //   }
+  // }, [warehouseId]);
+
+  const handleOnBlur = (index, e) => {
+    if (
+      stockProducts[index].transferQuantity <=
+      stockProducts[index].availableQuantity
+    ) {
+      e.target.style.borderColor = "#d8dbe0";
+    }
+  };
+
+  const addToRef = (el) => {
+    if (el && !quantityRef.current.includes(el)) {
+      quantityRef.current.push(el);
+    }
+  };
+
   const handleVariationchange = (index, e) => {
-    let newFormValues = [...products];
+    if (data.transfer.status !== "pending" || transferred) {
+      return;
+    }
+    let newFormValues = [...stockProducts];
+    if (e.target.value > newFormValues[index].availableQuantity) {
+      e.target.style.borderColor = "red";
+      return;
+    }
+    e.target.style.borderColor = "#d8dbe0";
     newFormValues[index][e.target.name] = e.target.value;
-    setProducts(newFormValues);
 
-    console.log(products, "products");
+    setStockProducts(newFormValues);
   };
 
-  const fetch_supplierBrand = () => {
+  useEffect(() => {
+    console.log(transferType, "transfer ki type");
+  }, [transferType]);
+
+  const fetch_a = () => {
     axios
       .get(
-        `http://vegasapi.phebsoft-team.com/api/getSupplierbrands/${supplierId}`,
+        `https://vegasapi.phebsoft-team.com/api/stocktransfers/${id}/edit`,
         axiosConfig
       )
       .then((result) => {
-        console.log(result);
-        const sup = result.data.data.map((brand) => {
-          return { value: brand.id, label: brand.title };
-        });
-        setBrands(sup);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  const fetch_brandProduct = () => {
-    setIsLoading(true);
-    axios
-      .get(
-        `http://vegasapi.phebsoft-team.com/api/getBrandproducts/${brandId}`,
-        axiosConfig
-      )
-      .then((result) => {
-        console.log(result, "dekh lete hain");
-        const prod = result.data.data
+        console.log("stock transfer result", result.data.data);
+        setData(result.data.data);
+        const { transfer_type, from_id, to_id, stock_products } =
+          result.data.data.transfer;
+        const { stores, warehouses } = result.data.data;
+        if (transfer_type === "1") {
+          setTransferType({ transfer_type, name: "Warehouse To Store" });
+          const warehouse = warehouses.find(({ id }) => id === from_id);
+          setWarehouse(warehouse);
+          const store = stores.find(({ id }) => id === to_id);
+          setStore(store);
+        }
+        const prod = stock_products
           .map((item) => {
-            if (item.product_type === "configurable") {
-              return item.variations.map((conproduct) => {
-                return {
-                  title: item.title,
-                  barcode: conproduct.barcode,
-                  options: conproduct.options,
-                  parent_id: conproduct.parent_id,
-                  product_type: item.product_type,
-                  product_variation_ids: conproduct.product_variation_ids,
-                  id: conproduct.id,
-                  variant_title: conproduct.title,
-                  quantity: "",
-                  amount: "",
-                };
-              });
+            if (item.options.length > 0) {
+              return {
+                title: item.title,
+                barcode: item.barcode,
+                options: item.options,
+                variant_id: item.variant_id,
+                product_id: item.product_id,
+                product_type: "configurable",
+                variant_title: item.variant_title,
+                availableQuantity: item.availableqty,
+                transferQuantity: item.quantity,
+                id: item.id,
+              };
             } else {
               return {
                 title: item.title,
                 barcode: item.barcode,
-                id: item.id,
-                product_type: item.product_type,
+                product_id: item.product_id,
                 options: "",
+                product_type: "simple",
                 variant_title: item.title,
-                quantity: "",
-                amount: "",
+                availableQuantity: item.availableqty,
+                transferQuantity: item.quantity,
+                id: item.id,
               };
             }
           })
           .flat();
         console.log(prod, "meri mehnat");
-        setProducts(prod);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        console.log("error", error);
-      });
-  };
-
-  useEffect(() => {
-    console.log(supplierId);
-    if (supplierId !== undefined) fetch_supplierBrand();
-  }, [supplierId]);
-
-  useEffect(() => {
-    if (brandId !== undefined) fetch_brandProduct();
-  }, [brandId]);
-
-  const [redirect, setRedirect] = useState(undefined);
-
-  const fetch_a = () => {
-    axios
-      .get(
-        "http://vegasapi.phebsoft-team.com/api/purchaseorders/create",
-        axiosConfig
-      )
-      .then((result) => {
-        console.log(result);
-        const sup = result.data.data.suppliers.map((supplier) => {
-          return { value: supplier.id, label: supplier.name };
-        });
-        const warehouse = result.data.data.warehouses.map(({ name, id }) => {
-          return { value: id, label: name };
-        });
-        setWarehouses(warehouse);
-        setSuppliers(sup);
+        setStockProducts(prod);
       })
       .catch((error) => console.log("error", error));
   };
@@ -150,106 +147,136 @@ function ManagePOCreate() {
     fetch_a();
   }, []);
 
-  const handleAdd = () => {
-    let purchaseOrder = {
-      warehouse_id: warhouseId.value,
-      supplier_id: supplierId,
-      days: days,
-      brand_id: brandId,
-      products: products,
+  useEffect(() => {
+    console.log(stockProducts, " stock produdcts ");
+  }, [stockProducts]);
+
+  const handleTransfer = () => {
+    if (data.transfer.status !== "pending") {
+      return;
+    }
+    const isFilled = stockProducts.map((prod) => {
+      if (prod.transferQuantity === "" || prod.transferQuantity == false) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    if (isFilled.includes(false)) {
+      return;
+    }
+    let productStockData = {
+      transfer_type: transferType.transfer_type,
+      from_id: data.transfer.from_id,
+      to_id: data.transfer.to_id,
+      brand_id: data.transfer.brand_id,
+      products: stockProducts,
     };
 
-    console.log(purchaseOrder, "yeh horaha hai send");
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json;charset=UTF-8",
-        "Access-Control-Allow-Origin": "*",
-        Authorization: `Bearer ${token_vegas}`,
-      },
-    };
+    console.log(productStockData, "stock transfer send data");
 
     axios
       .post(
-        "https://vegasapi.phebsoft-team.com/api/purchaseorders",
-        purchaseOrder,
+        `https://vegasapi.phebsoft-team.com/api/stock/transfer/${id}`,
+        productStockData,
         axiosConfig
       )
       .then((result) => {
         console.log(result);
-        if (result.data.status === false) {
-          setErrorOnSubmit(result.data.messages);
-          return;
-        }
+        setTransferred(true);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  const handleAdd = () => {
+    let productStockData = {
+      transfer_type: transferType.transfer_type,
+      from_id: data.transfer.from_id,
+      to_id: data.transfer.to_id,
+      brand_id: data.transfer.brand_id,
+      products: stockProducts,
+    };
+
+    axios
+      .put(
+        `https://vegasapi.phebsoft-team.com/api/stocktransfers/${id}`,
+        productStockData,
+        axiosConfig
+      )
+      .then((result) => {
+        console.log(result);
         setRedirect(true);
       })
-      .catch((error) => {
-        console.log(" what an error", error.response.statusText);
-        setErrorOnSubmit([error.response.statusText]);
-      });
+      .catch((error) => console.log("error", error));
   };
-  useEffect(() => {
-    console.log(errorOnSubmit, "hello error ");
-  }, [errorOnSubmit]);
+
+  if (data === undefined) return <LoadingComponent />;
 
   if (redirect === true) {
-    return <Redirect to="/purchase-order/manage-purchase-order" />;
+    return <Redirect to="/stock-transfer" />;
   }
-
+  // po id, product id
   return (
     <div>
       <CForm>
-        {errorOnSubmit.length > 0 && (
+        <div className="mb-3">
+          <CLabel htmlFor="Supplier">Transfer Type</CLabel>
+          <p
+            id="Supplier"
+            style={{
+              background: "white",
+              padding: "8px",
+              borderRadius: "5px",
+            }}
+          >
+            {transferType.name}
+          </p>
+        </div>
+        <div className="mb-3">
+          <CLabel htmlFor="Brand">Brand</CLabel>
+          <p
+            id="Brand"
+            style={{
+              background: "white",
+              padding: "8px",
+              borderRadius: "5px",
+            }}
+          >
+            {data.brand.title}
+          </p>
+        </div>
+        {transferType.transfer_type === "1" && (
           <>
-            {errorOnSubmit.map((error, index) => (
-              <CAlert key={index} color="danger" fade className="mb-3">
-                {error}
-              </CAlert>
-            ))}
+            <div className="mb-3">
+              <CLabel htmlFor="From">From</CLabel>
+              <p
+                id="From"
+                style={{
+                  background: "white",
+                  padding: "8px",
+                  borderRadius: "5px",
+                }}
+              >
+                {warehouse.name}
+              </p>
+            </div>
+            <div className="mb-3">
+              <CLabel htmlFor="To">To</CLabel>
+              <p
+                id="To"
+                style={{
+                  background: "white",
+                  padding: "8px",
+                  borderRadius: "5px",
+                }}
+              >
+                {store.name}
+              </p>
+            </div>
           </>
         )}
-        <div className="mb-3">
-          <CLabel htmlFor="warhouse">Warehouse</CLabel>
-          <WarehouseTransferDropDown
-            id="warhouse"
-            options={warehouses}
-            setWarehouseId={setWarehouseId}
-          />
-        </div>
-        <div className="mb-3">
-          <CLabel htmlFor="Supplier">Supplier</CLabel>
-          <SuppliersDropDown
-            id="Supplier"
-            options={suppliers}
-            setSupplierId={setSupplierId}
-          />
-        </div>
-        <div className="mb-3">
-          <CLabel htmlFor="days">No of Days</CLabel>
-          <CInput
-            type="text"
-            id="days"
-            value={days}
-            onChange={(e) => setDays(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <CLabel htmlFor="Brands">Brands</CLabel>
-          <BrandDropDown
-            id="Brands"
-            options={brands}
-            setBrandId={setBrandId}
-            disabled={supplierId === undefined}
-          />
-        </div>
-
-        {isLoading && (
-          <Loading2Component
-            className="mb-3 mt-3"
-            style={{ display: "block", width: "100%" }}
-          />
-        )}
         <div>
-          {products.length > 0 && (
+          {stockProducts.length > 0 && (
             <div>
               <CRow>
                 <CCol>
@@ -287,33 +314,32 @@ function ManagePOCreate() {
                               </th>
                               <th>
                                 <CCol sm="8" className="ml-1">
-                                  Quantity
+                                  Available Quantity
                                 </CCol>
                               </th>
                               <th>
                                 <CCol sm="8" className="ml-1">
-                                  Amount
+                                  Transfer Quantity
                                 </CCol>
                               </th>
                             </tr>
                           </thead>
                           <tbody>
-                            {products.map(
+                            {stockProducts.map(
                               (
                                 {
                                   title,
                                   barcode,
-                                  product_type,
-                                  quantity,
+                                  availableQuantity,
                                   options,
                                   variant_title,
-                                  amount,
+                                  transferQuantity,
                                 },
                                 index
                               ) => {
                                 return (
                                   <tr key={index}>
-                                    {product_type === "simple" && (
+                                    {options.length === 0 && (
                                       <>
                                         <td>
                                           <CCol sm="8">{title}</CCol>
@@ -330,19 +356,25 @@ function ManagePOCreate() {
                                         <td>
                                           <CCol sm="8" className="ml-1">
                                             <CInput
-                                              value={quantity}
-                                              name="quantity"
-                                              onChange={(e) =>
-                                                handleVariationchange(index, e)
-                                              }
+                                              value={availableQuantity}
+                                              name="availableQuantity"
+                                              disabled
                                             />
                                           </CCol>
                                         </td>
                                         <td>
                                           <CCol sm="8" className="ml-1">
                                             <CInput
-                                              value={amount}
-                                              name="amount"
+                                              value={transferQuantity}
+                                              name="transferQuantity"
+                                              innerRef={addToRef}
+                                              disabled={
+                                                data.transfer.status !==
+                                                  "pending" || transferred
+                                              }
+                                              onBlur={(e) =>
+                                                handleOnBlur(index, e)
+                                              }
                                               onChange={(e) =>
                                                 handleVariationchange(index, e)
                                               }
@@ -351,7 +383,7 @@ function ManagePOCreate() {
                                         </td>
                                       </>
                                     )}
-                                    {product_type === "configurable" && (
+                                    {options.length > 0 && (
                                       <>
                                         <td>
                                           <CCol sm="8">{title}</CCol>
@@ -381,19 +413,25 @@ function ManagePOCreate() {
                                         <td>
                                           <CCol sm="8" className="ml-1">
                                             <CInput
-                                              value={quantity}
-                                              name="quantity"
-                                              onChange={(e) =>
-                                                handleVariationchange(index, e)
-                                              }
+                                              value={availableQuantity}
+                                              name="availableQuantity"
+                                              disabled
                                             />
                                           </CCol>
                                         </td>
                                         <td>
                                           <CCol sm="8" className="ml-1">
                                             <CInput
-                                              value={amount}
-                                              name="amount"
+                                              value={transferQuantity}
+                                              name="transferQuantity"
+                                              innerRef={addToRef}
+                                              disabled={
+                                                data.transfer.status !==
+                                                  "pending" || transferred
+                                              }
+                                              onBlur={(e) =>
+                                                handleOnBlur(index, e)
+                                              }
                                               onChange={(e) =>
                                                 handleVariationchange(index, e)
                                               }
@@ -413,12 +451,28 @@ function ManagePOCreate() {
                   </CCard>
                 </CCol>
               </CRow>
+              {data.transfer.status !== "Transferred" && (
+                <CButton
+                  color="primary"
+                  className="mb-3"
+                  onClick={handleTransfer}
+                >
+                  Transfer
+                </CButton>
+              )}
+              {transferred && (
+                <CAlert fade color="info" className="mb-3">
+                  Stock transferred successfully!
+                </CAlert>
+              )}
             </div>
           )}
         </div>
-        <CButton color="primary" onClick={handleAdd}>
-          Add
-        </CButton>
+        {data.transfer.status !== "Transferred" && (
+          <CButton color="primary" onClick={handleAdd}>
+            Add
+          </CButton>
+        )}
         <CButton
           color="danger"
           variant="outline"
@@ -434,4 +488,4 @@ function ManagePOCreate() {
   );
 }
 
-export default ManagePOCreate;
+export default StockTransferEdit;
