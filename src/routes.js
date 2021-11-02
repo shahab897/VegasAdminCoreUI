@@ -1,6 +1,11 @@
 import React from "react";
 import componentLoader from "./utils/component-loader";
 
+// const StockTransferCreate = React.lazy(() =>
+//   componentLoader(
+//     () =>
+import StockTransferCreate from "./components/stock-transfer/stock-transfer-create/stock-transfer-create.component";
+
 const maxAttempts = 10;
 
 const Toaster = React.lazy(() =>
@@ -422,16 +427,10 @@ const ManagePOEdit = React.lazy(() =>
     maxAttempts
   )
 );
-
-const StockTransferCreate = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/stock-transfer/stock-transfer-create/stock-transfer-create.component"
-      ),
-    maxAttempts
-  )
-);
+//       ),
+//     maxAttempts
+//   )
+// );
 const StockTransferComponent = React.lazy(() =>
   import(
     "./components/stock-transfer/stock-transfer-list/stock-transfer-list.component"
