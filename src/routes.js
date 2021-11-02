@@ -4,48 +4,101 @@ import componentLoader from "./utils/component-loader";
 const maxAttempts = 10;
 
 const Toaster = React.lazy(() =>
-  import("./views/notifications/toaster/Toaster")
+  componentLoader(
+    () => import("./views/notifications/toaster/Toaster"),
+    maxAttempts
+  )
 );
-const Tables = React.lazy(() => import("./views/base/tables/Tables"));
+const Tables = React.lazy(() =>
+  componentLoader(() => import("./views/base/tables/Tables"), maxAttempts)
+);
 
 const Breadcrumbs = React.lazy(() =>
-  import("./views/base/breadcrumbs/Breadcrumbs")
+  componentLoader(
+    () => import("./views/base/breadcrumbs/Breadcrumbs"),
+    maxAttempts
+  )
 );
-const Cards = React.lazy(() => import("./views/base/cards/Cards"));
-const Carousels = React.lazy(() => import("./views/base/carousels/Carousels"));
-const Collapses = React.lazy(() => import("./views/base/collapses/Collapses"));
-const BasicForms = React.lazy(() => import("./views/base/forms/BasicForms"));
+const Cards = React.lazy(() =>
+  componentLoader(() => import("./views/base/cards/Cards"), maxAttempts)
+);
+const Carousels = React.lazy(() =>
+  componentLoader(() => import("./views/base/carousels/Carousels"), maxAttempts)
+);
+const Collapses = React.lazy(() =>
+  componentLoader(() => import("./views/base/collapses/Collapses"), maxAttempts)
+);
+const BasicForms = React.lazy(() =>
+  componentLoader(() => import("./views/base/forms/BasicForms"), maxAttempts)
+);
 
 const Jumbotrons = React.lazy(() =>
-  import("./views/base/jumbotrons/Jumbotrons")
+  componentLoader(
+    () => import("./views/base/jumbotrons/Jumbotrons"),
+    maxAttempts
+  )
 );
 const ListGroups = React.lazy(() =>
-  import("./views/base/list-groups/ListGroups")
+  componentLoader(
+    () => import("./views/base/list-groups/ListGroups"),
+    maxAttempts
+  )
 );
-const Navbars = React.lazy(() => import("./views/base/navbars/Navbars"));
-const Navs = React.lazy(() => import("./views/base/navs/Navs"));
+const Navbars = React.lazy(() =>
+  componentLoader(() => import("./views/base/navbars/Navbars"), maxAttempts)
+);
+const Navs = React.lazy(() =>
+  componentLoader(() => import("./views/base/navs/Navs"), maxAttempts)
+);
 const Paginations = React.lazy(() =>
-  import("./views/base/paginations/Pagnations")
+  componentLoader(
+    () => import("./views/base/paginations/Pagnations"),
+    maxAttempts
+  )
 );
-const Popovers = React.lazy(() => import("./views/base/popovers/Popovers"));
+const Popovers = React.lazy(() =>
+  componentLoader(() => import("./views/base/popovers/Popovers"), maxAttempts)
+);
 const ProgressBar = React.lazy(() =>
-  import("./views/base/progress-bar/ProgressBar")
+  componentLoader(
+    () => import("./views/base/progress-bar/ProgressBar"),
+    maxAttempts
+  )
 );
-const Switches = React.lazy(() => import("./views/base/switches/Switches"));
+const Switches = React.lazy(() =>
+  componentLoader(() => import("./views/base/switches/Switches"), maxAttempts)
+);
 
-const Tabs = React.lazy(() => import("./views/base/tabs/Tabs"));
-const Tooltips = React.lazy(() => import("./views/base/tooltips/Tooltips"));
+const Tabs = React.lazy(() =>
+  componentLoader(() => import("./views/base/tabs/Tabs"), maxAttempts)
+);
+const Tooltips = React.lazy(() =>
+  componentLoader(() => import("./views/base/tooltips/Tooltips"), maxAttempts)
+);
 const BrandButtons = React.lazy(() =>
-  import("./views/buttons/brand-buttons/BrandButtons")
+  componentLoader(
+    () => import("./views/buttons/brand-buttons/BrandButtons"),
+    maxAttempts
+  )
 );
 const ButtonDropdowns = React.lazy(() =>
-  import("./views/buttons/button-dropdowns/ButtonDropdowns")
+  componentLoader(
+    () => import("./views/buttons/button-dropdowns/ButtonDropdowns"),
+    maxAttempts
+  )
 );
 const ButtonGroups = React.lazy(() =>
-  import("./views/buttons/button-groups/ButtonGroups")
+  componentLoader(
+    () => import("./views/buttons/button-groups/ButtonGroups"),
+    maxAttempts
+  )
 );
-const Buttons = React.lazy(() => import("./views/buttons/buttons/Buttons"));
-const Charts = React.lazy(() => import("./views/charts/Charts"));
+const Buttons = React.lazy(() =>
+  componentLoader(() => import("./views/buttons/buttons/Buttons"), maxAttempts)
+);
+const Charts = React.lazy(() =>
+  componentLoader(() => import("./views/charts/Charts"), maxAttempts)
+);
 const Dashboard = React.lazy(() =>
   componentLoader(() => import("./views/dashboard/Dashboard"), maxAttempts)
 );
