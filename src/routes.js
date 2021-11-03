@@ -1,450 +1,76 @@
 import React from "react";
-import componentLoader from "./utils/component-loader";
 
-// const StockTransferCreate = React.lazy(() =>
-//   componentLoader(
-//     () =>
 import StockTransferCreate from "./components/stock-transfer/stock-transfer-create/stock-transfer-create.component";
 
-const maxAttempts = 10;
+import Toaster from "./views/notifications/toaster/Toaster";
+import Tables from "./views/base/tables/Tables";
 
-const Toaster = React.lazy(() =>
-  componentLoader(
-    () => import("./views/notifications/toaster/Toaster"),
-    maxAttempts
-  )
-);
-const Tables = React.lazy(() =>
-  componentLoader(() => import("./views/base/tables/Tables"), maxAttempts)
-);
+import Breadcrumbs from "./views/base/breadcrumbs/Breadcrumbs";
+import Cards from "./views/base/cards/Cards";
 
-const Breadcrumbs = React.lazy(() =>
-  componentLoader(
-    () => import("./views/base/breadcrumbs/Breadcrumbs"),
-    maxAttempts
-  )
-);
-const Cards = React.lazy(() =>
-  componentLoader(() => import("./views/base/cards/Cards"), maxAttempts)
-);
-const Carousels = React.lazy(() =>
-  componentLoader(() => import("./views/base/carousels/Carousels"), maxAttempts)
-);
-const Collapses = React.lazy(() =>
-  componentLoader(() => import("./views/base/collapses/Collapses"), maxAttempts)
-);
-const BasicForms = React.lazy(() =>
-  componentLoader(() => import("./views/base/forms/BasicForms"), maxAttempts)
-);
-
-const Jumbotrons = React.lazy(() =>
-  componentLoader(
-    () => import("./views/base/jumbotrons/Jumbotrons"),
-    maxAttempts
-  )
-);
-const ListGroups = React.lazy(() =>
-  componentLoader(
-    () => import("./views/base/list-groups/ListGroups"),
-    maxAttempts
-  )
-);
-const Navbars = React.lazy(() =>
-  componentLoader(() => import("./views/base/navbars/Navbars"), maxAttempts)
-);
-const Navs = React.lazy(() =>
-  componentLoader(() => import("./views/base/navs/Navs"), maxAttempts)
-);
-const Paginations = React.lazy(() =>
-  componentLoader(
-    () => import("./views/base/paginations/Pagnations"),
-    maxAttempts
-  )
-);
-const Popovers = React.lazy(() =>
-  componentLoader(() => import("./views/base/popovers/Popovers"), maxAttempts)
-);
-const ProgressBar = React.lazy(() =>
-  componentLoader(
-    () => import("./views/base/progress-bar/ProgressBar"),
-    maxAttempts
-  )
-);
-const Switches = React.lazy(() =>
-  componentLoader(() => import("./views/base/switches/Switches"), maxAttempts)
-);
-
-const Tabs = React.lazy(() =>
-  componentLoader(() => import("./views/base/tabs/Tabs"), maxAttempts)
-);
-const Tooltips = React.lazy(() =>
-  componentLoader(() => import("./views/base/tooltips/Tooltips"), maxAttempts)
-);
-const BrandButtons = React.lazy(() =>
-  componentLoader(
-    () => import("./views/buttons/brand-buttons/BrandButtons"),
-    maxAttempts
-  )
-);
-const ButtonDropdowns = React.lazy(() =>
-  componentLoader(
-    () => import("./views/buttons/button-dropdowns/ButtonDropdowns"),
-    maxAttempts
-  )
-);
-const ButtonGroups = React.lazy(() =>
-  componentLoader(
-    () => import("./views/buttons/button-groups/ButtonGroups"),
-    maxAttempts
-  )
-);
-const Buttons = React.lazy(() =>
-  componentLoader(() => import("./views/buttons/buttons/Buttons"), maxAttempts)
-);
-const Charts = React.lazy(() =>
-  componentLoader(() => import("./views/charts/Charts"), maxAttempts)
-);
-const Dashboard = React.lazy(() =>
-  componentLoader(() => import("./views/dashboard/Dashboard"), maxAttempts)
-);
-const CoreUIIcons = React.lazy(() =>
-  componentLoader(
-    () => import("./views/icons/coreui-icons/CoreUIIcons"),
-    maxAttempts
-  )
-);
-const Flags = React.lazy(() =>
-  componentLoader(() => import("./views/icons/flags/Flags"), maxAttempts)
-);
-const Brands = React.lazy(() =>
-  componentLoader(() => import("./views/icons/brands/Brands"), maxAttempts)
-);
-const Alerts = React.lazy(() =>
-  componentLoader(
-    () => import("./views/notifications/alerts/Alerts"),
-    maxAttempts
-  )
-);
-const Badges = React.lazy(() =>
-  componentLoader(
-    () => import("./views/notifications/badges/Badges"),
-    maxAttempts
-  )
-);
-const Modals = React.lazy(() =>
-  componentLoader(
-    () => import("./views/notifications/modals/Modals"),
-    maxAttempts
-  )
-);
-const Colors = React.lazy(() =>
-  componentLoader(() => import("./views/theme/colors/Colors"), maxAttempts)
-);
-const Typography = React.lazy(() =>
-  componentLoader(
-    () => import("./views/theme/typography/Typography"),
-    maxAttempts
-  )
-);
-const Widgets = React.lazy(() =>
-  componentLoader(() => import("./views/widgets/Widgets"), maxAttempts)
-);
-const Users = React.lazy(() =>
-  componentLoader(() => import("./views/users/Users"), maxAttempts)
-);
-const User = React.lazy(() =>
-  componentLoader(() => import("./views/users/User"), maxAttempts)
-);
-const Login = React.lazy(() =>
-  componentLoader(() => import("./views/pages/login/Login"), maxAttempts)
-);
-
-const WarehouseListComponent = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/warehouse/warehouse.component/warehouse-list.component"
-      ),
-    maxAttempts
-  )
-);
-const WarehouseCreate = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/warehouse/warehouse-create.component/warehouse-create.component"
-      ),
-    maxAttempts
-  )
-);
-const WarehouseEdit = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/warehouse/warehouse-edit.component/warehouse-edit.component"
-      ),
-    maxAttempts
-  )
-);
-
-const StoresListComponent = React.lazy(() =>
-  componentLoader(
-    () =>
-      import("./components/stores/stores-list.component/stores-list.component"),
-    maxAttempts
-  )
-);
-const StoresCreate = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/stores/stores-create.component/stores-create.component"
-      ),
-    maxAttempts
-  )
-);
-const StoresEdit = React.lazy(() =>
-  componentLoader(
-    () =>
-      import("./components/stores/stores-edit.component/stores-edit.component"),
-    maxAttempts
-  )
-);
-
-const CategoriesListComponent = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/catalogue/categories/categories-list/categories-list-component"
-      ),
-    maxAttempts
-  )
-);
-const CategoriesEdit = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/catalogue/categories/categories-edit/categories-edit.component"
-      ),
-    maxAttempts
-  )
-);
-const CategoriesCreate = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/catalogue/categories/categories-create/categories-create.component"
-      ),
-    maxAttempts
-  )
-);
-
-const BrandList = React.lazy(() =>
-  componentLoader(
-    () =>
-      import("./components/catalogue/Brands/Brands-list/brand-list.component"),
-    maxAttempts
-  )
-);
-const BrandsCreate = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/catalogue/Brands/Brand-create/brand-create.component"
-      ),
-    maxAttempts
-  )
-);
-const BrandsEdit = React.lazy(() =>
-  componentLoader(
-    () =>
-      import("./components/catalogue/Brands/Brand-edit/brand-edit.component"),
-    maxAttempts
-  )
-);
-
-const OptionsList = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/catalogue/options/option.component/option.component"
-      ),
-    maxAttempts
-  )
-);
-const OptionsCreate = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/catalogue/options/option-create.component/option-create.component"
-      ),
-    maxAttempts
-  )
-);
-const OptionsEdit = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/catalogue/options/options-edit.component/options-edit.component"
-      ),
-    maxAttempts
-  )
-);
-
-const ProductsList = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/catalogue/products/products-list.component/products-list.component"
-      ),
-    maxAttempts
-  )
-);
-const ProductsCreate = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/catalogue/products/products-create.component/products-create.component"
-      ),
-    maxAttempts
-  )
-);
-const ProductsEdit = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/catalogue/products/products-edit.component/product-edit.component"
-      ),
-    maxAttempts
-  )
-);
-
-const SuppliersListing = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/suppliers/suppliers-listing.component/suppliers-listing.component"
-      ),
-    maxAttempts
-  )
-);
-const SuppliersCreate = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/suppliers/suppliers-create.component/suppliers-create.component"
-      ),
-    maxAttempts
-  )
-);
-const SuppliersEdit = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/suppliers/suppliers-edit.component/suppliers-edit.component"
-      ),
-    maxAttempts
-  )
-);
-
-const CouriersList = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/courier/courier-list.component/courier-list.component"
-      ),
-    maxAttempts
-  )
-);
-const CourierCreate = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/courier/courier-create.component/courier-create.component"
-      ),
-    maxAttempts
-  )
-);
-const CouriersEdit = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/courier/courier-edit.component/courier-edit.component"
-      ),
-    maxAttempts
-  )
-);
-
-const CouponList = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/coupon/coupon-listing.component/coupon-listing.component"
-      ),
-    maxAttempts
-  )
-);
-const CouponCreate = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/coupon/coupon-create.component/coupon-create.component"
-      ),
-    maxAttempts
-  )
-);
-const CouponEdit = React.lazy(() =>
-  componentLoader(
-    () =>
-      import("./components/coupon/coupon-edit.component/coupon-edit.component"),
-    maxAttempts
-  )
-);
-const ManagePurchaseOrder = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/purchase-orders/manage-purchase-order/manage-purchase-order.component"
-      ),
-    maxAttempts
-  )
-);
-const ManagePOCreate = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/purchase-orders/manage-purchase-order/manage-purchase-order-create.compoent/manage-purchase-order-create.component"
-      ),
-    maxAttempts
-  )
-);
-const ManagePOEdit = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/purchase-orders/manage-purchase-order/manage-purchase-order-edit/manage-purchase-order-edit.component"
-      ),
-    maxAttempts
-  )
-);
-//       ),
-//     maxAttempts
-//   )
-// );
-const StockTransferComponent = React.lazy(() =>
-  import(
-    "./components/stock-transfer/stock-transfer-list/stock-transfer-list.component"
-  )
-);
-const StockTransferEdit = React.lazy(() =>
-  componentLoader(
-    () =>
-      import(
-        "./components/stock-transfer/stock-transfer-edit.component/stock-transfer-edit.component"
-      ),
-    maxAttempts
-  )
-);
+import Carousels from "./views/base/carousels/Carousels";
+import Collapses from "./views/base/collapses/Collapses";
+import BasicForms from "./views/base/forms/BasicForms";
+import Jumbotrons from "./views/base/jumbotrons/Jumbotrons";
+import ListGroups from "./views/base/list-groups/ListGroups";
+import Navbars from "./views/base/navbars/Navbars";
+import Navs from "./views/base/navs/Navs";
+import Paginations from "./views/base/paginations/Pagnations";
+import Popovers from "./views/base/popovers/Popovers";
+import ProgressBar from "./views/base/progress-bar/ProgressBar";
+import Switches from "./views/base/switches/Switches";
+import Tabs from "./views/base/tabs/Tabs";
+import Tooltips from "./views/base/tooltips/Tooltips";
+import BrandButtons from "./views/buttons/brand-buttons/BrandButtons";
+import ButtonDropdowns from "./views/buttons/button-dropdowns/ButtonDropdowns";
+import ButtonGroups from "./views/buttons/button-groups/ButtonGroups";
+import Buttons from "./views/buttons/buttons/Buttons";
+import Charts from "./views/charts/Charts";
+import Dashboard from "./views/dashboard/Dashboard";
+import CoreUIIcons from "./views/icons/coreui-icons/CoreUIIcons";
+import Flags from "./views/icons/flags/Flags";
+import Brands from "./views/icons/brands/Brands";
+import Alerts from "./views/notifications/alerts/Alerts";
+import Badges from "./views/notifications/badges/Badges";
+import Modals from "./views/notifications/modals/Modals";
+import Colors from "./views/theme/colors/Colors";
+import Typography from "./views/theme/typography/Typography";
+import Widgets from "./views/widgets/Widgets";
+import Users from "./views/users/Users";
+import User from "./views/users/User";
+import Login from "./views/pages/login/Login";
+import WarehouseListComponent from "./components/warehouse/warehouse.component/warehouse-list.component";
+import WarehouseCreate from "./components/warehouse/warehouse-create.component/warehouse-create.component";
+import WarehouseEdit from "./components/warehouse/warehouse-edit.component/warehouse-edit.component";
+import StoresListComponent from "./components/stores/stores-list.component/stores-list.component";
+import StoresCreate from "./components/stores/stores-create.component/stores-create.component";
+import StoresEdit from "./components/stores/stores-edit.component/stores-edit.component";
+import CategoriesListComponent from "./components/catalogue/categories/categories-list/categories-list-component";
+import CategoriesEdit from "./components/catalogue/categories/categories-edit/categories-edit.component";
+import CategoriesCreate from "./components/catalogue/categories/categories-create/categories-create.component";
+import BrandList from "./components/catalogue/Brands/Brands-list/brand-list.component";
+import BrandsCreate from "./components/catalogue/Brands/Brand-create/brand-create.component";
+import BrandsEdit from "./components/catalogue/Brands/Brand-edit/brand-edit.component";
+import OptionsList from "./components/catalogue/options/option.component/option.component";
+import OptionsCreate from "./components/catalogue/options/option-create.component/option-create.component";
+import OptionsEdit from "./components/catalogue/options/options-edit.component/options-edit.component";
+import ProductsList from "./components/catalogue/products/products-list.component/products-list.component";
+import ProductsCreate from "./components/catalogue/products/products-create.component/products-create.component";
+import ProductsEdit from "./components/catalogue/products/products-edit.component/product-edit.component";
+import SuppliersListing from "./components/suppliers/suppliers-listing.component/suppliers-listing.component";
+import SuppliersCreate from "./components/suppliers/suppliers-create.component/suppliers-create.component";
+import SuppliersEdit from "./components/suppliers/suppliers-edit.component/suppliers-edit.component";
+import CouriersList from "./components/courier/courier-list.component/courier-list.component";
+import CourierCreate from "./components/courier/courier-create.component/courier-create.component";
+import CouriersEdit from "./components/courier/courier-edit.component/courier-edit.component";
+import CouponList from "./components/coupon/coupon-listing.component/coupon-listing.component";
+import CouponCreate from "./components/coupon/coupon-create.component/coupon-create.component";
+import CouponEdit from "./components/coupon/coupon-edit.component/coupon-edit.component";
+import ManagePurchaseOrder from "./components/purchase-orders/manage-purchase-order/manage-purchase-order.component";
+import ManagePOCreate from "./components/purchase-orders/manage-purchase-order/manage-purchase-order-create.compoent/manage-purchase-order-create.component";
+import ManagePOEdit from "./components/purchase-orders/manage-purchase-order/manage-purchase-order-edit/manage-purchase-order-edit.component";
+import StockTransferComponent from "./components/stock-transfer/stock-transfer-list/stock-transfer-list.component";
+import StockTransferEdit from "./components/stock-transfer/stock-transfer-edit.component/stock-transfer-edit.component";
 
 const routes = [
   { path: "/", exact: true, name: "Home" },
