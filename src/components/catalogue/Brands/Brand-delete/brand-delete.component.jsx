@@ -15,7 +15,6 @@ function BrandsDelete(props) {
     axios
       .delete(`https://vegasapi.phebsoft-team.com/api/brands/${id}`, config)
       .then(() => {
-        console.log("Delete successful", `${id}`);
         setUpdated(true);
       });
   };

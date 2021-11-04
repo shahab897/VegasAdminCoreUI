@@ -52,7 +52,7 @@ function ManagePOCreate() {
   const fetch_supplierBrand = () => {
     axios
       .get(
-        `http://vegasapi.phebsoft-team.com/api/getSupplierbrands/${supplierId}`,
+        `https://vegasapi.phebsoft-team.com/api/getSupplierbrands/${supplierId}`,
         axiosConfig
       )
       .then((result) => {
@@ -69,7 +69,7 @@ function ManagePOCreate() {
     setIsLoading(true);
     axios
       .get(
-        `http://vegasapi.phebsoft-team.com/api/getBrandproducts/${brandId}`,
+        `https://vegasapi.phebsoft-team.com/api/getBrandproducts/${brandId}`,
         axiosConfig
       )
       .then((result) => {
@@ -129,7 +129,7 @@ function ManagePOCreate() {
   const fetch_a = () => {
     axios
       .get(
-        "http://vegasapi.phebsoft-team.com/api/purchaseorders/create",
+        "https://vegasapi.phebsoft-team.com/api/purchaseorders/create",
         axiosConfig
       )
       .then((result) => {

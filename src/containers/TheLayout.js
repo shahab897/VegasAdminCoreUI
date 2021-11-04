@@ -1,7 +1,18 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { TheContent, TheSidebar, TheFooter, TheHeader } from "./index";
+import { withRouter } from "react-router-dom";
+import { UserLoginContext } from "../context-providers/user-login-context";
 
-const TheLayout = () => {
+const TheLayout = ({ history }) => {
+  const { auth } = useContext(UserLoginContext);
+  useEffect(() => {
+    if (
+      auth.isLoggedIn === false ||
+      localStorage.getItem("userDetails") == null
+    ) {
+      history.push("/login");
+    }
+  }, [auth]);
   return (
     <div className="c-app c-default-layout">
       <TheSidebar />
@@ -16,4 +27,4 @@ const TheLayout = () => {
   );
 };
 
-export default TheLayout;
+export default withRouter(TheLayout);

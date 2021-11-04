@@ -61,10 +61,6 @@ function StockTransferCreate() {
     }
   }, [warehouseId]);
 
-  useEffect(() => {
-    console.log(transferType, "transfer ki type");
-  }, [transferType]);
-
   const fetch_a = () => {
     axios
       .get(
@@ -83,7 +79,6 @@ function StockTransferCreate() {
         setBrands(brandResults);
         setWarehouses(warehousesResult);
         setData(result.data.data);
-        console.log(warehousesResult, "warehouses filtered", result.data.data);
       })
       .catch((error) => console.log("error", error));
   };
@@ -112,8 +107,6 @@ function StockTransferCreate() {
       to: storeId,
       brand_id: brandId,
     };
-
-    console.log(productStockData, "kia ja rhia hai", warehouseId);
     axios
       .post(
         "https://vegasapi.phebsoft-team.com/api/getProductswithstock",
@@ -121,7 +114,6 @@ function StockTransferCreate() {
         axiosConfig
       )
       .then((result) => {
-        console.log(result, "dekh lete hain");
         const prod = result.data.data
           .map((item) => {
             if (item.product_type === "configurable") {
@@ -150,7 +142,6 @@ function StockTransferCreate() {
             }
           })
           .flat();
-        console.log(prod, "meri mehnat");
         setStockProducts(prod);
         setIsLoading(false);
       })
@@ -197,8 +188,6 @@ function StockTransferCreate() {
       products: stockProducts,
     };
 
-    console.log(productStockData, "stock transfer send data");
-
     axios
       .post(
         "https://vegasapi.phebsoft-team.com/api/stocktransfers",
@@ -206,7 +195,6 @@ function StockTransferCreate() {
         axiosConfig
       )
       .then((result) => {
-        console.log(result);
         setRedirect(true);
       })
       .catch((error) => console.log("error", error));

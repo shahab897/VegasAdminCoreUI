@@ -84,10 +84,6 @@ function StockTransferEdit() {
     setStockProducts(newFormValues);
   };
 
-  useEffect(() => {
-    console.log(transferType, "transfer ki type");
-  }, [transferType]);
-
   const fetch_a = () => {
     axios
       .get(
@@ -137,7 +133,6 @@ function StockTransferEdit() {
             }
           })
           .flat();
-        console.log(prod, "meri mehnat");
         setStockProducts(prod);
       })
       .catch((error) => console.log("error", error));
@@ -146,10 +141,6 @@ function StockTransferEdit() {
   useEffect(() => {
     fetch_a();
   }, []);
-
-  useEffect(() => {
-    console.log(stockProducts, " stock produdcts ");
-  }, [stockProducts]);
 
   const handleTransfer = () => {
     if (data.transfer.status !== "pending") {
@@ -182,7 +173,6 @@ function StockTransferEdit() {
         axiosConfig
       )
       .then((result) => {
-        console.log(result);
         setTransferred(true);
       })
       .catch((error) => console.log("error", error));
@@ -204,7 +194,6 @@ function StockTransferEdit() {
         axiosConfig
       )
       .then((result) => {
-        console.log(result);
         setRedirect(true);
       })
       .catch((error) => console.log("error", error));

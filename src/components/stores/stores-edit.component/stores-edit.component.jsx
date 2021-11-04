@@ -34,7 +34,6 @@ function StoresEdit(props) {
 
   useEffect(() => {
     fetch_a();
-    console.log(props);
   }, []);
 
   useEffect(() => {

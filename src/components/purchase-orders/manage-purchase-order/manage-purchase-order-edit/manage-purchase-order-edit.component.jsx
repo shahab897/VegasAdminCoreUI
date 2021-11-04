@@ -70,7 +70,7 @@ function ManagePOEdit() {
   const fetch_a = () => {
     axios
       .get(
-        `http://vegasapi.phebsoft-team.com/api/purchaseorders/${id}/edit`,
+        `https://vegasapi.phebsoft-team.com/api/purchaseorders/${id}/edit`,
         axiosConfig
       )
       .then((result) => {
@@ -326,7 +326,7 @@ function ManagePOEdit() {
 
     axios
       .post(
-        `http://vegasapi.phebsoft-team.com/api/stock/receive/${id}`,
+        `https://vegasapi.phebsoft-team.com/api/stock/receive/${id}`,
         purchaseOrder,
         axiosConfig
       )

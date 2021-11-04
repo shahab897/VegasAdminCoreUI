@@ -63,7 +63,6 @@ function StockTransferComponent() {
           };
         });
         setData(responseData);
-        console.log(response);
       })
       .catch(console.log);
   };

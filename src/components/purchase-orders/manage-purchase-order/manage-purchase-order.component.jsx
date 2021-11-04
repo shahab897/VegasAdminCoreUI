@@ -108,7 +108,7 @@ function ManagePurchaseOrder() {
       headers: { Authorization: `Bearer ${token_vegas}` },
     };
     axios
-      .get("http://vegasapi.phebsoft-team.com/api/purchaseorders", config)
+      .get("https://vegasapi.phebsoft-team.com/api/purchaseorders", config)
       .then((response) => {
         const poData = response.data.data.map((data) => {
           return {

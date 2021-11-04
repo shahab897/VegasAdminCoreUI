@@ -1,13 +1,8 @@
-import React from "react";
-
 import StockTransferCreate from "./components/stock-transfer/stock-transfer-create/stock-transfer-create.component";
-
 import Toaster from "./views/notifications/toaster/Toaster";
 import Tables from "./views/base/tables/Tables";
-
 import Breadcrumbs from "./views/base/breadcrumbs/Breadcrumbs";
 import Cards from "./views/base/cards/Cards";
-
 import Carousels from "./views/base/carousels/Carousels";
 import Collapses from "./views/base/collapses/Collapses";
 import BasicForms from "./views/base/forms/BasicForms";

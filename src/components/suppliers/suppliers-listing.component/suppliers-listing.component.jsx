@@ -56,14 +56,12 @@ const SuppliersList = (props) => {
       .get("https://vegasapi.phebsoft-team.com/api/suppliers", config)
       .then((response) => {
         setData(response.data.data);
-        console.log(response);
       })
       .catch(console.log);
   };
 
   useEffect(() => {
     fetch_a();
-    console.log(props);
   }, []);
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { Link, Redirect } from "react-router-dom";
 import {
   CButton,
@@ -16,21 +16,17 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import axios from "axios";
+import { UserLoginContext } from "../../../context-providers/user-login-context";
 
 const Login = () => {
   const [email, setEmail] = useState(undefined);
   const [password, setPassword] = useState(undefined);
-  const [auth, setAuth] = useState(undefined);
-  let isLoggedIn = JSON.parse(localStorage.getItem("userDetails"));
+  const { auth, changeAuthStatus } = useContext(UserLoginContext);
 
   const saveTokenInLocalStorage = (data) => {
     if (data == undefined) return;
     localStorage.setItem("userDetails", JSON.stringify(data.data.data));
   };
-
-  useEffect(() => {
-    if (isLoggedIn != undefined) setAuth(true);
-  }, [isLoggedIn]);
 
   const handleSubmit = () => {
     if (
@@ -62,12 +58,11 @@ const Login = () => {
       )
       .then((result) => {
         saveTokenInLocalStorage(result);
-        console.log(result);
-        setAuth(true);
+        changeAuthStatus(true);
       })
       .catch((error) => console.log("error", error));
   };
-  if (auth === true) {
+  if (auth.isLoggedIn === true) {
     return <Redirect to="/dashboard" />;
   }
 
@@ -118,38 +113,8 @@ const Login = () => {
                           Login
                         </CButton>
                       </CCol>
-                      <CCol xs="6" className="text-right">
-                        <CButton color="link" className="px-0">
-                          Forgot password?
-                        </CButton>
-                      </CCol>
                     </CRow>
                   </CForm>
-                </CCardBody>
-              </CCard>
-              <CCard
-                className="text-white bg-primary py-5 d-md-down-none"
-                style={{ width: "44%" }}
-              >
-                <CCardBody className="text-center">
-                  <div>
-                    <h2>Sign up</h2>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua.
-                    </p>
-                    <Link to="/register">
-                      <CButton
-                        color="primary"
-                        className="mt-3"
-                        active
-                        tabIndex={-1}
-                      >
-                        Register Now!
-                      </CButton>
-                    </Link>
-                  </div>
                 </CCardBody>
               </CCard>
             </CCardGroup>

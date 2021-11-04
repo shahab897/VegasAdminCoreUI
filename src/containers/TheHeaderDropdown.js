@@ -10,6 +10,10 @@ import {
 import CIcon from "@coreui/icons-react";
 
 const TheHeaderDropdown = () => {
+  const handleLogout = () => {
+    localStorage.removeItem("userDetails");
+  };
+
   return (
     <CDropdown inNav className="c-header-nav-items mx-2" direction="down">
       <CDropdownToggle className="c-header-nav-link" caret={false}>
@@ -75,9 +79,9 @@ const TheHeaderDropdown = () => {
           </CBadge>
         </CDropdownItem>
         <CDropdownItem divider />
-        <CDropdownItem onClick={() => localStorage.removeItem("userDetails")}>
+        <CDropdownItem onClick={handleLogout}>
           <CIcon name="cil-lock-locked" className="mfe-2" />
-          Lock Account
+          Log Out
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

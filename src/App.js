@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ProductOptionValuesProdvider from "./context-providers/product-options.context";
+import UserLoginProdvider from "./context-providers/user-login-context";
 import "./scss/style.scss";
 
 const loading = (
@@ -18,9 +19,9 @@ const Register = React.lazy(() => import("./views/pages/register/Register"));
 const Page404 = React.lazy(() => import("./views/pages/page404/Page404"));
 const Page500 = React.lazy(() => import("./views/pages/page500/Page500"));
 
-class App extends Component {
-  render() {
-    return (
+const App = () => {
+  return (
+    <UserLoginProdvider>
       <ProductOptionValuesProdvider>
         <BrowserRouter>
           <React.Suspense fallback={loading}>
@@ -58,8 +59,8 @@ class App extends Component {
           </React.Suspense>
         </BrowserRouter>
       </ProductOptionValuesProdvider>
-    );
-  }
-}
+    </UserLoginProdvider>
+  );
+};
 
 export default App;

@@ -65,7 +65,6 @@ function BrandsCreate() {
         axiosConfig
       )
       .then((result) => {
-        console.log(result);
         setRedirect(true);
       })
       .catch((error) => console.log("error", error));
