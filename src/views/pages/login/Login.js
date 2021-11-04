@@ -17,11 +17,13 @@ import {
 import CIcon from "@coreui/icons-react";
 import axios from "axios";
 import { UserLoginContext } from "../../../context-providers/user-login-context";
+import { parseJSON } from "date-fns";
 
 const Login = () => {
   const [email, setEmail] = useState(undefined);
   const [password, setPassword] = useState(undefined);
   const { auth, changeAuthStatus } = useContext(UserLoginContext);
+  const [authError, setAuthError] = useState({ errorStatus: false });
 
   const saveTokenInLocalStorage = (data) => {
     if (data == undefined) return;
@@ -57,10 +59,18 @@ const Login = () => {
         axiosConfig
       )
       .then((result) => {
-        saveTokenInLocalStorage(result);
-        changeAuthStatus(true);
+        if (result.data.data.status === true) {
+          setAuthError({ errorStatus: false });
+          saveTokenInLocalStorage(result);
+          changeAuthStatus(true);
+        } else if (result.data.data.status === false) {
+          setAuthError({
+            errorStatus: true,
+            errorMessage: result.data.data.message,
+          });
+        }
       })
-      .catch((error) => console.log("error", error));
+      .catch((error) => console.log(parseJSON(error), "whats is the errror"));
   };
   if (auth.isLoggedIn === true) {
     return <Redirect to="/dashboard" />;
@@ -103,6 +113,11 @@ const Login = () => {
                         onChange={(e) => setPassword(e.target.value)}
                       />
                     </CInputGroup>
+                    {authError.errorStatus === true && (
+                      <small style={{ color: "red", marginBottom: "10px" }}>
+                        {authError.errorMessage}
+                      </small>
+                    )}
                     <CRow>
                       <CCol xs="6">
                         <CButton

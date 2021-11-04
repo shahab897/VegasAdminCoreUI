@@ -12,6 +12,9 @@ const UserLoginProdvider = ({ children }) => {
 
   useEffect(() => {
     setIsLoggedIn(JSON.parse(localStorage.getItem("userDetails")));
+    if (localStorage.getItem("userDetails") != null) {
+      setAuth({ isLoggedIn: true });
+    }
   }, []);
 
   setInterval(() => {
