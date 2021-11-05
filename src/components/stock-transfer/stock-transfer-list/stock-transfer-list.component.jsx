@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Loading from "../../Loading-component/loading-component";
-import WarehouseDelete from "../../warehouse/warehouse-delete.component/warehouse-delete.component";
+import StockTransferDelete from "../stock-transfer-delete/stock-transfer-delete.component";
 import StockTransferEditButton from "../stock-transfer-edit.component/stock-transfer-edit-button.component";
 
 function StockTransferComponent() {
@@ -117,7 +117,7 @@ function StockTransferComponent() {
                     delete: (item) => {
                       if (item.status !== "Transferred") {
                         return (
-                          <WarehouseDelete
+                          <StockTransferDelete
                             id={item.id}
                             setUpdated={setUpdated}
                           />
