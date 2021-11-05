@@ -63,7 +63,7 @@ function CategoriesCreate() {
       details: categoryDetail,
       meta_description: categoryMeta,
       keywords: tagsToSend,
-      status: status,
+      ...(status == undefined ? { status: "YES" } : status),
       view_order: categoryViewOrder,
       cat_slug: categorySlug,
       parent_id: categoryParentId,
@@ -77,6 +77,7 @@ function CategoriesCreate() {
       },
     };
 
+    console.log(catergoryData, "category data data");
     axios
       .post(
         "https://vegasapi.phebsoft-team.com/api/categories",
