@@ -30,7 +30,7 @@ const StatusDropDown = (props) => {
   ];
   const { setStatus, defaultStatus } = props;
 
-  if (defaultStatus === "" || defaultStatus === undefined)
+  if (defaultStatus === "" || defaultStatus == undefined)
     return (
       <>
         <DropDown
