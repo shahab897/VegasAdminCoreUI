@@ -129,7 +129,6 @@ function CouponEdit() {
         status,
       };
     }
-    console.log(suppliersData, "tu ye masla hai");
     axios
       .put(
         `https://vegasapi.phebsoft-team.com/api/coupons/${id}`,

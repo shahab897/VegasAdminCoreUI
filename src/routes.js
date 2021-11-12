@@ -66,6 +66,8 @@ import ManagePOCreate from "./components/purchase-orders/manage-purchase-order/m
 import ManagePOEdit from "./components/purchase-orders/manage-purchase-order/manage-purchase-order-edit/manage-purchase-order-edit.component";
 import StockTransferComponent from "./components/stock-transfer/stock-transfer-list/stock-transfer-list.component";
 import StockTransferEdit from "./components/stock-transfer/stock-transfer-edit.component/stock-transfer-edit.component";
+import CouponOptionsList from "./components/coupon-options/coupon-options-list.component";
+import CouponOptionsCreate from "./components/coupon-options/coupon-options-create/coupon-options-create.component";
 
 const routes = [
   { path: "/", exact: true, name: "Home" },
@@ -246,6 +248,17 @@ const routes = [
     path: "/stock-transfer/edit/:editId",
     name: "Stock Transfer Edit",
     component: StockTransferEdit,
+  },
+  {
+    path: "/coupon-options",
+    name: "Coupon Options",
+    component: CouponOptionsList,
+    exact: true,
+  },
+  {
+    path: "/coupon-options/create",
+    name: "Coupon Options Create",
+    component: CouponOptionsCreate,
   },
   { path: "/theme", name: "Theme", component: Colors, exact: true },
   { path: "/theme/colors", name: "Colors", component: Colors },

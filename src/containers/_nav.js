@@ -20,6 +20,12 @@ const _nav = [
     to: "/coupons",
     icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Cart Discounts",
+    to: "/coupon-options",
+    icon: "cil-chart-pie",
+  },
   // {
   //   _tag: 'CSidebarNavTitle',
   //   _children: ['Theme']
